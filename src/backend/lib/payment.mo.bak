@@ -1,0 +1,506 @@
+import Principal "mo:core/Principal";
+import Set "mo:core/Set";
+import Map "mo:core/Map";
+import Nat "mo:core/Nat";
+import Nat8 "mo:core/Nat8";
+import Blob "mo:core/Blob";
+import Time "mo:core/Time";
+import AccessTypes "../types/access";
+
+module {
+  // ── Constants ────────────────────────────────────────────────────────────────
+
+  /// HERO ICRC-1 canister ID
+  public let HERO_CANISTER_ID : Text = "zm3la-fqaaa-aaaaa-qg2ma-cai";
+
+  /// Price constants (in HERO token base units, 8 decimals)
+  public let ARTICLE_UNLOCK_PRICE : Nat = 100_000_000;     // 1 HERO
+  public let SUBSCRIPTION_PRICE   : Nat = 1_000_000_000;   // 10 HERO
+
+  /// 30 days in nanoseconds — static literal, no arithmetic
+  public let SUBSCRIPTION_DURATION_NS : Int = 2_592_000_000_000_000;
+
+  /// Payment destination — all HERO payments must go here
+  public let PAYMENT_DESTINATION_OWNER : Text = "4nhst-plzyx-qyza2-lbvmc-6hmql-ldruf-jt7ab-hlnm6-ret6b-jlwg2-sqe";
+
+  // ── ICRC-1 / ICRC-3 types ───────────────────────────────────────────────────
+
+  public type Account = {
+    owner : Principal;
+    subaccount : ?Blob;
+  };
+
+  /// ICRC-3 generic value (used in block data)
+  public type Value = {
+    #Nat  : Nat;
+    #Int  : Int;
+    #Text : Text;
+    #Blob : Blob;
+    #Bool : Bool;
+    #Array : [Value];
+    #Map  : [(Text, Value)];
+  };
+
+  /// Archive callback result — simple block range, no nesting
+  public type BlockRange = {
+    blocks : [Value];
+  };
+
+  public type GetBlocksResult = {
+    log_length : Nat;
+    blocks     : [{ id : Nat; block : Value }];
+    archived_blocks : [{
+      args     : [{ start : Nat; length : Nat }];
+      callback : shared query ([{ start : Nat; length : Nat }]) -> async BlockRange;
+    }];
+  };
+
+  /// Remote actor type for HERO ICRC-1/3 canister
+  public type HeroActor = actor {
+    icrc3_get_blocks : query ([{ start : Nat; length : Nat }]) -> async GetBlocksResult;
+  };
+
+  // ── Double-spend guard ───────────────────────────────────────────────────────
+
+  public type ConsumedSet = Set.Set<Nat>;
+
+  public func newConsumedSet() : ConsumedSet {
+    Set.empty<Nat>()
+  };
+
+  public func isConsumed(consumed : ConsumedSet, blockIndex : Nat) : Bool {
+    consumed.contains(blockIndex)
+  };
+
+  public func markConsumed(consumed : ConsumedSet, blockIndex : Nat) {
+    consumed.add(blockIndex)
+  };
+
+  // ── Block verification helpers ───────────────────────────────────────────────
+
+  /// Look up a named field inside an ICRC-3 #Map Value.
+  func findField(fields : [(Text, Value)], name : Text) : ?Value {
+    var result : ?Value = null;
+    for ((k, v) in fields.vals()) {
+      if (k == name) { result := ?v };
+    };
+    result
+  };
+
+  /// Extract an Account from an ICRC-3 account encoding (owner blob + optional subaccount).
+  func decodeAccount(v : Value) : ?Account {
+    switch (v) {
+      case (#Array(arr)) {
+        if (arr.size() == 0) return null;
+        switch (arr[0]) {
+          case (#Blob(ownerBlob)) {
+            let owner = ownerBlob.fromBlob();
+            let subaccount : ?Blob = if (arr.size() > 1) {
+              switch (arr[1]) {
+                case (#Blob(sub)) ?sub;
+                case (_) null;
+              }
+            } else null;
+            ?{ owner; subaccount }
+          };
+          case (_) null;
+        }
+      };
+      case (_) null;
+    }
+  };
+
+  /// Try to match a single block Value against the expected payment criteria.
+  /// Returns the block's index if it matches, or null if it does not.
+  func matchBlock(
+    entry            : { id : Nat; block : Value },
+    callerPrincipal  : Principal,
+    expectedAmount   : Nat,
+    paymentDest      : Principal,
+    consumed         : ConsumedSet,
+  ) : ?Nat {
+    if (isConsumed(consumed, entry.id)) return null;
+
+    let topFields = switch (entry.block) {
+      case (#Map(m)) m;
+      case (_) return null;
+    };
+
+    let txValue = switch (findField(topFields, "tx")) {
+      case (?v) v;
+      case null return null;
+    };
+
+    let txFields = switch (txValue) {
+      case (#Map(m)) m;
+      case (_) return null;
+    };
+
+    // op must be "xfer"
+    switch (findField(txFields, "op")) {
+      case (?(#Text(op))) { if (op != "xfer") return null };
+      case (_) return null;
+    };
+
+    // amount must be >= expected
+    switch (findField(txFields, "amt")) {
+      case (?(#Nat(amt))) { if (amt < expectedAmount) return null };
+      case (_) return null;
+    };
+
+    // to must be payment destination with null subaccount
+    let toAccount = switch (findField(txFields, "to")) {
+      case (?v) { switch (decodeAccount(v)) { case (?a) a; case null return null } };
+      case null return null;
+    };
+    if (not Principal.equal(toAccount.owner, paymentDest)) return null;
+
+    // from must be caller
+    let fromAccount = switch (findField(txFields, "from")) {
+      case (?v) { switch (decodeAccount(v)) { case (?a) a; case null return null } };
+      case null return null;
+    };
+    if (not Principal.equal(fromAccount.owner, callerPrincipal)) return null;
+
+    ?entry.id
+  };
+
+  /// Scan the most recent blocks on the HERO ledger (up to `scanWindow` blocks)
+  /// looking for a transfer that matches caller, amount, and destination.
+  /// Returns the matching block index or an error message.
+  ///
+  /// Scanning window: last min(scanWindow, log_length) blocks.
+  public func scanForPayment(
+    heroActor       : HeroActor,
+    callerPrincipal : Principal,
+    expectedAmount  : Nat,
+    consumed        : ConsumedSet,
+    scanWindow      : Nat,
+  ) : async* { #ok : Nat; #err : Text } {
+    let paymentDest = Principal.fromText(PAYMENT_DESTINATION_OWNER);
+
+    // Step 1: get tip (log_length)
+    let tipResult = await heroActor.icrc3_get_blocks([{ start = 0; length = 0 }]);
+    let tip = tipResult.log_length;
+
+    if (tip == 0) {
+      return #err("HERO ledger has no blocks yet");
+    };
+
+    let window = if (scanWindow < tip) scanWindow else tip;
+    let startBlock = Nat.sub(tip, window);
+
+    // Step 2: fetch the window
+    let result = await heroActor.icrc3_get_blocks([{ start = startBlock; length = window }]);
+
+    // Step 3: scan blocks from newest to oldest for a matching payment
+    let blocks = result.blocks;
+    let count = blocks.size();
+    var i = count;
+    while (i > 0) {
+      i -= 1;
+      switch (matchBlock(blocks[i], callerPrincipal, expectedAmount, paymentDest, consumed)) {
+        case (?blockIndex) { return #ok(blockIndex) };
+        case null {};
+      };
+    };
+
+    #err(
+      "No recent matching payment found. " #
+      "Please check that you sent the exact amount to the HERO address " #
+      "from your authenticated wallet, then try again."
+    )
+  };
+
+  /// Verify that block at `blockIndex` is a valid ICRC-1 transfer:
+  ///   - tx.op == "xfer"
+  ///   - tx.to == PAYMENT_DESTINATION_OWNER (null subaccount)
+  ///   - tx.from == callerPrincipal
+  ///   - tx.amt >= expectedAmount
+  ///
+  /// Returns #ok or #err with a descriptive message.
+  public func verifyPayment(
+    heroActor        : HeroActor,
+    callerPrincipal  : Principal,
+    expectedAmount   : Nat,
+    blockIndex       : Nat,
+  ) : async* { #ok; #err : Text } {
+    let paymentDestination = Principal.fromText(PAYMENT_DESTINATION_OWNER);
+
+    // Fetch the block
+    let result = await heroActor.icrc3_get_blocks([{ start = blockIndex; length = 1 }]);
+
+    // Find the block by id
+    var blockOpt : ?Value = null;
+    for (entry in result.blocks.vals()) {
+      if (entry.id == blockIndex) {
+        blockOpt := ?entry.block;
+      };
+    };
+
+    let block = switch (blockOpt) {
+      case null { return #err("Block " # blockIndex.toText() # " not found in HERO ledger") };
+      case (?b) b;
+    };
+
+    // Block is a #Map — pull top-level fields
+    let topFields = switch (block) {
+      case (#Map(m)) m;
+      case (_) { return #err("Unexpected block format") };
+    };
+
+    // Get the "tx" sub-map
+    let txValue = switch (findField(topFields, "tx")) {
+      case null { return #err("Block missing 'tx' field") };
+      case (?v) v;
+    };
+
+    let txFields = switch (txValue) {
+      case (#Map(m)) m;
+      case (_) { return #err("'tx' field is not a map") };
+    };
+
+    // Verify op == "xfer"
+    switch (findField(txFields, "op")) {
+      case (?(#Text(op))) {
+        if (op != "xfer") {
+          return #err("Block op is '" # op # "', expected 'xfer'");
+        };
+      };
+      case (_) { return #err("Block missing or invalid 'op' field") };
+    };
+
+    // Verify amount >= expectedAmount
+    switch (findField(txFields, "amt")) {
+      case (?(#Nat(amt))) {
+        if (amt < expectedAmount) {
+          return #err(
+            "Insufficient payment: got " # amt.toText() #
+            " e8s, expected " # expectedAmount.toText()
+          );
+        };
+      };
+      case (_) { return #err("Block missing or invalid 'amt' field") };
+    };
+
+    // Verify to == payment destination principal (null subaccount)
+    let toAccount = switch (findField(txFields, "to")) {
+      case null { return #err("Block missing 'to' field") };
+      case (?v) {
+        switch (decodeAccount(v)) {
+          case null { return #err("Could not decode 'to' account") };
+          case (?a) a;
+        };
+      };
+    };
+
+    if (not Principal.equal(toAccount.owner, paymentDestination)) {
+      return #err(
+        "Payment not sent to correct destination: got " # toAccount.owner.toText() #
+        ", expected " # PAYMENT_DESTINATION_OWNER
+      );
+    };
+
+    // Verify from == callerPrincipal
+    let fromAccount = switch (findField(txFields, "from")) {
+      case null { return #err("Block missing 'from' field") };
+      case (?v) {
+        switch (decodeAccount(v)) {
+          case null { return #err("Could not decode 'from' account") };
+          case (?a) a;
+        };
+      };
+    };
+
+    if (not Principal.equal(fromAccount.owner, callerPrincipal)) {
+      return #err(
+        "Payment not from caller: got " # fromAccount.owner.toText() #
+        ", expected " # callerPrincipal.toText()
+      );
+    };
+
+    #ok
+  };
+
+  // ── Invoice subaccount architecture ─────────────────────────────────────────
+
+  /// Convert a Nat to a 32-byte big-endian Blob suitable for use as an ICRC-1 subaccount.
+  public func natToSubaccount(n : Nat) : Blob {
+    let bytes : [var Nat8] = [var
+      0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0
+    ];
+    var remaining = n;
+    var i : Nat = 31;
+    label encLoop while (remaining > 0) {
+      bytes[i] := Nat8.fromNat(remaining % 256);
+      remaining := remaining / 256;
+      if (i == 0) { break encLoop };
+      i := Nat.sub(i, 1);
+    };
+    Blob.fromVarArray(bytes)
+  };
+
+  /// Payment request store type
+  public type PaymentRequestStore = {
+    requests     : Map.Map<AccessTypes.PaymentRequestId, AccessTypes.PaymentRequest>;
+    var nextId   : Nat;
+  };
+
+  public func newPaymentRequestStore() : PaymentRequestStore {
+    {
+      requests   = Map.empty<AccessTypes.PaymentRequestId, AccessTypes.PaymentRequest>();
+      var nextId = 0;
+    }
+  };
+
+  /// Create a new pending payment request.
+  public func createPaymentRequest(
+    store       : PaymentRequestStore,
+    caller      : Principal,
+    paymentType : AccessTypes.PaymentType,
+  ) : AccessTypes.PaymentRequest {
+    let id = store.nextId;
+    store.nextId += 1;
+
+    let amountE8s : Nat = switch (paymentType) {
+      case (#ArticleUnlock(_)) ARTICLE_UNLOCK_PRICE;
+      case (#Subscription)     SUBSCRIPTION_PRICE;
+    };
+
+    let now = Time.now();
+    // 30 minutes in nanoseconds = 30 * 60 * 1_000_000_000
+    let thirtyMinutesNs : Int = 1_800_000_000_000;
+    let expiresAt : Int = now + thirtyMinutesNs;
+
+    let req : AccessTypes.PaymentRequest = {
+      id;
+      userId         = caller;
+      paymentType;
+      amountE8s;
+      subaccount     = natToSubaccount(id);
+      ownerPrincipal = PAYMENT_DESTINATION_OWNER;
+      createdAt      = now;
+      expiresAt;
+      status         = #Pending;
+    };
+    store.requests.add(id, req);
+    req
+  };
+
+  /// Retrieve a payment request by id, validating ownership.
+  public func getPaymentRequest(
+    store    : PaymentRequestStore,
+    caller   : Principal,
+    reqId    : AccessTypes.PaymentRequestId,
+  ) : { #ok : AccessTypes.PaymentRequest; #err : Text } {
+    switch (store.requests.get(reqId)) {
+      case null { #err("Payment request not found") };
+      case (?req) {
+        if (not Principal.equal(req.userId, caller)) {
+          return #err("Not authorized to view this payment request");
+        };
+        #ok(req)
+      };
+    }
+  };
+
+  /// Match a single ICRC-3 block against the expected invoice criteria:
+  ///   - op == "xfer"
+  ///   - to.owner == ownerPrincipal
+  ///   - to.subaccount == ?expectedSubaccount  (exact match)
+  ///   - amount >= expectedAmountE8s
+  func matchInvoiceBlock(
+    entry            : { id : Nat; block : Value },
+    ownerPrincipal   : Principal,
+    expectedSubacct  : Blob,
+    expectedAmount   : Nat,
+    consumed         : ConsumedSet,
+  ) : ?Nat {
+    if (isConsumed(consumed, entry.id)) return null;
+
+    let topFields = switch (entry.block) {
+      case (#Map(m)) m;
+      case (_) return null;
+    };
+
+    let txValue = switch (findField(topFields, "tx")) {
+      case (?v) v;
+      case null return null;
+    };
+
+    let txFields = switch (txValue) {
+      case (#Map(m)) m;
+      case (_) return null;
+    };
+
+    // op must be "xfer"
+    switch (findField(txFields, "op")) {
+      case (?(#Text(op))) { if (op != "xfer") return null };
+      case (_) return null;
+    };
+
+    // amount must be >= expected
+    switch (findField(txFields, "amt")) {
+      case (?(#Nat(amt))) { if (amt < expectedAmount) return null };
+      case (_) return null;
+    };
+
+    // to.owner must match, to.subaccount must exactly match expectedSubacct
+    let toAccount = switch (findField(txFields, "to")) {
+      case (?v) { switch (decodeAccount(v)) { case (?a) a; case null return null } };
+      case null return null;
+    };
+    if (not Principal.equal(toAccount.owner, ownerPrincipal)) return null;
+    // Require exact subaccount match
+    switch (toAccount.subaccount) {
+      case null return null;  // must have a subaccount
+      case (?sub) {
+        if (sub != expectedSubacct) return null;
+      };
+    };
+
+    ?entry.id
+  };
+
+  /// Verify a payment request by scanning recent HERO ledger blocks for a transfer
+  /// to the unique invoice subaccount. Returns the matching block index or an error.
+  public func verifyInvoicePayment(
+    heroActor   : HeroActor,
+    req         : AccessTypes.PaymentRequest,
+    consumed    : ConsumedSet,
+    scanWindow  : Nat,
+  ) : async* { #ok : Nat; #err : Text } {
+    let ownerPrincipal = Principal.fromText(req.ownerPrincipal);
+
+    // Step 1: get tip (log_length)
+    let tipResult = await heroActor.icrc3_get_blocks([{ start = 0; length = 0 }]);
+    let tip = tipResult.log_length;
+
+    if (tip == 0) {
+      return #err("HERO ledger has no blocks yet");
+    };
+
+    let window = if (scanWindow < tip) scanWindow else tip;
+    let startBlock = Nat.sub(tip, window);
+
+    // Step 2: fetch the window
+    let result = await heroActor.icrc3_get_blocks([{ start = startBlock; length = window }]);
+
+    // Step 3: scan blocks newest to oldest
+    let blocks = result.blocks;
+    let count = blocks.size();
+    var i = count;
+    while (i > 0) {
+      i := Nat.sub(i, 1);
+      switch (matchInvoiceBlock(blocks[i], ownerPrincipal, req.subaccount, req.amountE8s, consumed)) {
+        case (?blockIndex) { return #ok(blockIndex) };
+        case null {};
+      };
+    };
+
+    #err("Payment not found yet. Please ensure you sent the exact amount to the correct subaccount address.")
+  };
+};

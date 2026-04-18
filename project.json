@@ -1,0 +1,23 @@
+{
+  "overview": "HERO BLOG is a decentralized editorial blog platform on the Internet Computer. Visitors browse free and premium articles about ICP, Web3, and ecosystem news. Premium content is unlocked with HERO tokens — pay 1 HERO for a single article or 10 HERO for a monthly subscription. Admins publish and manage content through a built-in dashboard.",
+  "features": [
+    "Free and premium article browsing with cover images, titles, excerpts, and category labels",
+    "Internet Identity login for secure access",
+    "Pay 1 HERO for one-time article access or 10 HERO for a 30-day subscription",
+    "HERO token (ICRC-1) payment verification against the live HERO canister",
+    "Admin dashboard to create, edit, delete, and publish articles with rich text editor and cover image upload",
+    "Responsive dark editorial design with clear CTAs"
+  ],
+  "category": "content",
+  "tags": [
+    "blog",
+    "icp",
+    "web3",
+    "hero-token",
+    "icrc-1",
+    "internet-identity",
+    "premium-content",
+    "dark-theme"
+  ],
+  "last_updated": "2026-04-17T06:21:31.488Z"
+}

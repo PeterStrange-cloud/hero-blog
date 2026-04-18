@@ -1,0 +1,180 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type UserRole = 
+ record {
+   "principal": UserId;
+   role: Role;
+ };
+type UserId = principal;
+type UserAccess = 
+ record {
+   isSubscribed: bool;
+   subscription: opt Subscription;
+   unlockedArticleIds: vec ArticleId;
+ };
+type Timestamp = int;
+type Subscription = 
+ record {
+   expiryTime: Timestamp;
+   startTime: Timestamp;
+   userId: UserId;
+ };
+type SiteSettings = record {logoUrl: opt text;};
+type SettingsResult = 
+ variant {
+   notAuthorized;
+   ok;
+ };
+type Role = 
+ variant {
+   admin;
+   editor;
+   superadmin;
+ };
+type PaymentType = 
+ variant {
+   ArticleUnlock: ArticleId;
+   Subscription;
+ };
+type PaymentStatus = 
+ variant {
+   Consumed;
+   Expired;
+   Pending;
+   Verified;
+ };
+type PaymentRequestId = nat;
+type PaymentRequest = 
+ record {
+   amountE8s: nat;
+   createdAt: int;
+   expiresAt: int;
+   id: PaymentRequestId;
+   ownerPrincipal: text;
+   paymentType: PaymentType;
+   status: PaymentStatus;
+   subaccount: blob;
+   userId: principal;
+ };
+type InvitedUser = 
+ record {
+   addedAt: Timestamp;
+   boundAt: opt Timestamp;
+   boundPrincipal: opt principal;
+   email: text;
+   intendedRole: Role;
+ };
+type InviteResult = 
+ variant {
+   alreadyBound;
+   alreadyExists;
+   notAuthorized;
+   notFound;
+   ok;
+ };
+type ExternalBlob = blob;
+type ArticleInput = 
+ record {
+   category: text;
+   content: text;
+   coverImage: opt ExternalBlob;
+   excerpt: text;
+   isPremium: bool;
+   tags: vec text;
+   title: text;
+ };
+type ArticleId = nat;
+type ArticleFull = 
+ record {
+   authorPrincipal: UserId;
+   category: text;
+   content: text;
+   coverImage: opt ExternalBlob;
+   createdAt: Timestamp;
+   excerpt: text;
+   id: ArticleId;
+   isPremium: bool;
+   isPublished: bool;
+   tags: vec text;
+   title: text;
+   updatedAt: Timestamp;
+ };
+type ArticleCard = 
+ record {
+   authorPrincipal: UserId;
+   category: text;
+   coverImage: opt ExternalBlob;
+   createdAt: Timestamp;
+   excerpt: text;
+   id: ArticleId;
+   isPremium: bool;
+   isPublished: bool;
+   tags: vec text;
+   title: text;
+   updatedAt: Timestamp;
+ };
+type AdminResult = 
+ variant {
+   alreadyExists;
+   notAdmin;
+   notAuthorized;
+   notFound;
+   ok;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  addAdmin: (newAdmin: UserId) -> (AdminResult);
+  addInvite: (email: text, role: Role) -> (InviteResult);
+  bindInvitePrincipal: (email: text) -> (InviteResult);
+  createArticle: (input: ArticleInput) -> (ArticleCard);
+  createPaymentRequest: (paymentType: PaymentType) -> (PaymentRequest);
+  deleteArticle: (id: ArticleId) -> (AdminResult);
+  getAllArticlesAdmin: () -> (vec ArticleCard);
+  getArticle: (id: ArticleId) -> (opt ArticleFull);
+  getArticleCard: (id: ArticleId) -> (opt ArticleCard) query;
+  getInviteByEmail: (email: text) -> (opt InvitedUser);
+  getLogoUrl: () -> (opt text) query;
+  getMyPaymentRequests: () -> (vec PaymentRequest) query;
+  getMyRole: () -> (opt Role);
+  getPublishedArticles: () -> (vec ArticleCard) query;
+  getSettings: () -> (SiteSettings) query;
+  getUserAccess: () -> (UserAccess) query;
+  hasSuperadmin: () -> (bool) query;
+  initSuperadmin: () -> (AdminResult);
+  isAuthorized: () -> (bool) query;
+  listAdmins: () -> (vec UserId);
+  listInvites: () -> (vec InvitedUser);
+  listTrackedPrincipals: () -> (vec UserId);
+  listUserRoles: () -> (vec UserRole);
+  publishArticle: (id: ArticleId) -> (AdminResult);
+  removeAdmin: (target: UserId) -> (AdminResult);
+  removeInvite: (email: text) -> (InviteResult);
+  removeUserRole: (target: UserId) -> (AdminResult);
+  setUserRole: (target: UserId, role: Role) -> (AdminResult);
+  unpublishArticle: (id: ArticleId) -> (AdminResult);
+  updateArticle: (id: ArticleId, input: ArticleInput) -> (AdminResult);
+  updateSettings: (updated: SiteSettings) -> (SettingsResult);
+  verifyPaymentRequest: (reqId: nat) -> (variant {
+                                           err: text;
+                                           ok;
+                                         });
+}

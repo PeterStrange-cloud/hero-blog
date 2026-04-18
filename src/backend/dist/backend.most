@@ -1,0 +1,117 @@
+// Version: 1.0.0
+type ArticleId__678690314 = Nat;
+type ArticleId__865064574 = ArticleId__678690314;
+type ArticleId__886802531 = ArticleId__678690314;
+type Article__854647936 =
+  {
+    authorPrincipal : UserId__169873558;
+    var category : Text;
+    var content : Text;
+    var coverImage : ?ExternalBlob__246066408;
+    createdAt : Timestamp__244059318;
+    var excerpt : Text;
+    id : ArticleId__865064574;
+    var isPremium : Bool;
+    var isPublished : Bool;
+    var tags : [Text];
+    var title : Text;
+    var updatedAt : Timestamp__244059318
+  };
+type Data__159895909<T> = {var count : Nat__490723111; elements : [var ?T]};
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type ExternalBlob__246066408 = Blob;
+type Internal__667636161<T> =
+  {children : [var ?Node__92254746<T>]; data : Data__159895909<T>};
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type InvitedUser__393097481 =
+  {
+    addedAt : Timestamp__570090700;
+    boundAt : ?Timestamp__570090700;
+    boundPrincipal : ?Principal;
+    email : Text;
+    intendedRole : Role__987616599
+  };
+type Leaf__520550824<T> = {data : Data__159895909<T>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type Node__92254746<T> =
+  {#internal : Internal__667636161<T>; #leaf : Leaf__520550824<T>};
+type PaymentRequestId__634170104 = Nat;
+type PaymentRequest__3834035 =
+  {
+    amountE8s : Nat;
+    createdAt : Int;
+    expiresAt : Int;
+    id : PaymentRequestId__634170104;
+    ownerPrincipal : Text;
+    paymentType : PaymentType__546579218;
+    status : PaymentStatus__1065738219;
+    subaccount : Blob;
+    userId : Principal
+  };
+type PaymentStatus__1065738219 = {#Consumed; #Expired; #Pending; #Verified};
+type PaymentType__546579218 =
+  {#ArticleUnlock : ArticleId__886802531; #Subscription};
+type Role__239137457 = {#admin; #editor; #superadmin};
+type Role__308008125 = Role__239137457;
+type Role__987616599 = Role__239137457;
+type Set__532252804<T> = Set__710576254<T>;
+type Set__710576254<T> =
+  {var root : Node__92254746<T>; var size : Nat__490723111};
+type SiteSettings__359912925 = {logoUrl : ?Text};
+type Subscription__772392430 =
+  {
+    expiryTime : Timestamp__512268584;
+    startTime : Timestamp__512268584;
+    userId : UserId__914055195
+  };
+type Timestamp__244059318 = Timestamp__301639476;
+type Timestamp__301639476 = Int;
+type Timestamp__512268584 = Timestamp__301639476;
+type Timestamp__570090700 = Timestamp__301639476;
+type UserId__158757552 = Principal;
+type UserId__169873558 = UserId__158757552;
+type UserId__914055195 = UserId__158757552;
+actor {
+  stable var _nextPaymentId : Nat;
+  stable accessStore :
+    {
+      subscriptions :
+        Map__605269027<UserId__158757552, Subscription__772392430>;
+      unlocks :
+        Map__605269027<UserId__158757552,
+                        Set__532252804<ArticleId__678690314>>
+    };
+  stable adminStore :
+    {
+      roles : Map__605269027<UserId__158757552, Role__308008125>;
+      trackedPrincipals : Set__532252804<UserId__158757552>
+    };
+  stable articleStore :
+    {
+      articles : Map__605269027<ArticleId__678690314, Article__854647936>;
+      var nextId : Nat
+    };
+  stable consumedPayments :
+    {var root : Node__92254746<Nat>; var size : Nat__490723111};
+  stable inviteStore :
+    {invites : Map__605269027<Text, InvitedUser__393097481>};
+  stable nextPaymentId : {var value : Nat};
+  stable paymentRequestStore :
+    {
+      var root :
+        Node__46230540<PaymentRequestId__634170104, PaymentRequest__3834035>;
+      var size : Nat__490723111
+    };
+  stable seedAuthor : Principal;
+  stable settingsStore : {var settings : SiteSettings__359912925}
+};
