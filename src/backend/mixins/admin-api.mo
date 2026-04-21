@@ -1,3 +1,4 @@
+import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import AdminTypes "../types/admin";
 import Common "../types/common";
@@ -74,7 +75,7 @@ mixin (adminStore : AdminLib.AdminStore) {
   /// unless they are anonymous. Never traps — returns null on any error.
   public shared ({ caller }) func getMyRole() : async ?AdminTypes.Role {
     try {
-      if (not caller.isAnonymous()) {
+      if (not Principal.isAnonymous(caller)) {
         AdminLib.trackPrincipal(adminStore, caller);
       };
       AdminLib.getRole(adminStore, caller);
@@ -107,7 +108,7 @@ mixin (adminStore : AdminLib.AdminStore) {
   /// Can only be called once. After that returns #notAuthorized.
   /// Callable by ANY authenticated principal (not anonymous).
   public shared ({ caller }) func initSuperadmin() : async AdminTypes.AdminResult {
-    if (caller.isAnonymous()) {
+    if (Principal.isAnonymous(caller)) {
       return #notAuthorized;
     };
     if (AdminLib.hasSuperadmin(adminStore)) {

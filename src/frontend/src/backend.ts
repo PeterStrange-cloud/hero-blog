@@ -234,6 +234,8 @@ export interface backendInterface {
     getPublishedArticles(): Promise<Array<ArticleCard>>;
     getSettings(): Promise<SiteSettings>;
     getUserAccess(): Promise<UserAccess>;
+    getLinkedWallet(): Promise<any | null>;
+    linkWallet(walletPrincipal: any): Promise<{ ok: null } | { err: string }>;
     hasSuperadmin(): Promise<boolean>;
     initSuperadmin(): Promise<AdminResult>;
     isAuthorized(): Promise<boolean>;
@@ -797,6 +799,16 @@ export class Backend implements backendInterface {
             const result = await this.actor.verifyPaymentRequest(arg0);
             return from_candid_variant_n57(this._uploadFile, this._downloadFile, result);
         }
+    }
+    async linkWallet(walletPrincipal: any): Promise<{ ok: null } | { err: string }> {
+        const result = await (this.actor as any).linkWallet(walletPrincipal);
+        return result;
+    }
+    async getLinkedWallet(): Promise<any | null> {
+        const result = await (this.actor as any).getLinkedWallet();
+        if (Array.isArray(result) && result.length === 0) return null;
+        if (Array.isArray(result) && result.length === 1) return result[0];
+        return result;
     }
 }
 function from_candid_AdminResult_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _AdminResult): AdminResult {

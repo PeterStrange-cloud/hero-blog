@@ -493,3 +493,48 @@ export function useVerifyPaymentRequest() {
     },
   });
 }
+
+export function useGetLinkedWallet() {
+  const { actor, isFetching } = useBackend();
+  return useQuery<unknown | null>({
+    queryKey: ["linkedWallet"],
+    queryFn: async () => {
+      if (!actor) throw new Error("Actor not ready");
+      const result = await actor.getLinkedWallet();
+      return result ?? null;
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: 30_000,
+    refetchOnWindowFocus: false,
+  });
+}
+
+export function useLinkWallet() {
+  const { actor } = useBackend();
+  const qc = useQueryClient();
+  return useMutation<null, Error, string>({
+    mutationFn: async (walletPrincipalText) => {
+      console.log("[linkWallet] starting with:", walletPrincipalText);
+      if (!actor) throw new Error("Actor not ready");
+      console.log("[linkWallet] actor exists, type:", typeof actor.linkWallet);
+      try {
+        const { Principal } = await import("@dfinity/principal");
+        const walletPrincipal = Principal.fromText(walletPrincipalText);
+        console.log("[linkWallet] principal parsed:", walletPrincipal.toString());
+        const result = await actor.linkWallet(walletPrincipal);
+        console.log("[linkWallet] result:", result);
+        return null;
+      } catch (e) {
+        console.error("[linkWallet] ERROR:", e);
+        throw e;
+      }
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["userAccess"] });
+      qc.invalidateQueries({ queryKey: ["linkedWallet"] });
+    },
+    onError: (e) => {
+      console.error("[linkWallet] mutation error:", e);
+    },
+  });
+}

@@ -1,3 +1,4 @@
+import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import InviteTypes "../types/invite";
 import AdminLib "../lib/admin";
@@ -38,7 +39,7 @@ mixin (
   /// Bind a principal to an invited email.
   /// Any authenticated caller can bind themselves to an email they were invited with.
   public shared ({ caller }) func bindInvitePrincipal(email : Text) : async InviteTypes.InviteResult {
-    if (caller.isAnonymous()) {
+    if (Principal.isAnonymous(caller)) {
       return #notAuthorized;
     };
     InviteLib.bindPrincipal(inviteStore, email, caller);

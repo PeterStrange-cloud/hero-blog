@@ -37,7 +37,7 @@ function FeaturedCard({ article }: { article: ArticleCard }) {
 
   return (
     <motion.article
-      className="relative w-full overflow-hidden rounded-lg border border-border bg-card cursor-pointer group"
+      className="card-red relative w-full overflow-hidden cursor-pointer group transition-smooth"
       style={{ minHeight: 420 }}
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
@@ -102,7 +102,7 @@ function FeaturedCard({ article }: { article: ArticleCard }) {
           {article.isPremium ? (
             <Button
               variant="default"
-              className="gap-2 font-semibold"
+              className="btn-primary gap-2 font-semibold"
               onClick={(e) => {
                 e.stopPropagation();
                 goto();
@@ -115,7 +115,7 @@ function FeaturedCard({ article }: { article: ArticleCard }) {
           ) : (
             <Button
               variant="outline"
-              className="gap-2 border-border/60 bg-background/50 backdrop-blur-sm hover:bg-card"
+              className="gap-2 border-primary/50 bg-primary/10 text-accent-red hover:bg-primary/20 hover:border-primary"
               onClick={(e) => {
                 e.stopPropagation();
                 goto();
@@ -149,7 +149,7 @@ function ArticleGridCard({
 
   return (
     <motion.article
-      className="flex flex-col overflow-hidden rounded-lg border border-border bg-card cursor-pointer group transition-smooth hover:border-border/80 hover:shadow-lg hover:-translate-y-0.5"
+      className="flex flex-col overflow-hidden rounded-lg border border-border bg-card cursor-pointer group transition-smooth  hover:-translate-y-0.5"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -202,8 +202,7 @@ function ArticleGridCard({
           {article.isPremium ? (
             <Button
               size="sm"
-              variant="default"
-              className="h-7 px-3 text-xs gap-1.5 shrink-0"
+              className="btn-primary h-8 px-3 text-xs gap-1.5 shrink-0"
               onClick={(e) => {
                 e.stopPropagation();
                 goto();
@@ -296,7 +295,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background" data-ocid="home.page">
       {/* Page header band */}
-      <section className="border-b border-border bg-card/50 py-10 md:py-16">
+      <section className="border-b border-subtle py-16 md:py-24 hero-glow">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <motion.div
             className="flex flex-col gap-3 max-w-2xl"
@@ -310,8 +309,9 @@ export default function HomePage() {
                 DECENTRALIZED PUBLISHING
               </span>
             </div>
-            <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-tight">
-              HERO BLOG
+            <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-tight">
+              <span className="glow-red">HERO</span>{" "}
+              <span className="text-foreground">BLOG</span>
             </h1>
             <p className="type-body-lg text-muted-foreground">
               Decentralized insights on ICP and Web3 — exclusive research,

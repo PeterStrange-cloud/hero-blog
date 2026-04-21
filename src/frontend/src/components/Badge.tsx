@@ -16,12 +16,12 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  free: "bg-muted text-muted-foreground border-border",
-  premium: "bg-primary/10 text-primary border-primary/30",
-  category: "bg-secondary text-secondary-foreground border-border",
-  draft: "bg-muted text-muted-foreground border-border",
-  published: "bg-primary/10 text-primary border-primary/30",
-  tag: "bg-muted/50 text-muted-foreground border-border",
+  free: "badge-live",
+  premium: "badge-premium",
+  category: "bg-sunken text-muted border-subtle px-2 py-0.5 rounded border type-label text-[10px] inline-flex items-center",
+  draft: "bg-sunken text-muted border-subtle px-2 py-0.5 rounded border type-label text-[10px] inline-flex items-center",
+  published: "badge-live",
+  tag: "bg-sunken text-muted border-subtle px-2 py-0.5 rounded border type-label text-[10px] inline-flex items-center",
 };
 
 export function Badge({
@@ -31,11 +31,7 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={cn(
-        "inline-flex items-center gap-1 px-2 py-0.5 rounded border type-label text-[10px]",
-        variantStyles[variant],
-        className,
-      )}
+      className={cn(variantStyles[variant], className)}
     >
       {children}
     </span>

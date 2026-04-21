@@ -59,7 +59,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    bindgenPlugin(),
     environment("all", { prefix: "CANISTER_" }),
     environment("all", { prefix: "DFX_" }),
     environment(["II_URL"]),

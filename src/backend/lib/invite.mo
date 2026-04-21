@@ -1,4 +1,6 @@
 import Map "mo:core/Map";
+import Iter "mo:core/Iter";
+import Text "mo:core/Text";
 import Time "mo:core/Time";
 import Principal "mo:core/Principal";
 import InviteTypes "../types/invite";
@@ -20,7 +22,7 @@ module {
     email : Text,
     role : InviteTypes.Role,
   ) : InviteTypes.InviteResult {
-    if (store.invites.containsKey(email)) {
+    if (Map.containsKey(store.invites, Text.compare, email)) {
       return #alreadyExists;
     };
     let invite : InviteTypes.InvitedUser = {
@@ -30,20 +32,20 @@ module {
       boundPrincipal = null;
       boundAt = null;
     };
-    store.invites.add(email, invite);
+    Map.add(store.invites, Text.compare, email, invite);
     #ok;
   };
 
   public func removeInvite(store : InviteStore, email : Text) : InviteTypes.InviteResult {
-    if (not store.invites.containsKey(email)) {
+    if (not Map.containsKey(store.invites, Text.compare, email)) {
       return #notFound;
     };
-    store.invites.remove(email);
+    Map.remove(store.invites, Text.compare, email);
     #ok;
   };
 
   public func listInvites(store : InviteStore) : [InviteTypes.InvitedUser] {
-    store.invites.values().toArray();
+    Iter.toArray(Map.values(store.invites));
   };
 
   /// Bind a principal to an invited email (called after first sign-in)
@@ -52,7 +54,7 @@ module {
     email : Text,
     principal : Principal,
   ) : InviteTypes.InviteResult {
-    switch (store.invites.get(email)) {
+    switch (Map.get(store.invites, Text.compare, email)) {
       case null { #notFound };
       case (?invite) {
         if (invite.boundPrincipal != null) {
@@ -63,7 +65,7 @@ module {
           boundPrincipal = ?principal;
           boundAt = ?Time.now();
         };
-        store.invites.add(email, updated);
+        Map.add(store.invites, Text.compare, email, updated);
         #ok;
       };
     };
@@ -71,12 +73,12 @@ module {
 
   /// Get invited user by email
   public func getInviteByEmail(store : InviteStore, email : Text) : ?InviteTypes.InvitedUser {
-    store.invites.get(email);
+    Map.get(store.invites, Text.compare, email);
   };
 
   /// Find invite by bound principal
   public func getInviteByPrincipal(store : InviteStore, p : Principal) : ?InviteTypes.InvitedUser {
-    store.invites.values().find(func(inv : InviteTypes.InvitedUser) : Bool {
+    Iter.find(Map.values(store.invites), func(inv : InviteTypes.InvitedUser) : Bool {
       switch (inv.boundPrincipal) {
         case (?bp) Principal.equal(bp, p);
         case null false;

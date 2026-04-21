@@ -1,3 +1,4 @@
+import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import SettingsTypes "../types/settings";
 import AdminLib "../lib/admin";

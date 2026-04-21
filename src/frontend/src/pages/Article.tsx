@@ -85,14 +85,12 @@ interface PaywallProps {
   isAuthenticated: boolean;
   onLogin: () => void;
   onUnlock: () => void;
-  onSubscribe: () => void;
 }
 
 function Paywall({
   isAuthenticated,
   onLogin,
   onUnlock,
-  onSubscribe,
 }: PaywallProps) {
   return (
     <div
@@ -139,21 +137,22 @@ function Paywall({
         <div className="grid sm:grid-cols-2 gap-4">
           {/* Unlock article option */}
           <div
-            className="rounded-lg border border-border bg-background p-5 flex flex-col gap-3"
+            className="card-red p-6 flex flex-col gap-4 max-w-sm mx-auto"
             data-ocid="article.unlock_option_card"
           >
             <div>
-              <p className="text-primary text-xs mb-1 font-medium uppercase tracking-wider">
+              <p className="text-accent-red text-xs mb-1 font-bold uppercase tracking-wider">
                 ONE-TIME ACCESS
               </p>
-              <p className="font-display text-2xl text-foreground">1 HERO</p>
+              <p className="font-display text-3xl font-bold text-accent-red">1 HERO</p>
               <p className="text-xs text-muted-foreground mt-1">
                 Permanently unlock this article for your account.
               </p>
             </div>
             <Button
               disabled={!isAuthenticated}
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-40"
+              style={{ backgroundColor: "oklch(0.7 0.18 145)", color: "oklch(0.08 0 0)" }}
+              className="w-full hover:opacity-90 disabled:opacity-40 text-base font-semibold h-11 shadow-lg"
               onClick={onUnlock}
               data-ocid="article.unlock_article_button"
             >
@@ -162,36 +161,6 @@ function Paywall({
             </Button>
           </div>
 
-          {/* Subscribe option */}
-          <div
-            className="rounded-lg border border-primary/40 bg-primary/5 p-5 flex flex-col gap-3 relative overflow-hidden"
-            data-ocid="article.subscribe_option_card"
-          >
-            <div className="absolute top-3 right-3">
-              <span className="text-[9px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded font-medium uppercase tracking-wider">
-                BEST VALUE
-              </span>
-            </div>
-            <div>
-              <p className="text-primary text-xs mb-1 font-medium uppercase tracking-wider">
-                MONTHLY SUBSCRIPTION
-              </p>
-              <p className="font-display text-2xl text-foreground">10 HERO</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Unlock all premium articles for 30 days.
-              </p>
-            </div>
-            <Button
-              disabled={!isAuthenticated}
-              variant="outline"
-              className="w-full border-primary/50 text-primary hover:bg-primary/10 disabled:opacity-40"
-              onClick={onSubscribe}
-              data-ocid="article.subscribe_button"
-            >
-              <Crown className="size-4 mr-2" />
-              Subscribe for 10 HERO
-            </Button>
-          </div>
         </div>
 
         <p className="text-center text-muted-foreground/60 text-xs">
@@ -389,7 +358,6 @@ export default function Article() {
                 isAuthenticated={isAuthenticated}
                 onLogin={login}
                 onUnlock={() => setPaymentModal({ type: "unlock", articleId })}
-                onSubscribe={() => setPaymentModal({ type: "subscribe" })}
               />
             </>
           )}
@@ -406,6 +374,8 @@ export default function Article() {
           onSuccess={() => {
             setPaymentModal(null);
             queryClient.invalidateQueries({ queryKey: ["userAccess"] });
+            queryClient.invalidateQueries({ queryKey: ["article"] });
+            queryClient.invalidateQueries({ queryKey: ["articleCard"] });
           }}
         />
       )}

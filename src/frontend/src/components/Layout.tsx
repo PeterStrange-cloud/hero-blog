@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Check, Copy, LogIn, LogOut, Shield } from "lucide-react";
+import { Check, Copy, LogIn, LogOut, Shield, User } from "lucide-react";
 import { useState } from "react";
 import { useIdentity } from "../hooks/useIdentity";
 import { useGetLogoUrl } from "../hooks/useQueries";
@@ -36,7 +36,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-card border-b border-border">
+      <header className="sticky top-0 z-50 nav-dark">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link
@@ -51,9 +51,9 @@ export function Layout({ children }: LayoutProps) {
                 className="h-8 max-w-[140px] object-contain"
               />
             ) : (
-              <span className="font-display text-xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors duration-200">
-                HERO
-                <span className="text-primary ml-1">BLOG</span>
+              <span className="font-display text-xl font-bold tracking-tight text-foreground transition-colors duration-200">
+                <span className="glow-red">HERO</span>
+                <span className="ml-1">BLOG</span>
               </span>
             )}
           </Link>
@@ -67,7 +67,7 @@ export function Layout({ children }: LayoutProps) {
             >
               Blog
             </Link>
-            {isAuthenticated && (
+            {isAuthenticated && (<>
               <Link
                 to="/admin"
                 className="type-label text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1.5"
@@ -76,6 +76,15 @@ export function Layout({ children }: LayoutProps) {
                 <Shield className="size-3.5" />
                 Admin
               </Link>
+              <Link
+                to="/profile"
+                className="type-label text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1.5"
+                data-ocid="nav.profile_link"
+              >
+                <User className="size-3.5" />
+                Profile
+              </Link>
+              </>
             )}
           </nav>
 
@@ -141,7 +150,7 @@ export function Layout({ children }: LayoutProps) {
           >
             Blog
           </Link>
-          {isAuthenticated && (
+          {isAuthenticated && (<>
             <Link
               to="/admin"
               className="type-label text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1"
@@ -150,6 +159,15 @@ export function Layout({ children }: LayoutProps) {
               <Shield className="size-3" />
               Admin
             </Link>
+            <Link
+              to="/profile"
+              className="type-label text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1"
+              data-ocid="nav.mobile_profile_link"
+            >
+              <User className="size-3" />
+              Profile
+            </Link>
+            </>
           )}
         </div>
       </header>

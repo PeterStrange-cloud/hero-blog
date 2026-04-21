@@ -1,3 +1,4 @@
+import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import ArticleTypes "../types/articles";
 import AdminTypes "../types/admin";

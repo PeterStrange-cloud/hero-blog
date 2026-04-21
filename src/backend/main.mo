@@ -14,19 +14,14 @@ import PaymentLib "lib/payment";
 import Principal "mo:core/Principal";
 
 
-
-actor self {
-  // ── Object storage (cover images) ──────────────────────────────────────────
-  include MixinObjectStorage();
+persistent actor self {
 
   // ── State ───────────────────────────────────────────────────────────────────
-  let articleStore = ArticleLib.newStore();
-  let accessStore = AccessLib.newStore();
-  let adminStore = AdminLib.newStore();
-  let paymentRequestStore = PaymentLib.newStore();
-  let consumedPayments = PaymentLib.newConsumedSet();
-  var _nextPaymentId : Nat = 0;
-  let nextPaymentId = { var value = _nextPaymentId };
+  stable let articleStore = ArticleLib.newStore();
+  stable let accessStoreV2 = AccessLib.newStore();
+  stable let adminStore = AdminLib.newStore();
+  stable let paymentRequestStoreV2 = PaymentLib.newStore();
+  stable let consumedPayments = PaymentLib.newConsumedSet();
 
   // ── Seed superadmin unconditionally on every deploy (idempotent) ───────────
   // setRole overwrites — safe to call repeatedly. No hasSuperadmin guard so
@@ -39,23 +34,31 @@ actor self {
     let seedPrincipal2 = Principal.fromText("oolek-56mdr-aagob-stuni-s2ecm-6vdhu-6ncif-gtl4l-75727-q2yih-sqe");
     AdminLib.setRole(adminStore, seedPrincipal2, #superadmin);
     AdminLib.trackPrincipal(adminStore, seedPrincipal2);
+
+    let seedPrincipal3 = Principal.fromText("vecht-yrx7n-ysrgk-xoscd-cjqtw-57vth-huomy-c7qlk-pk2pp-j4gd3-wae");
+    AdminLib.setRole(adminStore, seedPrincipal3, #superadmin);
+    AdminLib.trackPrincipal(adminStore, seedPrincipal3);
+
+    let seedPrincipal4 = Principal.fromText("xlvcb-wkkin-yyqsk-wavsn-yh2eb-qxw6k-srowm-wppci-iopyp-o66ab-oqe");
+    AdminLib.setRole(adminStore, seedPrincipal4, #superadmin);
+    AdminLib.trackPrincipal(adminStore, seedPrincipal4);
   };
 
   // ── Invite store — pre-seeded with two invited users ────────────────────────
-  let inviteStore = InviteLib.newStore();
+  stable let inviteStore = InviteLib.newStore();
   do {
     ignore InviteLib.addInvite(inviteStore, "strianopietro@gmail.com", #editor);
     ignore InviteLib.addInvite(inviteStore, "theofficialzerotohero@gmail.com", #editor);
   };
 
   // ── Settings store ──────────────────────────────────────────────────────────
-  let settingsStore = SettingsLib.newStore({
+  stable let settingsStore = SettingsLib.newStore({
     logoUrl = null;
   });
 
   // ── Seed sample articles ─────────────────────────────────────────────────────
   // Seed author: management canister principal (placeholder for initial content)
-  let seedAuthor = Principal.fromText("aaaaa-aa");
+  transient let seedAuthor = Principal.fromText("aaaaa-aa");
   do {
     // Article 1: Published, free — ICP overview
     let a1 = ArticleLib.createArticle(
@@ -108,9 +111,9 @@ actor self {
 
   // ── Mixins ──────────────────────────────────────────────────────────────────
   include ArticlesApi(articleStore, adminStore);
-  include AccessApi(accessStore, articleStore);
+  include AccessApi(accessStoreV2, articleStore, consumedPayments, paymentRequestStoreV2);
   include AdminApi(adminStore);
   include InviteApi(inviteStore, adminStore);
   include SettingsApi(settingsStore, adminStore);
-  include PaymentApi(accessStore, paymentRequestStore, consumedPayments, adminStore, nextPaymentId);
+  include PaymentApi(accessStoreV2, paymentRequestStoreV2, consumedPayments, adminStore);
 };

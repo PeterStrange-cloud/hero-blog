@@ -1,4 +1,6 @@
 import Map "mo:core/Map";
+import Iter "mo:core/Iter";
+import Array "mo:core/Array";
 import Time "mo:core/Time";
 import Int "mo:core/Int";
 import Types "../types/articles";
@@ -101,16 +103,18 @@ module {
       .filter(func(a : Types.Article) : Bool { a.isPublished })
       .map(func(a : Types.Article) : Types.ArticleCard { toCard(a) })
       .toArray();
-    cards.sort(func(a : Types.ArticleCard, b : Types.ArticleCard) : { #less; #equal; #greater } {
+    let sorted = Array.sort(cards, func(a : Types.ArticleCard, b : Types.ArticleCard) : { #less; #equal; #greater } {
       Int.compare(b.createdAt, a.createdAt);
     });
+    sorted
   };
 
   public func getAllArticles(store : ArticleStore) : [Types.ArticleCard] {
     let cards = store.articles.values().map(func(a : Types.Article) : Types.ArticleCard { toCard(a) }).toArray();
-    cards.sort(func(a : Types.ArticleCard, b : Types.ArticleCard) : { #less; #equal; #greater } {
+    let sorted = Array.sort(cards, func(a : Types.ArticleCard, b : Types.ArticleCard) : { #less; #equal; #greater } {
       Int.compare(b.createdAt, a.createdAt);
     });
+    sorted
   };
 
   public func getArticle(store : ArticleStore, id : Common.ArticleId) : ?Types.Article {
