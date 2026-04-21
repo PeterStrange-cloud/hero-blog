@@ -1,13 +1,13 @@
-import { u as useNavigate, i as useParams, a as useIdentity, f as useListAdmins, k as useArticle, l as useUpdateArticle, h as usePublishArticle, j as jsxRuntimeExports, P as PageLoading, E as ErrorMessage, m as ExternalBlob, A as AdminResult } from "./index-CKpRxWa0.js";
-import { u as ue } from "./index-BQ03fKBn.js";
-import { A as ArticleForm } from "./ArticleForm-CfU_WRDF.js";
-import "./input--z3F7IR4.js";
-import "./label-BhI9duoF.js";
-import "./index-DdUz_TaJ.js";
-import "./index-BKF6UN4Q.js";
-import "./index-DI-4CuCE.js";
-import "./x-Ckj6hJtG.js";
-import "./upload-B4HxhLde.js";
+import { u as useNavigate, i as useParams, a as useIdentity, f as useListAdmins, k as useArticle, l as useUpdateArticle, h as usePublishArticle, j as jsxRuntimeExports, P as PageLoading, E as ErrorMessage, m as ExternalBlob, A as AdminResult } from "./index-Cb-A1uTt.js";
+import { u as ue } from "./index-DWSG0y-L.js";
+import { A as ArticleForm } from "./ArticleForm-LaO2KsCw.js";
+import "./input-PurMIxoJ.js";
+import "./label-DjZ2-zcl.js";
+import "./index-DaLeZk8p.js";
+import "./index-D2ZrNnFk.js";
+import "./index-DNZ_Umqy.js";
+import "./x-Ba-BVsoR.js";
+import "./upload-DbAwJOhU.js";
 function AdminEdit() {
   const navigate = useNavigate();
   const { id } = useParams({ from: "/admin/edit/$id" });
