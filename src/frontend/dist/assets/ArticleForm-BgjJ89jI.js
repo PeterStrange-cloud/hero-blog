@@ -1,13 +1,13 @@
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-import { r as reactExports, a2 as useComposedRefs, j as jsxRuntimeExports, o as cn, ac as commonjsGlobal, ad as getDefaultExportFromCjs, R as React2, B as Button, z as Link$1, ae as InlineError, m as ExternalBlob } from "./index-Cb-A1uTt.js";
-import { I as Input$1 } from "./input-PurMIxoJ.js";
-import { L as Label } from "./label-DjZ2-zcl.js";
-import { a as useControllableState, P as Primitive, b as composeEventHandlers, d as createContextScope } from "./index-D2ZrNnFk.js";
-import { a as usePrevious, u as useSize } from "./index-DNZ_Umqy.js";
-import { A as ArrowLeft, X } from "./x-Ba-BVsoR.js";
-import { I as Image$1, U as Upload } from "./upload-DbAwJOhU.js";
+import { r as reactExports, a2 as useComposedRefs, j as jsxRuntimeExports, o as cn, ac as commonjsGlobal, ad as getDefaultExportFromCjs, R as React2, B as Button, z as Link$1, ae as InlineError, m as ExternalBlob } from "./index-Cd3JRCiA.js";
+import { I as Input$1 } from "./input-DIa8aOsM.js";
+import { L as Label } from "./label-hydcGU44.js";
+import { a as useControllableState, P as Primitive, b as composeEventHandlers, d as createContextScope } from "./index-B6GEG0Mg.js";
+import { a as usePrevious, u as useSize } from "./index-BYrjqCW6.js";
+import { A as ArrowLeft, X } from "./x-o04IhqIt.js";
+import { I as Image$1, U as Upload } from "./upload-kD_MyvOH.js";
 var SWITCH_NAME = "Switch";
 var [createSwitchContext] = createContextScope(SWITCH_NAME);
 var [SwitchProvider, useSwitchContext] = createSwitchContext(SWITCH_NAME);
@@ -11286,6 +11286,8 @@ const QUILL_MODULES = {
   toolbar: [
     [{ header: [1, 2, 3, false] }],
     ["bold", "italic", "underline", "strike"],
+    [{ color: [] }, { background: [] }],
+    [{ align: [] }],
     [{ list: "ordered" }, { list: "bullet" }],
     ["blockquote", "code-block"],
     ["link"],
@@ -11298,6 +11300,9 @@ const QUILL_FORMATS = [
   "italic",
   "underline",
   "strike",
+  "color",
+  "background",
+  "align",
   "list",
   "blockquote",
   "code-block",

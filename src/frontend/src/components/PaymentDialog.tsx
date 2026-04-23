@@ -132,6 +132,8 @@ export function PaymentDialog({
 
   const verifyMutateRef = useRef(verifyMutation.mutate);
   verifyMutateRef.current = verifyMutation.mutate;
+  const verifyMutateAsyncRef = useRef(verifyMutation.mutateAsync);
+  verifyMutateAsyncRef.current = verifyMutation.mutateAsync;
   const onSuccessRef = useRef(onSuccess);
   onSuccessRef.current = onSuccess;
   const onCloseRef = useRef(onClose);
@@ -142,27 +144,28 @@ export function PaymentDialog({
     setPollingStatus("pending");
     attemptRef.current = 0;
 
-    const tick = () => {
+    const tick = async () => {
       attemptRef.current += 1;
       const attempt = attemptRef.current;
       setPollingStatus({ attempt });
 
-      verifyMutateRef.current(req.id, {
-        onSuccess: () => {
+      console.log("[PaymentDialog] polling verify for reqId=", req.id, "attempt=", attempt);
+      try {
+        const result = await verifyMutateAsyncRef.current(req.id);
+        console.log("[PaymentDialog] verify result for reqId=", req.id, "result=", result);
+        stopPolling();
+        setPollingStatus("granted");
+        setTimeout(() => {
+          onSuccessRef.current();
+          onCloseRef.current();
+        }, 1500);
+      } catch (err) {
+        console.log("[PaymentDialog] verify error for reqId=", req.id, "err=", err);
+        if (attempt >= MAX_ATTEMPTS) {
           stopPolling();
-          setPollingStatus("granted");
-          setTimeout(() => {
-            onSuccessRef.current();
-            onCloseRef.current();
-          }, 1500);
-        },
-        onError: () => {
-          if (attempt >= MAX_ATTEMPTS) {
-            stopPolling();
-            setPollingStatus("not_found");
-          }
-        },
-      });
+          setPollingStatus("not_found");
+        }
+      }
     };
 
     tick();

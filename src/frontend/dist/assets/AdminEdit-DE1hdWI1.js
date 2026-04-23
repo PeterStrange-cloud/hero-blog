@@ -1,13 +1,13 @@
-import { u as useNavigate, i as useParams, a as useIdentity, f as useListAdmins, k as useArticle, l as useUpdateArticle, h as usePublishArticle, j as jsxRuntimeExports, P as PageLoading, E as ErrorMessage, m as ExternalBlob, A as AdminResult } from "./index-Cb-A1uTt.js";
-import { u as ue } from "./index-DWSG0y-L.js";
-import { A as ArticleForm } from "./ArticleForm-LaO2KsCw.js";
-import "./input-PurMIxoJ.js";
-import "./label-DjZ2-zcl.js";
-import "./index-DaLeZk8p.js";
-import "./index-D2ZrNnFk.js";
-import "./index-DNZ_Umqy.js";
-import "./x-Ba-BVsoR.js";
-import "./upload-DbAwJOhU.js";
+import { u as useNavigate, i as useParams, a as useIdentity, f as useListAdmins, k as useArticle, l as useUpdateArticle, h as usePublishArticle, j as jsxRuntimeExports, P as PageLoading, E as ErrorMessage, m as ExternalBlob, A as AdminResult } from "./index-Cd3JRCiA.js";
+import { u as ue } from "./index-D1S_TZej.js";
+import { A as ArticleForm } from "./ArticleForm-BgjJ89jI.js";
+import "./input-DIa8aOsM.js";
+import "./label-hydcGU44.js";
+import "./index-BAOYKp7U.js";
+import "./index-B6GEG0Mg.js";
+import "./index-BYrjqCW6.js";
+import "./x-o04IhqIt.js";
+import "./upload-kD_MyvOH.js";
 function AdminEdit() {
   const navigate = useNavigate();
   const { id } = useParams({ from: "/admin/edit/$id" });
@@ -63,7 +63,16 @@ function AdminEdit() {
       isPremium: values.isPremium,
       coverImage: values.coverImage ?? void 0
     };
-    const result = await updateArticle.mutateAsync({ id: articleId, input });
+    console.log("[AdminEdit] submitting input=", input);
+    let result;
+    try {
+      result = await updateArticle.mutateAsync({ id: articleId, input });
+      console.log("[AdminEdit] update result=", result);
+    } catch (e) {
+      console.error("[AdminEdit] update THREW error=", e);
+      ue.error(`Update failed: ${(e == null ? void 0 : e.message) ?? e}`);
+      return;
+    }
     if (result === AdminResult.ok) {
       if (values.publishNow && !article.isPublished) {
         await publishArticle.mutateAsync(articleId);

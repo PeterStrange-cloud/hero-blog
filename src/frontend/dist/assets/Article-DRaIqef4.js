@@ -1,8 +1,8 @@
-import { e as createLucideIcon, r as reactExports, j as jsxRuntimeExports, o as cn, F as useUserAccess, G as useGetLinkedWallet, V as useCreatePaymentRequest, W as useVerifyPaymentRequest, B as Button, z as Link, L as LoaderCircle, C as Copy, i as useParams, a as useIdentity, X as useQueryClient, k as useArticle, Y as CircleAlert, Z as motion, _ as CategoryBadge, $ as PremiumBadge, a0 as FreeBadge, O as formatTimestamp, a1 as Lock } from "./index-Cb-A1uTt.js";
-import { P as Primitive } from "./index-DaLeZk8p.js";
-import { X, A as ArrowLeft } from "./x-Ba-BVsoR.js";
-import { W as Wallet } from "./wallet-C0YTW4eS.js";
-import { C as CircleCheckBig } from "./circle-check-big-D3m9cOrX.js";
+import { e as createLucideIcon, r as reactExports, j as jsxRuntimeExports, o as cn, F as useUserAccess, G as useGetLinkedWallet, V as useCreatePaymentRequest, W as useVerifyPaymentRequest, B as Button, z as Link, L as LoaderCircle, C as Copy, i as useParams, a as useIdentity, X as useQueryClient, k as useArticle, Y as CircleAlert, Z as motion, _ as CategoryBadge, $ as PremiumBadge, a0 as FreeBadge, O as formatTimestamp, a1 as Lock } from "./index-Cd3JRCiA.js";
+import { P as Primitive } from "./index-BAOYKp7U.js";
+import { X, A as ArrowLeft } from "./x-o04IhqIt.js";
+import { W as Wallet } from "./wallet-DCI1weOW.js";
+import { C as CircleCheckBig } from "./circle-check-big-Dnem3wGS.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -212,6 +212,8 @@ function PaymentDialog({
   }, [stopPolling]);
   const verifyMutateRef = reactExports.useRef(verifyMutation.mutate);
   verifyMutateRef.current = verifyMutation.mutate;
+  const verifyMutateAsyncRef = reactExports.useRef(verifyMutation.mutateAsync);
+  verifyMutateAsyncRef.current = verifyMutation.mutateAsync;
   const onSuccessRef = reactExports.useRef(onSuccess);
   onSuccessRef.current = onSuccess;
   const onCloseRef = reactExports.useRef(onClose);
@@ -220,26 +222,27 @@ function PaymentDialog({
     if (!req) return;
     setPollingStatus("pending");
     attemptRef.current = 0;
-    const tick = () => {
+    const tick = async () => {
       attemptRef.current += 1;
       const attempt = attemptRef.current;
       setPollingStatus({ attempt });
-      verifyMutateRef.current(req.id, {
-        onSuccess: () => {
+      console.log("[PaymentDialog] polling verify for reqId=", req.id, "attempt=", attempt);
+      try {
+        const result = await verifyMutateAsyncRef.current(req.id);
+        console.log("[PaymentDialog] verify result for reqId=", req.id, "result=", result);
+        stopPolling();
+        setPollingStatus("granted");
+        setTimeout(() => {
+          onSuccessRef.current();
+          onCloseRef.current();
+        }, 1500);
+      } catch (err) {
+        console.log("[PaymentDialog] verify error for reqId=", req.id, "err=", err);
+        if (attempt >= MAX_ATTEMPTS) {
           stopPolling();
-          setPollingStatus("granted");
-          setTimeout(() => {
-            onSuccessRef.current();
-            onCloseRef.current();
-          }, 1500);
-        },
-        onError: () => {
-          if (attempt >= MAX_ATTEMPTS) {
-            stopPolling();
-            setPollingStatus("not_found");
-          }
+          setPollingStatus("not_found");
         }
-      });
+      }
     };
     tick();
     pollingRef.current = setInterval(tick, POLL_INTERVAL_MS);
@@ -600,7 +603,7 @@ function ArticleBody({ content }) {
     "div",
     {
       ref,
-      className: "prose prose-invert prose-sm sm:prose-base max-w-none\n        prose-headings:font-display prose-headings:text-foreground\n        prose-p:text-foreground/90 prose-p:leading-relaxed\n        prose-a:text-primary prose-a:no-underline hover:prose-a:underline\n        prose-strong:text-foreground\n        prose-code:text-primary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded\n        prose-pre:bg-card prose-pre:border prose-pre:border-border\n        prose-blockquote:border-primary/40 prose-blockquote:text-muted-foreground\n        prose-img:rounded-lg prose-img:border prose-img:border-border\n        prose-hr:border-border",
+      className: "prose prose-sm sm:prose-base max-w-none\n        prose-headings:font-display prose-headings:text-foreground\n        prose-p:text-foreground prose-p:leading-relaxed\n        prose-a:text-primary prose-a:no-underline hover:prose-a:underline\n        prose-strong:text-foreground\n        prose-code:text-primary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded\n        prose-pre:bg-card prose-pre:border prose-pre:border-border\n        prose-blockquote:border-primary/40 prose-blockquote:text-muted-foreground\n        prose-img:rounded-lg prose-img:border prose-img:border-border\n        prose-hr:border-border",
       "data-ocid": "article.body"
     }
   );

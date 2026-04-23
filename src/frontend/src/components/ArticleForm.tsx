@@ -34,6 +34,8 @@ const QUILL_MODULES = {
   toolbar: [
     [{ header: [1, 2, 3, false] }],
     ["bold", "italic", "underline", "strike"],
+    [{ color: [] }, { background: [] }],
+    [{ align: [] }],
     [{ list: "ordered" }, { list: "bullet" }],
     ["blockquote", "code-block"],
     ["link"],
@@ -47,6 +49,9 @@ const QUILL_FORMATS = [
   "italic",
   "underline",
   "strike",
+  "color",
+  "background",
+  "align",
   "list",
   "blockquote",
   "code-block",

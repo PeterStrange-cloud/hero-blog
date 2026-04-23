@@ -197,9 +197,9 @@ function ArticleBody({ content }: { content: string }) {
   return (
     <div
       ref={ref}
-      className="prose prose-invert prose-sm sm:prose-base max-w-none
+      className="prose prose-sm sm:prose-base max-w-none
         prose-headings:font-display prose-headings:text-foreground
-        prose-p:text-foreground/90 prose-p:leading-relaxed
+        prose-p:text-foreground prose-p:leading-relaxed
         prose-a:text-primary prose-a:no-underline hover:prose-a:underline
         prose-strong:text-foreground
         prose-code:text-primary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded

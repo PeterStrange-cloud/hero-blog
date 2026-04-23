@@ -82,7 +82,16 @@ export default function AdminEdit() {
       coverImage: values.coverImage ?? undefined,
     };
 
-    const result = await updateArticle.mutateAsync({ id: articleId, input });
+    console.log("[AdminEdit] submitting input=", input);
+    let result;
+    try {
+      result = await updateArticle.mutateAsync({ id: articleId, input });
+      console.log("[AdminEdit] update result=", result);
+    } catch (e) {
+      console.error("[AdminEdit] update THREW error=", e);
+      toast.error(`Update failed: ${(e as Error)?.message ?? e}`);
+      return;
+    }
 
     if (result === AdminResult.ok) {
       // Handle publish toggle if needed

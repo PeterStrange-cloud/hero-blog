@@ -486,9 +486,12 @@ export function useVerifyPaymentRequest() {
   const { actor } = useBackend();
   return useMutation<null, Error, bigint>({
     mutationFn: async (reqId) => {
+      console.log("[verifyHook] START reqId=", reqId, "actor=", !!actor);
       if (!actor) throw new Error("Actor not ready");
       const result = await actor.verifyPaymentRequest(reqId);
+      console.log("[verifyHook] RAW result=", result);
       if ("err" in result) throw new Error(result.err as string);
+      console.log("[verifyHook] returning null (success)");
       return null;
     },
   });
