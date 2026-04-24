@@ -1,0 +1,116 @@
+// Version: 1.0.0
+type ArticleId__623262048 = Nat;
+type ArticleId__70946697 = ArticleId__623262048;
+type ArticleId__725621968 = ArticleId__623262048;
+type Article__663306592 =
+  {
+    authorPrincipal : UserId__708683920;
+    var category : Text;
+    var content : Text;
+    var coverImage : ?ExternalBlob__246066408;
+    createdAt : Timestamp__699635964;
+    var excerpt : Text;
+    id : ArticleId__70946697;
+    var isPremium : Bool;
+    var isPublished : Bool;
+    var tags : [Text];
+    var title : Text;
+    var updatedAt : Timestamp__699635964
+  };
+type Data__159895909<T> = {var count : Nat__490723111; elements : [var ?T]};
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type ExternalBlob__246066408 = Blob;
+type Internal__667636161<T> =
+  {children : [var ?Node__92254746<T>]; data : Data__159895909<T>};
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type InvitedUser__222609637 =
+  {
+    addedAt : Timestamp__203916467;
+    boundAt : ?Timestamp__203916467;
+    boundPrincipal : ?Principal;
+    email : Text;
+    intendedRole : Role__502306730
+  };
+type Leaf__520550824<T> = {data : Data__159895909<T>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type Node__92254746<T> =
+  {#internal : Internal__667636161<T>; #leaf : Leaf__520550824<T>};
+type PaymentRequestId__452738016 = Nat;
+type PaymentRequest__1032814532 =
+  {
+    amountE8s : Nat;
+    createdAt : Int;
+    expiresAt : Int;
+    id : PaymentRequestId__452738016;
+    ownerPrincipal : Text;
+    paymentType : PaymentType__969994639;
+    status : PaymentStatus__226732758;
+    subaccount : Blob;
+    userId : Principal
+  };
+type PaymentStatus__226732758 = {#Consumed; #Expired; #Pending; #Verified};
+type PaymentType__969994639 =
+  {#ArticleUnlock : ArticleId__725621968; #Subscription};
+type Role__190781890 = {#admin; #editor; #superadmin};
+type Role__502306730 = Role__190781890;
+type Role__575667408 = Role__190781890;
+type Set__532252804<T> = Set__710576254<T>;
+type Set__710576254<T> =
+  {var root : Node__92254746<T>; var size : Nat__490723111};
+type SiteSettings__573819688 = {logoUrl : ?Text};
+type Subscription__171075365 =
+  {
+    expiryTime : Timestamp__219252874;
+    startTime : Timestamp__219252874;
+    userId : UserId__560468811
+  };
+type Timestamp__203916467 = Timestamp__950144999;
+type Timestamp__219252874 = Timestamp__950144999;
+type Timestamp__699635964 = Timestamp__950144999;
+type Timestamp__950144999 = Int;
+type UserId__560468811 = UserId__930254330;
+type UserId__708683920 = UserId__930254330;
+type UserId__930254330 = Principal;
+actor {
+  stable accessStoreV2 :
+    {
+      linkedWallets : Map__605269027<UserId__930254330, UserId__930254330>;
+      subscriptions :
+        Map__605269027<UserId__930254330, Subscription__171075365>;
+      unlocks :
+        Map__605269027<UserId__930254330,
+                        Set__532252804<ArticleId__623262048>>
+    };
+  stable adminStore :
+    {
+      roles : Map__605269027<UserId__930254330, Role__575667408>;
+      trackedPrincipals : Set__532252804<UserId__930254330>
+    };
+  stable articleStore :
+    {
+      articles : Map__605269027<ArticleId__623262048, Article__663306592>;
+      var nextId : Nat
+    };
+  stable consumedPayments :
+    {var root : Node__92254746<Nat>; var size : Nat__490723111};
+  stable inviteStore :
+    {invites : Map__605269027<Text, InvitedUser__222609637>};
+  stable paymentRequestStoreV2 :
+    {
+      var nextId : Nat;
+      requests :
+        Map__605269027<PaymentRequestId__452738016,
+                        PaymentRequest__1032814532>
+    };
+  stable settingsStore : {var settings : SiteSettings__573819688}
+};
