@@ -51,9 +51,9 @@ export function Layout({ children }: LayoutProps) {
                 className="h-8 max-w-[140px] object-contain"
               />
             ) : (
-              <span className="font-display text-xl font-bold tracking-tight text-foreground transition-colors duration-200">
-                <span className="glow-red">HERO</span>
-                <span className="ml-1">BLOG</span>
+              <span className="font-display text-xl font-bold tracking-tight">
+                <span className="hero-logo-hero">HERO</span>
+                <span className="ml-1 hero-logo-blog">BLOG</span>
               </span>
             )}
           </Link>
@@ -179,8 +179,8 @@ export function Layout({ children }: LayoutProps) {
       <footer className="bg-card border-t border-border mt-auto">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-display font-bold text-sm text-foreground">
-              HERO<span className="text-primary">BLOG</span>
+            <span className="font-display font-bold text-sm">
+              <span className="hero-logo-hero">HERO</span><span className="hero-logo-blog">BLOG</span>
             </span>
             <span className="text-muted-foreground text-xs">
               · Decentralized publishing on ICP

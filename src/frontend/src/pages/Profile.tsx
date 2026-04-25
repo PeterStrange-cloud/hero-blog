@@ -127,7 +127,7 @@ export default function Profile() {
           </h2>
         </div>
         <p className="type-meta text-muted-foreground text-sm">
-          Link your NNS or Oisy wallet principal so you can pay HERO tokens to
+          Link your NNS wallet principal so you can pay HERO tokens to
           unlock premium articles. Payments must come from this wallet to be
           recognized.
         </p>
@@ -158,7 +158,7 @@ export default function Profile() {
               </p>
               <div className="flex flex-col sm:flex-row gap-2">
                 <Input
-                  placeholder="Paste new NNS / Oisy principal"
+                  placeholder="Paste new NNS principal"
                   value={walletInput}
                   onChange={(e) => setWalletInput(e.target.value)}
                   className="input-dark font-mono text-xs px-3 py-2"
@@ -176,7 +176,7 @@ export default function Profile() {
         ) : (
           <div className="flex flex-col sm:flex-row gap-2">
             <Input
-              placeholder="Paste your NNS / Oisy principal"
+              placeholder="Paste your NNS principal"
               value={walletInput}
               onChange={(e) => setWalletInput(e.target.value)}
               className="input-dark font-mono text-xs px-3 py-2"

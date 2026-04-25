@@ -2,7 +2,7 @@ import { CategoryBadge, FreeBadge, PremiumBadge } from "@/components/Badge";
 import { EmptyState } from "@/components/ErrorMessage";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { usePublishedArticles } from "@/hooks/useQueries";
+import { usePublishedArticles, useUserAccess } from "@/hooks/useQueries";
 import { formatTimestampShort } from "@/types";
 import type { ArticleCard } from "@/types";
 import { useNavigate } from "@tanstack/react-router";
@@ -26,7 +26,7 @@ function getGradient(id: bigint) {
 
 // ─── Featured hero card ───────────────────────────────────────────────────────
 
-function FeaturedCard({ article }: { article: ArticleCard }) {
+function FeaturedCard({ article, unlocked }: { article: ArticleCard; unlocked: boolean }) {
   const navigate = useNavigate();
   const goto = () =>
     navigate({ to: "/article/$id", params: { id: String(article.id) } });
@@ -99,7 +99,7 @@ function FeaturedCard({ article }: { article: ArticleCard }) {
         </div>
 
         <div className="flex items-center gap-3">
-          {article.isPremium ? (
+          {article.isPremium && !unlocked ? (
             <Button
               variant="default"
               className="btn-primary gap-2 font-semibold"
@@ -114,8 +114,7 @@ function FeaturedCard({ article }: { article: ArticleCard }) {
             </Button>
           ) : (
             <Button
-              variant="outline"
-              className="gap-2 border-primary/50 bg-primary/10 text-accent-red hover:bg-primary/20 hover:border-primary"
+              className="btn-accent gap-2 font-semibold"
               onClick={(e) => {
                 e.stopPropagation();
                 goto();
@@ -138,7 +137,8 @@ function FeaturedCard({ article }: { article: ArticleCard }) {
 function ArticleGridCard({
   article,
   index,
-}: { article: ArticleCard; index: number }) {
+  unlocked,
+}: { article: ArticleCard; index: number; unlocked: boolean }) {
   const navigate = useNavigate();
   const goto = () =>
     navigate({ to: "/article/$id", params: { id: String(article.id) } });
@@ -199,7 +199,7 @@ function ArticleGridCard({
           <span className="type-meta">
             {formatTimestampShort(article.createdAt)}
           </span>
-          {article.isPremium ? (
+          {article.isPremium && !unlocked ? (
             <Button
               size="sm"
               className="btn-primary h-8 px-3 text-xs gap-1.5 shrink-0"
@@ -215,8 +215,7 @@ function ArticleGridCard({
           ) : (
             <Button
               size="sm"
-              variant="ghost"
-              className="h-7 px-3 text-xs gap-1.5 shrink-0 text-muted-foreground hover:text-foreground"
+              className="btn-accent h-8 px-3 text-xs gap-1.5 shrink-0"
               onClick={(e) => {
                 e.stopPropagation();
                 goto();
@@ -288,6 +287,16 @@ export default function HomePage() {
   // Show skeleton while loading OR while auto-retrying (failureCount > 0 but still under 3)
   const showSkeleton =
     isLoading || (isFetching && !articles && failureCount < 3);
+
+  const { data: userAccess } = useUserAccess();
+  const unlockedSet = new Set<string>();
+  if (userAccess) {
+    for (const uid of userAccess.unlockedArticleIds) {
+      unlockedSet.add(uid.toString());
+    }
+  }
+  const isUnlocked = (a: ArticleCard) =>
+    !!userAccess?.isSubscribed || unlockedSet.has(a.id.toString());
 
   const featured = articles?.[0] ?? null;
   const rest = articles?.slice(1) ?? [];
@@ -364,7 +373,7 @@ export default function HomePage() {
               <span className="type-label text-muted-foreground">FEATURED</span>
               <div className="flex-1 h-px bg-border" />
             </div>
-            <FeaturedCard article={featured} />
+            <FeaturedCard article={featured} unlocked={isUnlocked(featured)} />
           </section>
         )}
 
@@ -386,6 +395,7 @@ export default function HomePage() {
                   key={String(article.id)}
                   article={article}
                   index={i}
+                  unlocked={isUnlocked(article)}
                 />
               ))}
             </div>

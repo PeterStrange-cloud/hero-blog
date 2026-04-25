@@ -13,42 +13,42 @@
 @layer base {
   :root {
     /* ── Raw OKLCH values (for shadcn/Tailwind: used via oklch(var(--X))) ── */
-    --background:             0.99 0.002 60;
-    --foreground:             0.15 0.005 60;
-    --card:                   1.00 0.000 0;
-    --card-foreground:        0.15 0.005 60;
-    --popover:                1.00 0.000 0;
-    --popover-foreground:     0.15 0.005 60;
-    --primary:                0.42 0.17 295;       /* FedEx purple */
+    --background:             0.20 0.025 50;
+    --foreground:             0.96 0.005 60;
+    --card:                   0.25 0.030 50;
+    --card-foreground:        0.96 0.005 60;
+    --popover:                0.25 0.030 50;
+    --popover-foreground:     0.96 0.005 60;
+    --primary:                0.55 0.20 295;       /* Brighter purple for dark bg */
     --primary-foreground:     1.00 0.000 0;
-    --secondary:              0.72 0.19 50;        /* FedEx orange */
-    --secondary-foreground:   1.00 0.000 0;
-    --muted:                  0.96 0.002 60;
-    --muted-foreground:       0.55 0.006 60;
-    --accent:                 0.72 0.19 50;
-    --accent-foreground:      1.00 0.000 0;
-    --destructive:            0.55 0.22 25;
+    --secondary:              0.75 0.19 50;        /* Brighter orange for dark bg */
+    --secondary-foreground:   0.20 0.025 50;
+    --muted:                  0.28 0.025 50;
+    --muted-foreground:       0.70 0.010 60;
+    --accent:                 0.75 0.19 50;
+    --accent-foreground:      0.20 0.025 50;
+    --destructive:            0.62 0.22 25;
     --destructive-foreground: 1.00 0.000 0;
-    --border:                 0.90 0.004 60;
-    --input:                  0.88 0.005 60;
-    --ring:                   0.42 0.17 295;
+    --border:                 0.32 0.025 50;
+    --input:                  0.30 0.025 50;
+    --ring:                   0.55 0.20 295;
     --radius: 0.5rem;
 
     /* ── Named tokens (for hand-authored CSS below) ── */
-    --color-bg:            oklch(0.99 0.002 60);
-    --color-bg-elevated:   oklch(1.00 0.000 0);
-    --color-bg-sunken:     oklch(0.96 0.002 60);
+    --color-bg:            oklch(0.20 0.025 50);
+    --color-bg-elevated:   oklch(0.25 0.030 50);
+    --color-bg-sunken:     oklch(0.16 0.020 50);
 
-    --color-purple:        oklch(0.42 0.17 295);
-    --color-purple-dim:    oklch(0.35 0.15 295);
-    --color-purple-soft:   oklch(0.55 0.14 295);
-    --color-purple-subtle: oklch(0.96 0.03 295);
-    --color-purple-glow:   oklch(0.42 0.17 295 / 0.18);
+    --color-purple:        oklch(0.65 0.22 295);
+    --color-purple-dim:    oklch(0.55 0.20 295);
+    --color-purple-soft:   oklch(0.72 0.18 295);
+    --color-purple-subtle: oklch(0.30 0.06 295);
+    --color-purple-glow:   oklch(0.65 0.22 295 / 0.30);
 
-    --color-orange:        oklch(0.72 0.19 50);
-    --color-orange-dim:    oklch(0.62 0.17 50);
-    --color-orange-subtle: oklch(0.97 0.04 60);
-    --color-orange-glow:   oklch(0.72 0.19 50 / 0.18);
+    --color-orange:        oklch(0.75 0.19 50);
+    --color-orange-dim:    oklch(0.65 0.17 50);
+    --color-orange-subtle: oklch(0.32 0.06 50);
+    --color-orange-glow:   oklch(0.75 0.19 50 / 0.30);
 
     /* ── Backward-compat aliases (old components use these) ── */
     --color-red:           var(--color-purple);
@@ -64,16 +64,16 @@
     --color-lilac-subtle:  var(--color-purple-subtle);
     --color-lilac-glow:    var(--color-purple-glow);
 
-    --color-text-primary:   oklch(0.15 0.005 60);
-    --color-text-secondary: oklch(0.38 0.008 60);
-    --color-text-muted:     oklch(0.55 0.006 60);
+    --color-text-primary:   oklch(0.96 0.005 60);
+    --color-text-secondary: oklch(0.80 0.010 60);
+    --color-text-muted:     oklch(0.65 0.010 60);
 
-    --color-border:        oklch(0.90 0.004 60);
-    --color-border-red:    oklch(0.42 0.17 295 / 0.35);
-    --color-border-green:  oklch(0.72 0.19 50 / 0.35);
+    --color-border:        oklch(0.32 0.025 50);
+    --color-border-red:    oklch(0.65 0.22 295 / 0.45);
+    --color-border-green:  oklch(0.75 0.19 50 / 0.45);
   }
 
-  html { color-scheme: light; }
+  html { color-scheme: dark; }
 
   body {
     background-color: var(--color-bg);
@@ -183,6 +183,22 @@
     color: white;
   }
 
+  /* Orange filled button — used for unlocked / "Read Article" CTAs */
+  .btn-accent {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.6rem 1.5rem; border-radius: var(--radius);
+    font-weight: 600; font-size: 0.9rem; letter-spacing: 0.01em;
+    background: var(--color-orange); color: oklch(0.20 0.025 50);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 150ms ease, box-shadow 150ms ease, transform 100ms ease;
+  }
+  .btn-accent:hover {
+    background: var(--color-orange-dim);
+    box-shadow: 0 4px 16px var(--color-orange-glow);
+  }
+  .btn-accent:active { transform: translateY(1px); }
+
   .btn-ghost-red {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
     padding: 0.6rem 1.5rem; border-radius: var(--radius);
@@ -250,7 +266,7 @@
   }
 
   .nav-dark {
-    background: oklch(1.00 0.000 0 / 0.92);
+    background: oklch(0.20 0.025 50 / 0.92);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
   }

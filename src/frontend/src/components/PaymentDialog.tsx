@@ -239,7 +239,7 @@ export function PaymentDialog({
                   Link Your <span className="text-accent-red">Wallet</span> First
                 </h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  To buy articles, connect your NNS or Oisy wallet in your profile.
+                  To buy articles, connect your NNS wallet in your profile.
                   Payments are verified by which wallet sends them.
                 </p>
               </div>
@@ -326,7 +326,7 @@ export function PaymentDialog({
 
               {/* Instruction */}
               <p className="text-sm text-foreground/80 leading-relaxed">
-                From your linked NNS or Oisy wallet, send the amount below to this
+                From your linked NNS wallet, send the amount below to this
                 address. Then click <span className="font-medium">Check Payment</span>.
               </p>
 
