@@ -90,30 +90,7 @@ export function Layout({ children }: LayoutProps) {
 
           {/* Auth */}
           <div className="flex items-center gap-2">
-            {isAuthenticated && principalStr && (
-              <div className="hidden sm:flex items-center gap-1">
-                <span
-                  className="type-meta text-muted-foreground font-mono text-xs break-all"
-                  data-ocid="nav.principal_display"
-                >
-                  {principalStr}
-                </span>
-                <button
-                  type="button"
-                  onClick={handleCopyPrincipal}
-                  className="flex-shrink-0 p-1 rounded text-muted-foreground hover:text-foreground transition-colors duration-200"
-                  aria-label="Copy principal"
-                  title="Copy principal"
-                  data-ocid="nav.copy_principal_button"
-                >
-                  {copied ? (
-                    <Check className="size-3" />
-                  ) : (
-                    <Copy className="size-3" />
-                  )}
-                </button>
-              </div>
-            )}
+            {/* principal display hidden — replaced by display name in profile */}
             {isAuthenticated ? (
               <Button
                 variant="ghost"

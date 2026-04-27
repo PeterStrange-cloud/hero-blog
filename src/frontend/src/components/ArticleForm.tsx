@@ -6,10 +6,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ImageIcon, Upload, X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
-import ReactQuill from "react-quill-new";
+import ReactQuill, { Quill } from "react-quill-new";
+import ImageResize from "quill-image-resize";
 import { ExternalBlob } from "../backend";
 import { InlineError } from "./ErrorMessage";
 import "react-quill-new/dist/quill.snow.css";
+
+Quill.register("modules/imageResize", ImageResize);
 
 export interface ArticleFormValues {
   title: string;
@@ -31,6 +34,7 @@ interface ArticleFormProps {
 }
 
 const QUILL_MODULES = {
+  imageResize: { parchment: Quill.import("parchment") },
   toolbar: [
     [{ header: [1, 2, 3, false] }],
     ["bold", "italic", "underline", "strike"],
@@ -38,7 +42,7 @@ const QUILL_MODULES = {
     [{ align: [] }],
     [{ list: "ordered" }, { list: "bullet" }],
     ["blockquote", "code-block"],
-    ["link"],
+    ["link", "image"],
     ["clean"],
   ],
 };
@@ -56,6 +60,7 @@ const QUILL_FORMATS = [
   "blockquote",
   "code-block",
   "link",
+  "image",
 ];
 
 const empty: ArticleFormValues = {
@@ -86,6 +91,38 @@ export function ArticleForm({
   );
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const quillRef = useRef<ReactQuill>(null);
+
+  const insertImageHandler = useCallback(() => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+    input.onchange = () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        if (img.width < 600) {
+          alert(`Image too small. Minimum width is 600px (yours is ${img.width}px).`);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64 = reader.result as string;
+          const editor = quillRef.current?.getEditor();
+          if (!editor) return;
+          const range = editor.getSelection(true);
+          editor.insertEmbed(range.index, "image", base64);
+          editor.setSelection(range.index + 1, 0);
+        };
+        reader.readAsDataURL(file);
+      };
+      img.src = url;
+    };
+  }, []);
 
   const set = useCallback(
     <K extends keyof ArticleFormValues>(key: K, val: ArticleFormValues[K]) => {
@@ -314,7 +351,14 @@ export function ArticleForm({
             theme="snow"
             value={values.content}
             onChange={(val) => set("content", val)}
-            modules={QUILL_MODULES}
+            ref={quillRef}
+            modules={{
+              ...QUILL_MODULES,
+              toolbar: {
+                container: QUILL_MODULES.toolbar,
+                handlers: { image: insertImageHandler },
+              },
+            }}
             formats={QUILL_FORMATS}
             placeholder="Write your article here…"
           />

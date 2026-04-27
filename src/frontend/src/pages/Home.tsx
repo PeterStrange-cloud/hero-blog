@@ -59,7 +59,7 @@ function FeaturedCard({ article, unlocked }: { article: ArticleCard; unlocked: b
           />
         )}
         {/* dark overlay for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-background/30" />
       </div>
 
       {/* Lock icon for premium */}
@@ -79,7 +79,10 @@ function FeaturedCard({ article, unlocked }: { article: ArticleCard; unlocked: b
           {article.isPremium ? <PremiumBadge /> : <FreeBadge />}
         </div>
 
-        <h1 className="font-display text-2xl md:text-4xl font-bold leading-tight text-foreground max-w-2xl">
+        <h1
+          className="font-display text-2xl md:text-4xl font-bold leading-tight text-foreground max-w-2xl"
+          style={{ textShadow: "0 2px 12px oklch(0.16 0.020 50 / 0.9), 0 1px 4px oklch(0.16 0.020 50 / 0.9)" }}
+        >
           {article.title}
         </h1>
 
@@ -319,8 +322,8 @@ export default function HomePage() {
               </span>
             </div>
             <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight leading-tight">
-              <span className="glow-red">HERO</span>{" "}
-              <span className="text-foreground">BLOG</span>
+              <span className="hero-logo-hero">HERO</span>{" "}
+              <span className="hero-logo-blog">BLOG</span>
             </h1>
             <p className="type-body-lg text-muted-foreground">
               Decentralized insights on ICP and Web3 — exclusive research,

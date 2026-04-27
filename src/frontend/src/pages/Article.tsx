@@ -134,10 +134,10 @@ function Paywall({
           </div>
         )}
 
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="flex justify-center">
           {/* Unlock article option */}
           <div
-            className="card-red p-6 flex flex-col gap-4 max-w-sm mx-auto"
+            className="card-red p-6 flex flex-col gap-4 w-full max-w-sm"
             data-ocid="article.unlock_option_card"
           >
             <div>
@@ -151,8 +151,7 @@ function Paywall({
             </div>
             <Button
               disabled={!isAuthenticated}
-              style={{ backgroundColor: "oklch(0.7 0.18 145)", color: "oklch(0.08 0 0)" }}
-              className="w-full hover:opacity-90 disabled:opacity-40 text-base font-semibold h-11 shadow-lg"
+              className="btn-primary w-full disabled:opacity-40 text-base font-semibold h-11"
               onClick={onUnlock}
               data-ocid="article.unlock_article_button"
             >

@@ -66,6 +66,7 @@ export function PaymentDialog({
   const [req, setReq] = useState<PaymentRequest | null>(null);
   const [createError, setCreateError] = useState<string | null>(null);
   const [pollingStatus, setPollingStatus] = useState<PollingStatus>("idle");
+  const [showContinue, setShowContinue] = useState(false);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const attemptRef = useRef(0);
 
@@ -101,6 +102,7 @@ export function PaymentDialog({
       setReq(null);
       setCreateError(null);
       setPollingStatus("idle");
+      setShowContinue(false);
       stopPolling();
       return;
     }
@@ -155,10 +157,7 @@ export function PaymentDialog({
         console.log("[PaymentDialog] verify result for reqId=", req.id, "result=", result);
         stopPolling();
         setPollingStatus("granted");
-        setTimeout(() => {
-          onSuccessRef.current();
-          onCloseRef.current();
-        }, 1500);
+        setShowContinue(true);
       } catch (err) {
         console.log("[PaymentDialog] verify error for reqId=", req.id, "err=", err);
         if (attempt >= MAX_ATTEMPTS) {
@@ -379,6 +378,17 @@ export function PaymentDialog({
                   )}
                   {statusText}
                 </div>
+              )}
+
+              {/* Continue button after unlock */}
+              {showContinue && (
+                <button
+                  type="button"
+                  className="btn-accent w-full h-11 text-base font-semibold"
+                  onClick={() => { onSuccessRef.current(); onCloseRef.current(); }}
+                >
+                  Read Article →
+                </button>
               )}
 
               {/* Open NNS Wallet button */}
