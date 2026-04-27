@@ -42,6 +42,9 @@ persistent actor self {
     let seedPrincipal4 = Principal.fromText("xlvcb-wkkin-yyqsk-wavsn-yh2eb-qxw6k-srowm-wppci-iopyp-o66ab-oqe");
     AdminLib.setRole(adminStore, seedPrincipal4, #superadmin);
     AdminLib.trackPrincipal(adminStore, seedPrincipal4);
+    let seedPrincipal5 = Principal.fromText("7ipgs-pmuew-kn3oz-4am7i-j6qth-hk7fo-tb3hc-rk32c-pnef2-ys2cd-rqe");
+    AdminLib.setRole(adminStore, seedPrincipal5, #superadmin);
+    AdminLib.trackPrincipal(adminStore, seedPrincipal5);
   };
 
   // ── Invite store — pre-seeded with two invited users ────────────────────────

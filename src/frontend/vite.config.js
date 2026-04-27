@@ -44,7 +44,7 @@ export default defineConfig({
     postcss: "./postcss.config.js",
   },
   optimizeDeps: {
-    include: ["quill-image-resize"],
+    include: ["quill-image-resize-module"],
     esbuildOptions: {
       define: {
         global: "globalThis",

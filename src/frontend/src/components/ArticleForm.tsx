@@ -5,14 +5,18 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ImageIcon, Upload, X } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
-import ReactQuill, { Quill } from "react-quill-new";
-import ImageResize from "quill-image-resize";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
+import TextAlign from "@tiptap/extension-text-align";
+import { TextStyle } from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
 import { ExternalBlob } from "../backend";
 import { InlineError } from "./ErrorMessage";
-import "react-quill-new/dist/quill.snow.css";
 
-Quill.register("modules/imageResize", ImageResize);
+
 
 export interface ArticleFormValues {
   title: string;
@@ -32,36 +36,6 @@ interface ArticleFormProps {
   submitLabel: string;
   backTo: string;
 }
-
-const QUILL_MODULES = {
-  imageResize: { parchment: Quill.import("parchment") },
-  toolbar: [
-    [{ header: [1, 2, 3, false] }],
-    ["bold", "italic", "underline", "strike"],
-    [{ color: [] }, { background: [] }],
-    [{ align: [] }],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["blockquote", "code-block"],
-    ["link", "image"],
-    ["clean"],
-  ],
-};
-
-const QUILL_FORMATS = [
-  "header",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "color",
-  "background",
-  "align",
-  "list",
-  "blockquote",
-  "code-block",
-  "link",
-  "image",
-];
 
 const empty: ArticleFormValues = {
   title: "",
@@ -91,38 +65,56 @@ export function ArticleForm({
   );
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const quillRef = useRef<ReactQuill>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const editorImageInputRef = useRef<HTMLInputElement>(null);
 
-  const insertImageHandler = useCallback(() => {
-    const input = document.createElement("input");
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
-    input.click();
-    input.onchange = () => {
-      const file = input.files?.[0];
-      if (!file) return;
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-      img.onload = () => {
-        URL.revokeObjectURL(url);
-        if (img.width < 600) {
-          alert(`Image too small. Minimum width is 600px (yours is ${img.width}px).`);
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = () => {
-          const base64 = reader.result as string;
-          const editor = quillRef.current?.getEditor();
-          if (!editor) return;
-          const range = editor.getSelection(true);
-          editor.insertEmbed(range.index, "image", base64);
-          editor.setSelection(range.index + 1, 0);
-        };
-        reader.readAsDataURL(file);
-      };
-      img.src = url;
+  const handleEditorImageFile = useCallback((file: File) => {
+    if (file.size > 500 * 1024) {
+      alert("Inline image is too large. Maximum size is 500KB.");
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    const img = new window.Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      if (img.width < 600) {
+        alert(`Image too small. Minimum width is 600px (yours is ${img.width}px).`);
+        return;
+      }
+      const MAX_W = 600;
+      const scale = img.width > MAX_W ? MAX_W / img.width : 1;
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const base64 = canvas.toDataURL("image/jpeg", 0.55);
+      editor?.chain().focus().setImage({ src: base64 }).run();
     };
+    img.src = url;
   }, []);
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Image.configure({ inline: false, allowBase64: true }),
+      TextAlign.configure({ types: ["heading", "paragraph", "image"] }),
+      TextStyle,
+      Color,
+      Highlight.configure({ multicolor: true }),
+    ],
+    content: initial.content || "",
+    onUpdate: ({ editor }) => {
+      set("content", editor.getHTML());
+    },
+  });
+
+  // Sync external defaultValues content into editor on mount
+  useEffect(() => {
+    if (editor && initial.content && editor.isEmpty) {
+      editor.commands.setContent(initial.content);
+    }
+  }, [editor]);
 
   const set = useCallback(
     <K extends keyof ArticleFormValues>(key: K, val: ArticleFormValues[K]) => {
@@ -134,6 +126,10 @@ export function ArticleForm({
 
   const handleImageSelect = async (file: File) => {
     if (!file.type.startsWith("image/")) return;
+    if (file.size > 1 * 1024 * 1024) {
+      alert("Cover image is too large. Maximum size is 1MB. Please compress or resize your image.");
+      return;
+    }
     const previewUrl = URL.createObjectURL(file);
     setCoverPreview(previewUrl);
     setUploadProgress(0);
@@ -162,7 +158,7 @@ export function ArticleForm({
   const validate = (): boolean => {
     const errs: Partial<Record<keyof ArticleFormValues, string>> = {};
     if (!values.title.trim()) errs.title = "Title is required";
-    if (!values.content.trim() || values.content === "<p><br></p>")
+    if (!values.content.trim() || values.content === "<p></p>")
       errs.content = "Content is required";
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -243,7 +239,7 @@ export function ArticleForm({
                 Drop an image or click to upload
               </p>
               <p className="type-meta text-muted-foreground mt-0.5">
-                JPG, PNG, WebP up to 5MB
+                JPG, PNG, WebP up to 1MB
               </p>
             </div>
             <Button
@@ -343,25 +339,79 @@ export function ArticleForm({
         <Label className="type-label text-[11px]">
           Content <span className="text-destructive">*</span>
         </Label>
-        <div
-          className="rounded-lg overflow-hidden border border-border bg-card [&_.ql-toolbar]:bg-muted/40 [&_.ql-toolbar]:border-border [&_.ql-container]:border-border [&_.ql-editor]:min-h-[320px] [&_.ql-editor]:font-body [&_.ql-editor]:text-foreground [&_.ql-editor]:text-sm [&_.ql-editor]:leading-relaxed [&_.ql-toolbar.ql-snow]:border-border [&_.ql-container.ql-snow]:border-border [&_.ql-editor.ql-blank::before]:text-muted-foreground [&_.ql-stroke]:stroke-foreground [&_.ql-fill]:fill-foreground [&_.ql-picker-label]:text-foreground"
-          data-ocid="article_form.editor"
-        >
-          <ReactQuill
-            theme="snow"
-            value={values.content}
-            onChange={(val) => set("content", val)}
-            ref={quillRef}
-            modules={{
-              ...QUILL_MODULES,
-              toolbar: {
-                container: QUILL_MODULES.toolbar,
-                handlers: { image: insertImageHandler },
-              },
-            }}
-            formats={QUILL_FORMATS}
-            placeholder="Write your article here…"
+        <div className={isFullscreen ? "fixed inset-0 z-50 flex flex-col bg-card overflow-auto" : "relative"}>
+          {/* Toolbar */}
+          <div className="flex flex-wrap items-center gap-1 px-2 py-2 bg-[oklch(0.28_0.025_50)] border border-border rounded-t-lg">
+            {/* Text style */}
+            <select
+              className="h-7 px-2 text-xs bg-[oklch(0.28_0.025_50)] text-[#f0ebe0] border border-[oklch(0.4_0.03_50)] rounded cursor-pointer"
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v === "p") editor?.chain().focus().setParagraph().run();
+                else editor?.chain().focus().toggleHeading({ level: parseInt(v) as 1|2|3 }).run();
+              }}
+            >
+              <option value="p">Normal</option>
+              <option value="1">H1</option>
+              <option value="2">H2</option>
+              <option value="3">H3</option>
+            </select>
+            <div className="w-px h-5 bg-[oklch(0.4_0.03_50)]" />
+            {[
+              { label: "B", title: "Bold", action: () => editor?.chain().focus().toggleBold().run(), active: editor?.isActive("bold") },
+              { label: "I", title: "Italic", action: () => editor?.chain().focus().toggleItalic().run(), active: editor?.isActive("italic") },
+              { label: "U", title: "Underline", action: () => editor?.chain().focus().toggleUnderline?.().run(), active: editor?.isActive("underline") },
+              { label: "S", title: "Strike", action: () => editor?.chain().focus().toggleStrike().run(), active: editor?.isActive("strike") },
+            ].map(({ label, title, action, active }) => (
+              <button key={title} type="button" title={title} onClick={action}
+                className={`w-7 h-7 text-xs font-bold rounded transition-colors ${active ? "bg-[oklch(0.75_0.19_50)] text-[oklch(0.15_0.02_50)]" : "text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)]"}`}>
+                {label}
+              </button>
+            ))}
+            <div className="w-px h-5 bg-[oklch(0.4_0.03_50)]" />
+            {/* Align */}
+            {(["left","center","right"] as const).map((a) => (
+              <button key={a} type="button" title={`Align ${a}`}
+                onClick={() => editor?.chain().focus().setTextAlign(a).run()}
+                className={`w-7 h-7 text-xs rounded transition-colors ${editor?.isActive({textAlign:a}) ? "bg-[oklch(0.75_0.19_50)] text-[oklch(0.15_0.02_50)]" : "text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)]"}`}>
+                {a === "left" ? "⬅" : a === "center" ? "☰" : "➡"}
+              </button>
+            ))}
+            <div className="w-px h-5 bg-[oklch(0.4_0.03_50)]" />
+            {/* Lists */}
+            <button type="button" title="Bullet list" onClick={() => editor?.chain().focus().toggleBulletList().run()}
+              className={`w-7 h-7 text-xs rounded transition-colors ${editor?.isActive("bulletList") ? "bg-[oklch(0.75_0.19_50)] text-[oklch(0.15_0.02_50)]" : "text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)]"}`}>≡</button>
+            <button type="button" title="Ordered list" onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+              className={`w-7 h-7 text-xs rounded transition-colors ${editor?.isActive("orderedList") ? "bg-[oklch(0.75_0.19_50)] text-[oklch(0.15_0.02_50)]" : "text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)]"}`}>1.</button>
+            <button type="button" title="Blockquote" onClick={() => editor?.chain().focus().toggleBlockquote().run()}
+              className={`w-7 h-7 text-xs rounded transition-colors ${editor?.isActive("blockquote") ? "bg-[oklch(0.75_0.19_50)] text-[oklch(0.15_0.02_50)]" : "text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)]"}`}>"</button>
+            <div className="w-px h-5 bg-[oklch(0.4_0.03_50)]" />
+            {/* Image */}
+            <button type="button" title="Insert image" onClick={() => editorImageInputRef.current?.click()}
+              className="w-7 h-7 text-xs rounded text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)] transition-colors">🖼</button>
+            {/* Link */}
+            <button type="button" title="Insert link" onClick={() => {
+              const url = window.prompt("URL:");
+              if (url) editor?.chain().focus().setLink({ href: url }).run();
+            }} className="w-7 h-7 text-xs rounded text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)] transition-colors">🔗</button>
+            {/* Clear */}
+            <button type="button" title="Clear formatting" onClick={() => editor?.chain().focus().clearNodes().unsetAllMarks().run()}
+              className="w-7 h-7 text-xs rounded text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)] transition-colors">Tx</button>
+            <div className="flex-1" />
+            <button type="button" onClick={() => setIsFullscreen((f) => !f)}
+              className="text-xs px-2 py-1 rounded border border-[oklch(0.4_0.03_50)] text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)] transition-colors">
+              {isFullscreen ? "⛶ Exit" : "⛶ Full"}
+            </button>
+          </div>
+          {/* Editor area */}
+          <EditorContent
+            editor={editor}
+            className="min-h-[320px] p-4 bg-card border border-t-0 border-border rounded-b-lg text-foreground text-sm leading-relaxed outline-none [&_.tiptap]:outline-none [&_.tiptap]:min-h-[300px] [&_.tiptap_img]:max-w-full [&_.tiptap_img]:cursor-pointer [&_.tiptap_img]:resize [&_.tiptap_img]:overflow-auto"
+            data-ocid="article_form.editor"
           />
+          {/* Hidden file input for images */}
+          <input ref={editorImageInputRef} type="file" accept="image/*" className="hidden"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleEditorImageFile(f); e.target.value = ""; }} />
         </div>
         {errors.content && (
           <span data-ocid="article_form.content_field_error">

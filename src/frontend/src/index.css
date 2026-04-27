@@ -349,3 +349,25 @@
 
   .transition-smooth { transition: all 200ms ease; }
 }
+
+/* ── Quill editor toolbar overrides ─────────────────────────────────────── */
+.ql-snow.ql-toolbar { background: oklch(0.28 0.025 50) !important; border-color: oklch(0.35 0.03 50) !important; }
+.ql-snow .ql-toolbar { background: oklch(0.28 0.025 50) !important; border-color: oklch(0.35 0.03 50) !important; }
+.ql-container.ql-snow { border-color: oklch(0.35 0.03 50) !important; }
+.ql-snow .ql-stroke { stroke: #f0ebe0 !important; }
+.ql-snow .ql-fill { fill: #f0ebe0 !important; }
+.ql-snow .ql-stroke.ql-fill { fill: #f0ebe0 !important; }
+.ql-snow .ql-color-label.ql-stroke.ql-transparent { opacity: 0.5; }
+.ql-snow .ql-picker { color: #f0ebe0 !important; }
+.ql-snow .ql-picker-label { color: #f0ebe0 !important; border-color: oklch(0.35 0.03 50) !important; }
+.ql-snow .ql-picker-label::before { color: #f0ebe0 !important; }
+.ql-snow .ql-picker-label .ql-stroke { stroke: #f0ebe0 !important; }
+.ql-snow .ql-picker-options { background: oklch(0.25 0.025 50) !important; border-color: oklch(0.35 0.03 50) !important; }
+.ql-snow .ql-picker-item { color: #f0ebe0 !important; }
+.ql-snow .ql-picker-item .ql-stroke { stroke: #f0ebe0 !important; }
+.ql-snow button:hover .ql-stroke { stroke: oklch(0.75 0.19 50) !important; }
+.ql-snow button:hover .ql-fill { fill: oklch(0.75 0.19 50) !important; }
+.ql-snow .ql-active .ql-stroke { stroke: oklch(0.75 0.19 50) !important; }
+.ql-snow .ql-active .ql-fill { fill: oklch(0.75 0.19 50) !important; }
+.ql-snow .ql-active .ql-picker-label { color: oklch(0.75 0.19 50) !important; }
+.ql-editor img { cursor: pointer; max-width: 100%; height: auto; display: block; }
