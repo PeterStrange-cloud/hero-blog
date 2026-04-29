@@ -144,7 +144,7 @@ function Paywall({
               <p className="text-accent-red text-xs mb-1 font-bold uppercase tracking-wider">
                 ONE-TIME ACCESS
               </p>
-              <p className="font-display text-3xl font-bold text-accent-red">1 HERO</p>
+              <p className="font-display text-3xl font-bold text-accent-red">999 HERO</p>
               <p className="text-xs text-muted-foreground mt-1">
                 Permanently unlock this article for your account.
               </p>
@@ -156,7 +156,7 @@ function Paywall({
               data-ocid="article.unlock_article_button"
             >
               <Unlock className="size-4 mr-2" />
-              Unlock for 1 HERO
+              Unlock for 999 HERO
             </Button>
           </div>
 

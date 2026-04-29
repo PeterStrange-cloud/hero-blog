@@ -1,9 +1,9 @@
-import { e as createLucideIcon, r as reactExports, j as jsxRuntimeExports, o as cn, a as useIdentity, N as useGetLinkedWallet, a9 as useCreatePaymentRequest, aa as useVerifyPaymentRequest, ab as X, B as Button, K as Link, L as LoaderCircle, ac as CircleAlert, i as useParams, ad as useQueryClient, k as useArticle, s as useUserAccess, ae as motion, C as CategoryBadge, w as PremiumBadge, F as FreeBadge, Y as formatTimestamp, af as Lock } from "./index-DWdWli5p.js";
-import { P as Primitive } from "./index-kA6Ma8LT.js";
-import { W as Wallet } from "./wallet-C_iGbKZW.js";
-import { C as CircleCheckBig } from "./circle-check-big-8SGyceix.js";
-import { C as Copy } from "./copy-DAAXMIcC.js";
-import { A as ArrowLeft } from "./arrow-left-gh1Ywqa3.js";
+import { e as createLucideIcon, r as reactExports, j as jsxRuntimeExports, o as cn, a as useIdentity, N as useGetLinkedWallet, a9 as useCreatePaymentRequest, aa as useVerifyPaymentRequest, ab as X, B as Button, K as Link, L as LoaderCircle, ac as CircleAlert, i as useParams, ad as useQueryClient, k as useArticle, s as useUserAccess, ae as motion, C as CategoryBadge, w as PremiumBadge, F as FreeBadge, Y as formatTimestamp, af as Lock } from "./index-6yZJnywS.js";
+import { P as Primitive } from "./index-B0aoHkD7.js";
+import { W as Wallet } from "./wallet-CldylR96.js";
+import { C as CircleCheckBig } from "./circle-check-big-BtjQIg2g.js";
+import { C as Copy } from "./copy-Diycbt2a.js";
+import { A as ArrowLeft } from "./arrow-left-B9aHxxpA.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -540,8 +540,8 @@ function PaymentDialog({ open, onClose, paymentType, articleId, onSuccess }) {
   }, [req, stopPolling]);
   if (!open) return null;
   const title = showIssueForm ? "Having an issue?" : "Unlock with HERO";
-  const amountLabel = "1 HERO (100,000,000 e8s)";
-  const amountE8s = "100000000";
+  const amountLabel = "999 HERO (99,900,000,000 e8s)";
+  const amountE8s = "99900000000";
   const isPolling = typeof pollingStatus === "object" && "attempt" in pollingStatus;
   const isGranted = pollingStatus === "granted";
   const isFailed = pollingStatus === "not_found";
@@ -549,7 +549,7 @@ function PaymentDialog({ open, onClose, paymentType, articleId, onSuccess }) {
   if (pollingStatus === "pending") statusText = "Pending...";
   else if (isPolling) statusText = "Checking (attempt " + pollingStatus.attempt + " of " + MAX_ATTEMPTS + ")...";
   else if (isGranted) statusText = "Article unlocked — Thank you!";
-  else if (isFailed) statusText = "Payment not detected. Please ensure you sent exactly 1 HERO from your linked wallet.";
+  else if (isFailed) statusText = "Payment not detected. Please ensure you sent exactly 999 HERO from your linked wallet.";
   return /* @__PURE__ */ jsxRuntimeExports.jsx("dialog", { "aria-label": title, open: true, className: "fixed inset-0 z-50 flex items-center justify-center p-4 w-full h-full max-w-none m-0 bg-transparent border-0 outline-none", style: { background: "rgba(0,0,0,0.7)" }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "dialog-dark relative w-full max-w-md p-0", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between px-5 py-4 border-b border-border", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "font-display text-lg font-semibold text-foreground", children: title }),
@@ -734,7 +734,7 @@ function Paywall({
               children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-accent-red text-xs mb-1 font-bold uppercase tracking-wider", children: "ONE-TIME ACCESS" }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display text-3xl font-bold text-accent-red", children: "1 HERO" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-display text-3xl font-bold text-accent-red", children: "999 HERO" }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs text-muted-foreground mt-1", children: "Permanently unlock this article for your account." })
                 ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -746,7 +746,7 @@ function Paywall({
                     "data-ocid": "article.unlock_article_button",
                     children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx(LockOpen, { className: "size-4 mr-2" }),
-                      "Unlock for 1 HERO"
+                      "Unlock for 999 HERO"
                     ]
                   }
                 )

@@ -218,8 +218,8 @@ export function PaymentDialog({ open, onClose, paymentType, articleId, onSuccess
   if (!open) return null;
 
   const title = showIssueForm ? "Having an issue?" : "Unlock with HERO";
-  const amountLabel = "1 HERO (100,000,000 e8s)";
-  const amountE8s = "100000000";
+  const amountLabel = "999 HERO (99,900,000,000 e8s)";
+  const amountE8s = "99900000000";
   const isPolling = typeof pollingStatus === "object" && "attempt" in pollingStatus;
   const isGranted = pollingStatus === "granted";
   const isFailed = pollingStatus === "not_found";
@@ -228,7 +228,7 @@ export function PaymentDialog({ open, onClose, paymentType, articleId, onSuccess
   if (pollingStatus === "pending") statusText = "Pending...";
   else if (isPolling) statusText = "Checking (attempt " + (pollingStatus as { attempt: number }).attempt + " of " + MAX_ATTEMPTS + ")...";
   else if (isGranted) statusText = "Article unlocked — Thank you!";
-  else if (isFailed) statusText = "Payment not detected. Please ensure you sent exactly 1 HERO from your linked wallet.";
+  else if (isFailed) statusText = "Payment not detected. Please ensure you sent exactly 999 HERO from your linked wallet.";
 
   return (
     <dialog aria-label={title} open className="fixed inset-0 z-50 flex items-center justify-center p-4 w-full h-full max-w-none m-0 bg-transparent border-0 outline-none" style={{ background: "rgba(0,0,0,0.7)" }}>

@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { usePublishedArticles, useUserAccess } from "@/hooks/useQueries";
 import { formatTimestampShort } from "@/types";
 import type { ArticleCard } from "@/types";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, BookOpen, Lock, Zap } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -333,9 +333,8 @@ export default function HomePage() {
   const isUnlocked = (a: ArticleCard) =>
     !!userAccess?.isSubscribed || unlockedSet.has(a.id.toString());
 
-  const rawSearch = typeof window !== "undefined"
-    ? new URLSearchParams(window.location.search).get("search") ?? ""
-    : "";
+  const location = useLocation();
+  const rawSearch = new URLSearchParams(location.searchStr ?? "").get("search") ?? "";
   const searchTerm = rawSearch.toLowerCase().trim();
 
   const filteredArticles = searchTerm

@@ -11,7 +11,7 @@ import AccessTypes "../types/access";
 module {
 
   public let HERO_CANISTER_ID : Text = "zm3la-fqaaa-aaaaa-qg2ma-cai";
-  public let ARTICLE_UNLOCK_PRICE : Nat = 100_000_000;
+  public let ARTICLE_UNLOCK_PRICE : Nat = 99_900_000_000;
   public let SUBSCRIPTION_PRICE   : Nat = 1_000_000_000;
   public let PAYMENT_DESTINATION_OWNER : Text =
     "7ipgs-pmuew-kn3oz-4am7i-j6qth-hk7fo-tb3hc-rk32c-pnef2-ys2cd-rqe";

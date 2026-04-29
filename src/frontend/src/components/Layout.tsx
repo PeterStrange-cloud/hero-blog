@@ -64,9 +64,9 @@ export function Layout({ children }: LayoutProps) {
 
           {!searchOpen && (
             <nav className="hidden sm:flex items-center gap-6">
-              <Link to="/" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.blog_link">
+              <a href="/" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.blog_link">
                 Blog
-              </Link>
+              </a>
               <Link to="/archive" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.archive_link">
                 Archive
               </Link>
@@ -120,9 +120,9 @@ export function Layout({ children }: LayoutProps) {
         </div>
 
         <div className="sm:hidden border-t border-border px-4 py-2 flex gap-4 bg-card">
-          <Link to="/" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.mobile_blog_link">
+          <a href="/" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.mobile_blog_link">
             Blog
-          </Link>
+          </a>
           <Link to="/archive" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.mobile_archive_link">
             Archive
           </Link>
@@ -153,10 +153,7 @@ export function Layout({ children }: LayoutProps) {
             </Link>
           )}
           <p className="type-meta text-center">
-            {String.fromCharCode(169)} {new Date().getFullYear()}. Built with love using{" "}
-            <a href="https://caffeine.ai" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline transition-colors duration-200">
-              caffeine.ai
-            </a>
+            {String.fromCharCode(169)} {new Date().getFullYear()}. Built by Pietro Striano
           </p>
         </div>
       </footer>

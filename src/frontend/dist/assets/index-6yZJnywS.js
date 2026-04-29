@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Article-CJq4Xpjf.js","assets/index-kA6Ma8LT.js","assets/wallet-C_iGbKZW.js","assets/circle-check-big-8SGyceix.js","assets/copy-DAAXMIcC.js","assets/arrow-left-gh1Ywqa3.js","assets/Admin-Ca1LHyqt.js","assets/index-CbrXVDy0.js","assets/badge-D_2HPDLQ.js","assets/index-bYVMzOwb.js","assets/AdminBootstrap-ComgshjI.js","assets/AdminNew-Cob7PAnV.js","assets/ArticleForm-DAXXivLF.js","assets/input-Dv3MWJ6u.js","assets/label-BnnQMAQA.js","assets/index-B5ncRMJJ.js","assets/upload-CeMEW9sG.js","assets/AdminEdit-xby0ILk0.js","assets/AdminSettings-BxjYHdiM.js","assets/select-GoQbYeKY.js","assets/chevron-left-C16ttYth.js","assets/Profile-BDu5u2E0.js","assets/AdminInvites-C3tszPse.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Article-dN3xw_ue.js","assets/index-B0aoHkD7.js","assets/wallet-CldylR96.js","assets/circle-check-big-BtjQIg2g.js","assets/copy-Diycbt2a.js","assets/arrow-left-B9aHxxpA.js","assets/Admin-BmqXVe-H.js","assets/index-CJq7P5k_.js","assets/badge-Cnt9lEf0.js","assets/index-DLHjEx6J.js","assets/AdminBootstrap-HioxFs24.js","assets/AdminNew-15hN6nfl.js","assets/ArticleForm-B2Eh0jyV.js","assets/input-CWAFmxGX.js","assets/label-Dg7OE4eo.js","assets/index-CZjvTgF3.js","assets/upload-BhXEFT_b.js","assets/AdminEdit-Bt-dx73v.js","assets/AdminSettings-NRdyteiy.js","assets/select-2I3Y-OHA.js","assets/chevron-left-CiTbgKzz.js","assets/Profile-C1i2pid_.js","assets/AdminInvites-CtQGvWiy.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -32216,6 +32216,11 @@ function RouterContextProvider({
 function RouterProvider({ router: router2, ...rest }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(RouterContextProvider, { router: router2, ...rest, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Matches, {}) });
 }
+function useLocation(opts) {
+  return useRouterState({
+    select: (state) => state.location
+  });
+}
 /**
  * @license lucide-react v0.511.0 - ISC
  *
@@ -32631,6 +32636,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "getAllArticlesAdmin": IDL2.Func([], [IDL2.Vec(ArticleCard)], []),
     "getArticle": IDL2.Func([ArticleId], [IDL2.Opt(ArticleFull)], []),
     "getArticleCard": IDL2.Func([ArticleId], [IDL2.Opt(ArticleCard)], ["query"]),
+    "getDisplayName": IDL2.Func([IDL2.Principal], [IDL2.Opt(IDL2.Text)], ["query"]),
     "getInviteByEmail": IDL2.Func([IDL2.Text], [IDL2.Opt(InvitedUser)], []),
     "getLinkedWallet": IDL2.Func([], [IDL2.Opt(IDL2.Principal)], ["query"]),
     "getLogoUrl": IDL2.Func([], [IDL2.Opt(IDL2.Text)], ["query"]),
@@ -32655,6 +32661,7 @@ const idlFactory = ({ IDL: IDL2 }) => {
     "removeAdmin": IDL2.Func([UserId], [AdminResult2], []),
     "removeInvite": IDL2.Func([IDL2.Text], [InviteResult], []),
     "removeUserRole": IDL2.Func([UserId], [AdminResult2], []),
+    "setDisplayName": IDL2.Func([IDL2.Text], [], []),
     "setUserRole": IDL2.Func([UserId, Role2], [AdminResult2], []),
     "unpublishArticle": IDL2.Func([ArticleId], [AdminResult2], []),
     "updateArticle": IDL2.Func([ArticleId, ArticleInput], [AdminResult2], []),
@@ -36802,7 +36809,7 @@ function Layout({ children }) {
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "ml-1 hero-logo-blog", children: "BLOG" })
         ] }) }),
         !searchOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "hidden sm:flex items-center gap-6", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { to: "/", className: "type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200", "data-ocid": "nav.blog_link", children: "Blog" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "/", className: "type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200", "data-ocid": "nav.blog_link", children: "Blog" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { to: "/archive", className: "type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200", "data-ocid": "nav.archive_link", children: "Archive" })
         ] }),
         searchOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSearchSubmit, className: "hidden sm:flex flex-1 max-w-md items-center gap-2 bg-card border border-border rounded-md px-3 py-1.5", children: [
@@ -36837,7 +36844,7 @@ function Layout({ children }) {
         ] })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "sm:hidden border-t border-border px-4 py-2 flex gap-4 bg-card", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { to: "/", className: "type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200", "data-ocid": "nav.mobile_blog_link", children: "Blog" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "/", className: "type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200", "data-ocid": "nav.mobile_blog_link", children: "Blog" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { to: "/archive", className: "type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200", "data-ocid": "nav.mobile_archive_link", children: "Archive" }),
         isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsxs(Link, { to: "/profile", className: "type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200 flex items-center gap-1", "data-ocid": "nav.mobile_profile_link", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "size-3" }),
@@ -36862,9 +36869,7 @@ function Layout({ children }) {
         String.fromCharCode(169),
         " ",
         (/* @__PURE__ */ new Date()).getFullYear(),
-        ". Built with love using",
-        " ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("a", { href: "https://caffeine.ai", target: "_blank", rel: "noopener noreferrer", className: "text-primary hover:underline transition-colors duration-200", children: "caffeine.ai" })
+        ". Built by Pietro Striano"
       ] })
     ] }) })
   ] });
@@ -45111,7 +45116,8 @@ function HomePage() {
     }
   }
   const isUnlocked = (a2) => !!(userAccess == null ? void 0 : userAccess.isSubscribed) || unlockedSet.has(a2.id.toString());
-  const rawSearch = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("search") ?? "" : "";
+  const location2 = useLocation();
+  const rawSearch = new URLSearchParams(location2.searchStr ?? "").get("search") ?? "";
   const searchTerm = rawSearch.toLowerCase().trim();
   const filteredArticles = searchTerm ? (articles ?? []).filter(
     (a2) => a2.title.toLowerCase().includes(searchTerm) || a2.excerpt.toLowerCase().includes(searchTerm) || a2.category.toLowerCase().includes(searchTerm) || a2.tags.some((t) => t.toLowerCase().includes(searchTerm))
@@ -45212,15 +45218,15 @@ function HomePage() {
     ] })
   ] });
 }
-const ArticlePage = reactExports.lazy(() => __vitePreload(() => import("./Article-CJq4Xpjf.js"), true ? __vite__mapDeps([0,1,2,3,4,5]) : void 0));
-const AdminPage = reactExports.lazy(() => __vitePreload(() => import("./Admin-Ca1LHyqt.js"), true ? __vite__mapDeps([6,7,8,9,3,4]) : void 0));
-const AdminBootstrapPage = reactExports.lazy(() => __vitePreload(() => import("./AdminBootstrap-ComgshjI.js"), true ? __vite__mapDeps([10,9,3,4]) : void 0));
-const AdminNewPage = reactExports.lazy(() => __vitePreload(() => import("./AdminNew-Cob7PAnV.js"), true ? __vite__mapDeps([11,9,12,13,14,1,7,15,5,16]) : void 0));
-const AdminEditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminEdit-xby0ILk0.js"), true ? __vite__mapDeps([17,9,12,13,14,1,7,15,5,16]) : void 0));
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettings-BxjYHdiM.js"), true ? __vite__mapDeps([18,8,7,19,15,9,20,16,4]) : void 0));
-const ProfilePage = reactExports.lazy(() => __vitePreload(() => import("./Profile-BDu5u2E0.js"), true ? __vite__mapDeps([21,13,9,20,4,2]) : void 0));
-const AdminInvitesPage = reactExports.lazy(() => __vitePreload(() => import("./AdminInvites-C3tszPse.js"), true ? __vite__mapDeps([22,8,7,13,14,1,19,15,9,20,4]) : void 0));
-const ArchivePage = reactExports.lazy(() => __vitePreload(() => import("./Archive-948J0u1e.js"), true ? [] : void 0));
+const ArticlePage = reactExports.lazy(() => __vitePreload(() => import("./Article-dN3xw_ue.js"), true ? __vite__mapDeps([0,1,2,3,4,5]) : void 0));
+const AdminPage = reactExports.lazy(() => __vitePreload(() => import("./Admin-BmqXVe-H.js"), true ? __vite__mapDeps([6,7,8,9,3,4]) : void 0));
+const AdminBootstrapPage = reactExports.lazy(() => __vitePreload(() => import("./AdminBootstrap-HioxFs24.js"), true ? __vite__mapDeps([10,9,3,4]) : void 0));
+const AdminNewPage = reactExports.lazy(() => __vitePreload(() => import("./AdminNew-15hN6nfl.js"), true ? __vite__mapDeps([11,9,12,13,14,1,7,15,5,16]) : void 0));
+const AdminEditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminEdit-Bt-dx73v.js"), true ? __vite__mapDeps([17,9,12,13,14,1,7,15,5,16]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettings-NRdyteiy.js"), true ? __vite__mapDeps([18,8,7,19,15,9,20,16,4]) : void 0));
+const ProfilePage = reactExports.lazy(() => __vitePreload(() => import("./Profile-C1i2pid_.js"), true ? __vite__mapDeps([21,13,9,20,4,2]) : void 0));
+const AdminInvitesPage = reactExports.lazy(() => __vitePreload(() => import("./AdminInvites-CtQGvWiy.js"), true ? __vite__mapDeps([22,8,7,13,14,1,19,15,9,20,4]) : void 0));
+const ArchivePage = reactExports.lazy(() => __vitePreload(() => import("./Archive-Bj_WKGy-.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Layout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(PageLoading, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) }) })
 });
