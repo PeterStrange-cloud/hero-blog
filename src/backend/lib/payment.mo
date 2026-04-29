@@ -176,7 +176,7 @@ module {
     };
 
     switch (findField(txFields, "amt")) {
-      case (?(#Nat(amt))) { if (amt < expectedAmount) return null };
+      case (?(#Nat(amt))) { if (amt != expectedAmount) return null };
       case (_)            return null;
     };
 
@@ -324,7 +324,7 @@ module {
     };
 
     switch (findField(txFields, "amt")) {
-      case (?(#Nat(amt))) { if (amt < expectedAmount) return null };
+      case (?(#Nat(amt))) { if (amt != expectedAmount) return null };
       case (_) return null;
     };
 
@@ -418,7 +418,7 @@ module {
       case (_) return "FAIL: op missing";
     };
     switch (findField(txFields, "amt")) {
-      case (?(#Nat(amt))) { if (amt < expectedAmount) return "FAIL: amt " # Nat.toText(amt) # " < " # Nat.toText(expectedAmount) };
+      case (?(#Nat(amt))) { if (amt != expectedAmount) return "FAIL: amt " # Nat.toText(amt) # " < " # Nat.toText(expectedAmount) };
       case (_) return "FAIL: amt missing";
     };
     let toAccount = switch (findField(txFields, "to")) {

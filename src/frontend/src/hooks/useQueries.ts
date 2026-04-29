@@ -19,6 +19,7 @@ import type {
   UserId,
 } from "../types";
 import { useBackend } from "./useBackend";
+import { useIdentity } from "./useIdentity";
 
 // ─── Article queries ────────────────────────────────────────────────────────
 
@@ -538,6 +539,33 @@ export function useLinkWallet() {
     },
     onError: (e) => {
       console.error("[linkWallet] mutation error:", e);
+    },
+  });
+}
+
+export function useGetDisplayName() {
+  const { actor } = useBackend();
+  const { principal } = useIdentity();
+  return useQuery({
+    queryKey: ["displayName", principal?.toString()],
+    queryFn: async () => {
+      if (!actor || !principal) return null;
+      return actor.getDisplayName(principal);
+    },
+    enabled: !!actor && !!principal,
+  });
+}
+
+export function useSetDisplayName() {
+  const { actor } = useBackend();
+  const qc = useQueryClient();
+  return useMutation<void, Error, string>({
+    mutationFn: async (name: string) => {
+      if (!actor) throw new Error("Actor not ready");
+      await actor.setDisplayName(name);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["displayName"] });
     },
   });
 }

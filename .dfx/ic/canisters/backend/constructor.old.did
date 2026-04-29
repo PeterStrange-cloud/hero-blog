@@ -131,6 +131,7 @@ service : {
   getAllArticlesAdmin: () -> (vec ArticleCard);
   getArticle: (id: ArticleId) -> (opt ArticleFull);
   getArticleCard: (id: ArticleId) -> (opt ArticleCard) query;
+  getDisplayName: (p: principal) -> (opt text) query;
   getInviteByEmail: (email: text) -> (opt InvitedUser);
   getLinkedWallet: () -> (opt principal) query;
   getLogoUrl: () -> (opt text) query;
@@ -154,6 +155,7 @@ service : {
   removeAdmin: (target: UserId) -> (AdminResult);
   removeInvite: (email: text) -> (InviteResult);
   removeUserRole: (target: UserId) -> (AdminResult);
+  setDisplayName: (name: text) -> ();
   setUserRole: (target: UserId, role: Role) -> (AdminResult);
   unpublishArticle: (id: ArticleId) -> (AdminResult);
   updateArticle: (id: ArticleId, input: ArticleInput) -> (AdminResult);

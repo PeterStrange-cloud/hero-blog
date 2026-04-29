@@ -13,20 +13,20 @@
 @layer base {
   :root {
     /* ── Raw OKLCH values (for shadcn/Tailwind: used via oklch(var(--X))) ── */
-    --background:             0.20 0.025 50;
+    --background:             0.08 0.000 0;
     --foreground:             0.96 0.005 60;
     --card:                   0.25 0.030 50;
     --card-foreground:        0.96 0.005 60;
     --popover:                0.25 0.030 50;
     --popover-foreground:     0.96 0.005 60;
-    --primary:                0.55 0.20 295;       /* Brighter purple for dark bg */
+    --primary:                0.62 0.20 145;       /* Green primary */
     --primary-foreground:     1.00 0.000 0;
     --secondary:              0.75 0.19 50;        /* Brighter orange for dark bg */
-    --secondary-foreground:   0.20 0.025 50;
+    --secondary-foreground:   0.08 0.000 0;
     --muted:                  0.28 0.025 50;
     --muted-foreground:       0.70 0.010 60;
     --accent:                 0.75 0.19 50;
-    --accent-foreground:      0.20 0.025 50;
+    --accent-foreground:      0.08 0.000 0;
     --destructive:            0.62 0.22 25;
     --destructive-foreground: 1.00 0.000 0;
     --border:                 0.32 0.025 50;
@@ -35,20 +35,20 @@
     --radius: 0.5rem;
 
     /* ── Named tokens (for hand-authored CSS below) ── */
-    --color-bg:            oklch(0.20 0.025 50);
-    --color-bg-elevated:   oklch(0.25 0.030 50);
-    --color-bg-sunken:     oklch(0.16 0.020 50);
+    --color-bg:            oklch(0.08 0.000 0);
+    --color-bg-elevated:   oklch(0.13 0.000 0);
+    --color-bg-sunken:     oklch(0.05 0.000 0);
 
-    --color-purple:        oklch(0.65 0.22 295);
-    --color-purple-dim:    oklch(0.55 0.20 295);
-    --color-purple-soft:   oklch(0.72 0.18 295);
-    --color-purple-subtle: oklch(0.30 0.06 295);
-    --color-purple-glow:   oklch(0.65 0.22 295 / 0.30);
+    --color-purple:        oklch(0.62 0.22 25);
+    --color-purple-dim:    oklch(0.52 0.20 25);
+    --color-purple-soft:   oklch(0.68 0.20 25);
+    --color-purple-subtle: oklch(0.22 0.07 25);
+    --color-purple-glow:   oklch(0.62 0.22 25 / 0.30);
 
-    --color-orange:        oklch(0.75 0.19 50);
-    --color-orange-dim:    oklch(0.65 0.17 50);
-    --color-orange-subtle: oklch(0.32 0.06 50);
-    --color-orange-glow:   oklch(0.75 0.19 50 / 0.30);
+    --color-orange:        oklch(0.72 0.20 145);
+    --color-orange-dim:    oklch(0.62 0.18 145);
+    --color-orange-subtle: oklch(0.22 0.06 145);
+    --color-orange-glow:   oklch(0.72 0.20 145 / 0.30);
 
     /* ── Backward-compat aliases (old components use these) ── */
     --color-red:           var(--color-purple);
@@ -68,9 +68,9 @@
     --color-text-secondary: oklch(0.80 0.010 60);
     --color-text-muted:     oklch(0.65 0.010 60);
 
-    --color-border:        oklch(0.32 0.025 50);
-    --color-border-red:    oklch(0.65 0.22 295 / 0.45);
-    --color-border-green:  oklch(0.75 0.19 50 / 0.45);
+    --color-border:        oklch(0.25 0.000 0);
+    --color-border-red:    oklch(0.62 0.22 25 / 0.45);
+    --color-border-green:  oklch(0.72 0.20 145 / 0.45);
   }
 
   html { color-scheme: dark; }
@@ -188,7 +188,7 @@
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
     padding: 0.6rem 1.5rem; border-radius: var(--radius);
     font-weight: 600; font-size: 0.9rem; letter-spacing: 0.01em;
-    background: var(--color-orange); color: oklch(0.20 0.025 50);
+    background: var(--color-orange); color: oklch(0.08 0.000 0);
     border: 1px solid transparent;
     cursor: pointer;
     transition: background 150ms ease, box-shadow 150ms ease, transform 100ms ease;
@@ -365,9 +365,9 @@
 .ql-snow .ql-picker-options { background: oklch(0.25 0.025 50) !important; border-color: oklch(0.35 0.03 50) !important; }
 .ql-snow .ql-picker-item { color: #f0ebe0 !important; }
 .ql-snow .ql-picker-item .ql-stroke { stroke: #f0ebe0 !important; }
-.ql-snow button:hover .ql-stroke { stroke: oklch(0.75 0.19 50) !important; }
-.ql-snow button:hover .ql-fill { fill: oklch(0.75 0.19 50) !important; }
-.ql-snow .ql-active .ql-stroke { stroke: oklch(0.75 0.19 50) !important; }
-.ql-snow .ql-active .ql-fill { fill: oklch(0.75 0.19 50) !important; }
-.ql-snow .ql-active .ql-picker-label { color: oklch(0.75 0.19 50) !important; }
+.ql-snow button:hover .ql-stroke { stroke: oklch(0.72 0.20 145) !important; }
+.ql-snow button:hover .ql-fill { fill: oklch(0.72 0.20 145) !important; }
+.ql-snow .ql-active .ql-stroke { stroke: oklch(0.72 0.20 145) !important; }
+.ql-snow .ql-active .ql-fill { fill: oklch(0.72 0.20 145) !important; }
+.ql-snow .ql-active .ql-picker-label { color: oklch(0.72 0.20 145) !important; }
 .ql-editor img { cursor: pointer; max-width: 100%; height: auto; display: block; }

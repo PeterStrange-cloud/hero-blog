@@ -103,6 +103,8 @@ actor {
     };
   stable consumedPayments :
     {var root : Node__92254746<Nat>; var size : Nat__490723111};
+  stable displayNameStore :
+    {var root : Node__46230540<Principal, Text>; var size : Nat__490723111};
   stable inviteStore :
     {invites : Map__605269027<Text, InvitedUser__222609637>};
   stable paymentRequestStoreV2 :

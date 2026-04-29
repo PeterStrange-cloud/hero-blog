@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Check, Copy, LogIn, LogOut, Shield, User } from "lucide-react";
-import { useState } from "react";
+import { LogIn, LogOut, Search, Shield, User, X } from "lucide-react";
+import { useRef, useState } from "react";
 import { useIdentity } from "../hooks/useIdentity";
+import { useGetDisplayName } from "../hooks/useQueries";
 import { useGetLogoUrl } from "../hooks/useQueries";
 import { Button } from "./ui/button";
 
@@ -19,158 +20,141 @@ export function Layout({ children }: LayoutProps) {
     principal,
   } = useIdentity();
   const logoQuery = useGetLogoUrl();
+  const displayNameQuery = useGetDisplayName();
   const logoUrl = logoQuery.data ?? null;
 
-  const [copied, setCopied] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const principalStr = principal ? principal.toString() : null;
+  const handleSearchOpen = () => {
+    setSearchOpen(true);
+    setTimeout(() => searchInputRef.current?.focus(), 50);
+  };
 
-  const handleCopyPrincipal = () => {
-    if (!principalStr) return;
-    navigator.clipboard.writeText(principalStr).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+  const handleSearchClose = () => {
+    setSearchOpen(false);
+    setSearchQuery("");
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      window.location.href = "/?search=" + encodeURIComponent(searchQuery.trim());
+      handleSearchClose();
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      {/* Header */}
       <header className="sticky top-0 z-50 nav-dark">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="flex items-center gap-2 group"
-            data-ocid="nav.logo_link"
-          >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+
+          <Link to="/" className="flex items-center gap-2 group shrink-0" data-ocid="nav.logo_link">
             {logoUrl ? (
-              <img
-                src={logoUrl}
-                alt="HERO BLOG"
-                className="h-8 max-w-[140px] object-contain"
-              />
+              <img src={logoUrl} alt="HERO BLOG" className="h-8 max-w-[140px] object-contain" />
             ) : (
-              <span className="font-display text-xl font-bold tracking-tight">
+              <span className="font-display text-xl font-bold tracking-tight flex items-center gap-2">
+                <img src="/hero-coin.svg" alt="HERO" className="h-7 w-7" />
                 <span className="hero-logo-hero">HERO</span>
                 <span className="ml-1 hero-logo-blog">BLOG</span>
               </span>
             )}
           </Link>
 
-          {/* Nav */}
-          <nav className="hidden sm:flex items-center gap-6">
-            <Link
-              to="/"
-              className="type-label text-muted-foreground hover:text-foreground transition-colors duration-200"
-              data-ocid="nav.blog_link"
-            >
-              Blog
-            </Link>
-            {isAuthenticated && (<>
-              <Link
-                to="/admin"
-                className="type-label text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1.5"
-                data-ocid="nav.admin_link"
-              >
-                <Shield className="size-3.5" />
-                Admin
+          {!searchOpen && (
+            <nav className="hidden sm:flex items-center gap-6">
+              <Link to="/" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.blog_link">
+                Blog
               </Link>
-              <Link
-                to="/profile"
-                className="type-label text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1.5"
-                data-ocid="nav.profile_link"
-              >
+              <Link to="/archive" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.archive_link">
+                Archive
+              </Link>
+            </nav>
+          )}
+
+          {searchOpen && (
+            <form onSubmit={handleSearchSubmit} className="hidden sm:flex flex-1 max-w-md items-center gap-2 bg-card border border-border rounded-md px-3 py-1.5">
+              <Search className="size-4 text-muted-foreground shrink-0" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search articles..."
+                className="flex-1 bg-transparent text-sm outline-none text-foreground placeholder:text-muted-foreground"
+              />
+              <button type="button" onClick={handleSearchClose}>
+                <X className="size-4 text-muted-foreground hover:text-white transition-colors" />
+              </button>
+            </form>
+          )}
+
+          <div className="flex items-center gap-3 shrink-0">
+            {displayNameQuery.data && isAuthenticated && (
+              <span className="text-sm font-medium hidden sm:inline">{displayNameQuery.data}</span>
+            )}
+            {isAuthenticated && (
+              <Link to="/profile" className="hidden sm:flex type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200 items-center gap-1.5" data-ocid="nav.profile_link">
                 <User className="size-3.5" />
                 Profile
               </Link>
-              </>
             )}
-          </nav>
-
-          {/* Auth */}
-          <div className="flex items-center gap-2">
-            {/* principal display hidden — replaced by display name in profile */}
             {isAuthenticated ? (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => logout()}
-                className="gap-2 text-muted-foreground hover:text-foreground"
-                data-ocid="nav.logout_button"
-              >
+              <Button variant="ghost" size="sm" onClick={() => logout()} className="gap-2 text-[oklch(0.72_0.20_145)] hover:text-white" data-ocid="nav.logout_button">
                 <LogOut className="size-4" />
                 <span className="hidden sm:inline">Sign out</span>
               </Button>
             ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => login()}
-                disabled={isInitializing || isLoggingIn}
-                className="gap-2 border-border"
-                data-ocid="nav.login_button"
-              >
+              <Button variant="outline" size="sm" onClick={() => login()} disabled={isInitializing || isLoggingIn} className="gap-2 border-border" data-ocid="nav.login_button">
                 <LogIn className="size-4" />
-                {isLoggingIn ? "Signing in…" : "Sign in"}
+                {isLoggingIn ? "Signing in..." : "Sign in"}
               </Button>
+            )}
+            {!searchOpen && (
+              <button onClick={handleSearchOpen} className="ml-4 text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" aria-label="Search" data-ocid="nav.search_button">
+                <Search className="size-4" />
+              </button>
             )}
           </div>
         </div>
 
-        {/* Mobile nav */}
         <div className="sm:hidden border-t border-border px-4 py-2 flex gap-4 bg-card">
-          <Link
-            to="/"
-            className="type-label text-muted-foreground hover:text-foreground transition-colors duration-200"
-            data-ocid="nav.mobile_blog_link"
-          >
+          <Link to="/" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.mobile_blog_link">
             Blog
           </Link>
-          {isAuthenticated && (<>
-            <Link
-              to="/admin"
-              className="type-label text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1"
-              data-ocid="nav.mobile_admin_link"
-            >
-              <Shield className="size-3" />
-              Admin
-            </Link>
-            <Link
-              to="/profile"
-              className="type-label text-muted-foreground hover:text-foreground transition-colors duration-200 flex items-center gap-1"
-              data-ocid="nav.mobile_profile_link"
-            >
+          <Link to="/archive" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.mobile_archive_link">
+            Archive
+          </Link>
+          {isAuthenticated && (
+            <Link to="/profile" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200 flex items-center gap-1" data-ocid="nav.mobile_profile_link">
               <User className="size-3" />
               Profile
             </Link>
-            </>
           )}
         </div>
       </header>
 
-      {/* Main content */}
       <main className="flex-1 bg-background">{children}</main>
 
-      {/* Footer */}
-      <footer className="bg-card border-t border-border mt-auto">
+      <footer className="bg-black border-t border-[oklch(0.25_0.000_0)] mt-auto">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="font-display font-bold text-sm">
-              <span className="hero-logo-hero">HERO</span><span className="hero-logo-blog">BLOG</span>
+              <span className="hero-logo-hero">HERO</span>
+              <span className="hero-logo-blog">BLOG</span>
             </span>
-            <span className="text-muted-foreground text-xs">
-              · Decentralized publishing on ICP
-            </span>
+            <span className="text-muted-foreground text-xs">· Decentralized publishing on ICP</span>
           </div>
+          {isAuthenticated && (
+            <Link to="/admin" className="type-label text-muted-foreground hover:text-white transition-colors duration-200 flex items-center gap-1.5">
+              <Shield className="size-3.5" />
+              Admin
+            </Link>
+          )}
           <p className="type-meta text-center">
-            © {new Date().getFullYear()}. Built with love using{" "}
-            <a
-              href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(typeof window !== "undefined" ? window.location.hostname : "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline transition-colors duration-200"
-            >
+            {String.fromCharCode(169)} {new Date().getFullYear()}. Built with love using{" "}
+            <a href="https://caffeine.ai" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline transition-colors duration-200">
               caffeine.ai
             </a>
           </p>

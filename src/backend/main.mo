@@ -12,6 +12,7 @@ import InviteLib "lib/invite";
 import SettingsLib "lib/settings";
 import PaymentLib "lib/payment";
 import Principal "mo:core/Principal";
+import Map "mo:core/Map";
 
 
 persistent actor self {
@@ -62,7 +63,7 @@ persistent actor self {
   // ── Seed sample articles ─────────────────────────────────────────────────────
   // Seed author: management canister principal (placeholder for initial content)
   transient let seedAuthor = Principal.fromText("aaaaa-aa");
-  do {
+  if (ArticleLib.getAllArticles(articleStore).size() == 0) {
     // Article 1: Published, free — ICP overview
     let a1 = ArticleLib.createArticle(
       articleStore,
@@ -110,6 +111,16 @@ persistent actor self {
       seedAuthor,
     );
     // Article 3 remains unpublished (draft)
+  };
+
+  stable let displayNameStore = Map.empty<Principal, Text>();
+
+  public shared(msg) func setDisplayName(name : Text) : async () {
+    Map.add(displayNameStore, Principal.compare, msg.caller, name);
+  };
+
+  public query func getDisplayName(p : Principal) : async ?Text {
+    Map.get(displayNameStore, Principal.compare, p);
   };
 
   // ── Mixins ──────────────────────────────────────────────────────────────────

@@ -804,6 +804,15 @@ export class Backend implements backendInterface {
         const result = await (this.actor as any).linkWallet(walletPrincipal);
         return result;
     }
+    async setDisplayName(name: string): Promise<void> {
+        await (this.actor as any).setDisplayName(name);
+    }
+    async getDisplayName(principal: any): Promise<string | null> {
+        const result = await (this.actor as any).getDisplayName(principal);
+        if (Array.isArray(result) && result.length === 0) return null;
+        if (Array.isArray(result) && result.length === 1) return result[0];
+        return result;
+    }
     async getLinkedWallet(): Promise<any | null> {
         const result = await (this.actor as any).getLinkedWallet();
         if (Array.isArray(result) && result.length === 0) return null;

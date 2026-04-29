@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { PageLoading } from "../components/LoadingSpinner";
 import { useIdentity } from "../hooks/useIdentity";
-import { useUserAccess, useLinkWallet, useGetLinkedWallet } from "../hooks/useQueries";
+import { useUserAccess, useLinkWallet, useGetLinkedWallet, useGetDisplayName, useSetDisplayName } from "../hooks/useQueries";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -17,6 +17,9 @@ export default function Profile() {
   const linkWallet = useLinkWallet();
 
   const [walletInput, setWalletInput] = useState("");
+  const [nameInput, setNameInput] = useState("");
+  const displayNameQuery = useGetDisplayName();
+  const setDisplayName = useSetDisplayName();
 
   if (!isInitializing && !isAuthenticated) {
     navigate({ to: "/" });
@@ -114,6 +117,36 @@ export default function Profile() {
             aria-label="Copy principal"
           >
             <Copy className="size-3" />
+          </Button>
+        </div>
+      </section>
+
+      {/* Display Name */}
+      <section className="card-dark p-6 space-y-3">
+        <h2 className="font-display font-semibold text-foreground">Display Name</h2>
+        <p className="type-meta text-muted-foreground text-sm">
+          This name appears in the navigation bar next to Sign out.
+        </p>
+        {displayNameQuery.data && (
+          <p className="text-sm text-green-400 font-medium">Current: {displayNameQuery.data}</p>
+        )}
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Input
+            placeholder="Enter your name or nickname"
+            value={nameInput}
+            onChange={(e) => setNameInput(e.target.value)}
+            className="input-dark text-sm px-3 py-2"
+          />
+          <Button
+            onClick={async () => {
+              if (!nameInput.trim()) return;
+              await setDisplayName.mutateAsync(nameInput.trim());
+              setNameInput("");
+            }}
+            disabled={setDisplayName.isPending}
+            className="btn-primary"
+          >
+            {setDisplayName.isPending ? "Saving…" : "Save"}
           </Button>
         </div>
       </section>

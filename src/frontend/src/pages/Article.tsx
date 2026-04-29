@@ -23,7 +23,7 @@ import { type ArticleFull, type UserAccess, formatTimestamp } from "../types";
 function ArticleSkeleton() {
   return (
     <div className="animate-pulse" data-ocid="article.loading_state">
-      <div className="w-full aspect-[21/9] bg-muted mb-10" />
+      <div className="max-w-[760px] mx-auto aspect-[4/3] max-h-[360px] bg-muted mb-10" />
       <div className="max-w-[760px] mx-auto px-4 sm:px-6 space-y-4">
         <div className="h-3 w-20 bg-muted rounded" />
         <div className="h-10 w-4/5 bg-muted rounded" />
@@ -44,7 +44,7 @@ function CoverImage({ article }: { article: ArticleFull }) {
 
   if (!imgSrc) {
     return (
-      <div className="w-full aspect-[21/9] bg-muted flex items-center justify-center">
+      <div className="max-w-[760px] mx-auto aspect-[4/3] max-h-[360px] bg-muted flex items-center justify-center">
         <span className="text-muted-foreground text-sm font-medium uppercase tracking-wider">
           NO COVER IMAGE
         </span>
@@ -53,7 +53,7 @@ function CoverImage({ article }: { article: ArticleFull }) {
   }
 
   return (
-    <div className="w-full aspect-[21/9] overflow-hidden bg-muted">
+    <div className="max-w-[760px] mx-auto aspect-[4/3] max-h-[360px] overflow-hidden bg-muted rounded-lg">
       <img
         src={imgSrc}
         alt={article.title}

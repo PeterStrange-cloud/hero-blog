@@ -13,6 +13,8 @@ import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
+import TiptapLink from "@tiptap/extension-link";
+import Underline from "@tiptap/extension-underline";
 import { ExternalBlob } from "../backend";
 import { InlineError } from "./ErrorMessage";
 
@@ -102,6 +104,8 @@ export function ArticleForm({
       TextStyle,
       Color,
       Highlight.configure({ multicolor: true }),
+      TiptapLink.configure({ openOnClick: false }),
+      Underline,
     ],
     content: initial.content || "",
     onUpdate: ({ editor }) => {

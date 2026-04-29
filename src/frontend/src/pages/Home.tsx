@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { usePublishedArticles, useUserAccess } from "@/hooks/useQueries";
 import { formatTimestampShort } from "@/types";
 import type { ArticleCard } from "@/types";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { ArrowRight, BookOpen, Lock, Zap } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -275,6 +275,38 @@ function GridSkeleton() {
   );
 }
 
+
+// ─── Archive row ──────────────────────────────────────────────────────────────
+
+function ArchiveRow({ article, unlocked }: { article: ArticleCard; unlocked: boolean }) {
+  const navigate = useNavigate();
+  const goto = () => navigate({ to: "/article/$id", params: { id: String(article.id) } });
+  return (
+    <div
+      className="flex items-center justify-between gap-4 px-4 py-3 bg-card hover:bg-muted/30 cursor-pointer transition-colors duration-200 group"
+      onClick={goto}
+    >
+      <div className="flex items-center gap-3 min-w-0">
+        <span className="type-meta text-muted-foreground shrink-0">{formatTimestampShort(article.createdAt)}</span>
+        <CategoryBadge category={article.category} />
+        {article.isPremium ? <PremiumBadge /> : <FreeBadge />}
+        <h3 className="font-display font-semibold text-sm text-foreground truncate group-hover:text-primary transition-colors duration-200">{article.title}</h3>
+      </div>
+      <div className="shrink-0">
+        {article.isPremium && !unlocked ? (
+          <Button size="sm" className="btn-primary h-7 px-2 text-xs gap-1" onClick={(e) => { e.stopPropagation(); goto(); }}>
+            <Zap className="size-3" />Unlock
+          </Button>
+        ) : (
+          <Button size="sm" className="btn-accent h-7 px-2 text-xs gap-1" onClick={(e) => { e.stopPropagation(); goto(); }}>
+            Read<ArrowRight className="size-3" />
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Home page ─────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
@@ -301,8 +333,23 @@ export default function HomePage() {
   const isUnlocked = (a: ArticleCard) =>
     !!userAccess?.isSubscribed || unlockedSet.has(a.id.toString());
 
-  const featured = articles?.[0] ?? null;
-  const rest = articles?.slice(1) ?? [];
+  const rawSearch = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("search") ?? ""
+    : "";
+  const searchTerm = rawSearch.toLowerCase().trim();
+
+  const filteredArticles = searchTerm
+    ? (articles ?? []).filter((a) =>
+        a.title.toLowerCase().includes(searchTerm) ||
+        a.excerpt.toLowerCase().includes(searchTerm) ||
+        a.category.toLowerCase().includes(searchTerm) ||
+        a.tags.some((t) => t.toLowerCase().includes(searchTerm))
+      )
+    : articles;
+
+  const featured = searchTerm ? null : (filteredArticles?.[0] ?? null);
+  const rest = searchTerm ? (filteredArticles ?? []).slice(0, 3) : (filteredArticles?.slice(1, 4) ?? []);
+  const archive = searchTerm ? (filteredArticles ?? []).slice(3) : (filteredArticles?.slice(4) ?? []);
 
   return (
     <div className="min-h-screen bg-background" data-ocid="home.page">
@@ -317,7 +364,7 @@ export default function HomePage() {
           >
             <div className="flex items-center gap-2">
               <div className="h-px w-8 bg-primary" />
-              <span className="type-label text-primary">
+              <span className="type-label text-white">
                 DECENTRALIZED PUBLISHING
               </span>
             </div>
@@ -332,6 +379,22 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Search results banner */}
+      {searchTerm && (
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6">
+          <div className="flex items-center gap-3">
+            <span className="type-label text-muted-foreground">
+              SEARCH RESULTS FOR "{rawSearch}"
+            </span>
+            <div className="flex-1 h-px bg-border" />
+            <a href="/" className="type-meta text-primary hover:underline">Clear</a>
+          </div>
+          {!showSkeleton && !isError && (filteredArticles ?? []).length === 0 && (
+            <p className="type-body text-muted-foreground mt-4">No articles found.</p>
+          )}
+        </div>
+      )}
 
       {/* Main content area */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex flex-col gap-12">
@@ -404,6 +467,8 @@ export default function HomePage() {
             </div>
           </section>
         )}
+
+
       </div>
     </div>
   );
