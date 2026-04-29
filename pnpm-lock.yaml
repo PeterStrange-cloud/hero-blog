@@ -135,6 +135,9 @@ importers:
       '@tanstack/react-router':
         specifier: ~1.131.8
         version: 1.131.50(react-dom@19.1.5(react@19.1.5))(react@19.1.5)
+      '@tiptap/core':
+        specifier: 3.22.4
+        version: 3.22.4(@tiptap/pm@3.22.4)
       '@tiptap/extension-color':
         specifier: ^3.22.4
         version: 3.22.4(@tiptap/extension-text-style@3.22.4(@tiptap/core@3.22.4(@tiptap/pm@3.22.4)))
@@ -156,6 +159,9 @@ importers:
       '@tiptap/extension-underline':
         specifier: ^3.22.5
         version: 3.22.5(@tiptap/core@3.22.4(@tiptap/pm@3.22.4))
+      '@tiptap/extension-youtube':
+        specifier: ^3.22.4
+        version: 3.22.4(@tiptap/core@3.22.4(@tiptap/pm@3.22.4))
       '@tiptap/pm':
         specifier: ^3.22.4
         version: 3.22.4
@@ -1897,6 +1903,11 @@ packages:
     resolution: {integrity: sha512-9ut09rJD0iEbS6sk7yd2j6IwuFDLTNmDEGTDLodvqAfi+bq7ddsTDv0YviXoZaA9sdHAdTEVr2ITy2m6WK5jpA==}
     peerDependencies:
       '@tiptap/core': 3.22.5
+
+  '@tiptap/extension-youtube@3.22.4':
+    resolution: {integrity: sha512-H5dKDEdVhGeE2JZ4z6AvurN9GNwZQBNige8wjUie3R+hkwX/0DDql0oqvNM8lO5WM1M90Sq/AwyPQ2K9auSbbw==}
+    peerDependencies:
+      '@tiptap/core': 3.22.4
 
   '@tiptap/extensions@3.22.4':
     resolution: {integrity: sha512-fOe8VptJvLPs32bNdUYo8SRyljwqKNQVXWW056VoXIc5en/59OdJlJQVeHI0jRRciH3MtrqODi/gfJR0VHNZ8A==}
@@ -4669,6 +4680,10 @@ snapshots:
       '@tiptap/core': 3.22.4(@tiptap/pm@3.22.4)
 
   '@tiptap/extension-underline@3.22.5(@tiptap/core@3.22.4(@tiptap/pm@3.22.4))':
+    dependencies:
+      '@tiptap/core': 3.22.4(@tiptap/pm@3.22.4)
+
+  '@tiptap/extension-youtube@3.22.4(@tiptap/core@3.22.4(@tiptap/pm@3.22.4))':
     dependencies:
       '@tiptap/core': 3.22.4(@tiptap/pm@3.22.4)
 

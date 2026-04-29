@@ -191,7 +191,33 @@ function ArticleTeaser({ content }: { content: string }) {
 function ArticleBody({ content }: { content: string }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (ref.current) ref.current.innerHTML = content;
+    if (!ref.current) return;
+    ref.current.innerHTML = content;
+
+    // Hydrate Twitter embeds if present
+    const hasTwitter = content.includes("data-twitter-url") || content.includes("twitter-tweet");
+    if (hasTwitter) {
+      const w = window as any;
+      const renderTweets = () => {
+        if (w.twttr && w.twttr.widgets && ref.current) {
+          w.twttr.widgets.load(ref.current);
+        }
+      };
+      if (w.twttr && w.twttr.widgets) {
+        renderTweets();
+      } else if (!document.getElementById("twitter-widgets-script")) {
+        const s = document.createElement("script");
+        s.id = "twitter-widgets-script";
+        s.src = "https://platform.twitter.com/widgets.js";
+        s.async = true;
+        s.charset = "utf-8";
+        s.onload = renderTweets;
+        document.body.appendChild(s);
+      } else {
+        // script already present, retry after a beat
+        setTimeout(renderTweets, 500);
+      }
+    }
   }, [content]);
   return (
     <div

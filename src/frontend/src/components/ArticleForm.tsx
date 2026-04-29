@@ -15,6 +15,8 @@ import { Color } from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
 import TiptapLink from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
+import Youtube from "@tiptap/extension-youtube";
+import { Twitter } from "./extensions/Twitter";
 import { ExternalBlob } from "../backend";
 import { InlineError } from "./ErrorMessage";
 
@@ -106,6 +108,8 @@ export function ArticleForm({
       Highlight.configure({ multicolor: true }),
       TiptapLink.configure({ openOnClick: false }),
       Underline,
+      Youtube.configure({ controls: true, nocookie: true, HTMLAttributes: { class: "youtube-embed-wrapper my-4" } }),
+      Twitter,
     ],
     content: initial.content || "",
     onUpdate: ({ editor }) => {
@@ -128,21 +132,87 @@ export function ArticleForm({
     [],
   );
 
+  const fitInto4x3 = (file: File, targetSizeBytes = 1024 * 1024): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const img = new window.Image();
+      const url = URL.createObjectURL(file);
+      img.onload = async () => {
+        URL.revokeObjectURL(url);
+        const targetRatio = 4 / 3;
+        const maxW = 1600;
+        const outW = maxW;
+        const outH = outW / targetRatio;
+        const srcRatio = img.width / img.height;
+        let drawW: number, drawH: number, dx: number, dy: number;
+        if (srcRatio > targetRatio) {
+          drawW = outW;
+          drawH = outW / srcRatio;
+          dx = 0;
+          dy = (outH - drawH) / 2;
+        } else {
+          drawH = outH;
+          drawW = outH * srcRatio;
+          dy = 0;
+          dx = (outW - drawW) / 2;
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = outW;
+        canvas.height = outH;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return reject(new Error("Canvas not supported"));
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, outW, outH);
+        ctx.drawImage(img, 0, 0, img.width, img.height, dx, dy, drawW, drawH);
+
+        const tryEncode = (q: number): Promise<Blob> =>
+          new Promise((res, rej) =>
+            canvas.toBlob(
+              (b) => (b ? res(b) : rej(new Error("Encode failed"))),
+              "image/jpeg",
+              q
+            )
+          );
+
+        let q = 0.85;
+        let blob = await tryEncode(q);
+        while (blob.size > targetSizeBytes && q > 0.4) {
+          q -= 0.1;
+          blob = await tryEncode(q);
+        }
+        resolve(blob);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("Could not load image"));
+      };
+      img.src = url;
+    });
+  };
+
   const handleImageSelect = async (file: File) => {
     if (!file.type.startsWith("image/")) return;
-    if (file.size > 1 * 1024 * 1024) {
-      alert("Cover image is too large. Maximum size is 1MB. Please compress or resize your image.");
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Cover image is too large. Maximum source size is 5MB. Please compress or resize your image first.");
       return;
     }
-    const previewUrl = URL.createObjectURL(file);
+    let cropped: Blob;
+    try {
+      cropped = await fitInto4x3(file);
+    } catch (err) {
+      alert("Failed to process image. Please try a different file.");
+      return;
+    }
+    if (cropped.size > 1 * 1024 * 1024) {
+      alert("Could not compress image under 1MB even at low quality. Please use a smaller or simpler source file.");
+      return;
+    }
+    const previewUrl = URL.createObjectURL(cropped);
     setCoverPreview(previewUrl);
     setUploadProgress(0);
-
-    const bytes = new Uint8Array(await file.arrayBuffer());
+    const bytes = new Uint8Array(await cropped.arrayBuffer());
     const blob = ExternalBlob.fromBytes(bytes).withUploadProgress((pct) => {
       setUploadProgress(pct);
     });
-
     set("coverImage", blob);
     setUploadProgress(null);
   };
@@ -199,11 +269,11 @@ export function ArticleForm({
       <div className="space-y-2">
         <Label className="type-label text-[11px]">Cover Image</Label>
         {coverPreview ? (
-          <div className="relative rounded-lg overflow-hidden border border-border">
+          <div className="relative rounded-lg overflow-hidden border border-border max-w-sm aspect-[4/3]">
             <img
               src={coverPreview}
               alt="Cover preview"
-              className="w-full h-48 object-cover"
+              className="w-full h-full object-cover"
             />
             {uploadProgress !== null && (
               <div className="absolute inset-0 bg-background/70 flex flex-col items-center justify-center gap-2">
@@ -243,7 +313,10 @@ export function ArticleForm({
                 Drop an image or click to upload
               </p>
               <p className="type-meta text-muted-foreground mt-0.5">
-                JPG, PNG, WebP up to 1MB
+                JPG, PNG, WebP. Any size up to 5MB.
+              </p>
+              <p className="type-meta text-muted-foreground mt-0.5">
+                Fitted into 4:3 frame (no cropping). Auto-compressed under 1MB.
               </p>
             </div>
             <Button
@@ -396,8 +469,29 @@ export function ArticleForm({
             {/* Link */}
             <button type="button" title="Insert link" onClick={() => {
               const url = window.prompt("URL:");
-              if (url) editor?.chain().focus().setLink({ href: url }).run();
+              if (!url) return;
+              const { from, to, empty } = editor!.state.selection;
+              if (empty) {
+                editor?.chain().focus().insertContent({ type: "text", text: url, marks: [{ type: "link", attrs: { href: url } }] }).run();
+              } else {
+                editor?.chain().focus().setLink({ href: url }).run();
+              }
             }} className="w-7 h-7 text-xs rounded text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)] transition-colors">🔗</button>
+            {/* Embed (YouTube / X) */}
+            <button type="button" title="Embed YouTube or X/Twitter video/post" onClick={() => {
+              const url = window.prompt("Paste a YouTube or X/Twitter URL:");
+              if (!url) return;
+              const trimmed = url.trim();
+              const isYoutube = /(?:youtube\.com|youtu\.be)/.test(trimmed);
+              const isTwitter = /(?:twitter\.com|x\.com)\/\w+\/status\/\d+/.test(trimmed);
+              if (isYoutube) {
+                (editor as any)?.chain().focus().setYoutubeVideo({ src: trimmed }).run();
+              } else if (isTwitter) {
+                editor?.chain().focus().insertContent({ type: "twitter", attrs: { url: trimmed } }).run();
+              } else {
+                alert("Only YouTube and X/Twitter URLs are supported.");
+              }
+            }} className="w-7 h-7 text-xs rounded text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)] transition-colors">▶</button>
             {/* Clear */}
             <button type="button" title="Clear formatting" onClick={() => editor?.chain().focus().clearNodes().unsetAllMarks().run()}
               className="w-7 h-7 text-xs rounded text-[#f0ebe0] hover:bg-[oklch(0.35_0.03_50)] transition-colors">Tx</button>
