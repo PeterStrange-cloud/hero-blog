@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Article-BVXuEOVm.js","assets/index-Dpfa_YKk.js","assets/wallet-0bpZOr8J.js","assets/circle-check-big-DaFrPoSq.js","assets/copy-CHKaqaqN.js","assets/arrow-left-ysIDJU-x.js","assets/Admin-BRmh3pi8.js","assets/index-DS2mrLPq.js","assets/badge-CULQ3LpV.js","assets/index-orfVZPyu.js","assets/AdminBootstrap-GSHNFEZS.js","assets/AdminNew-DD_C2NqC.js","assets/ArticleForm-DjPGJC_P.js","assets/input-Do7oCR9P.js","assets/label-wUlTzMjW.js","assets/index-CJoROy8t.js","assets/upload-BqNda5RG.js","assets/AdminEdit-B221lTH_.js","assets/AdminSettings-JN3xY8ex.js","assets/select-B9O0KiV8.js","assets/chevron-left-CLsI8mNX.js","assets/Profile-CS1TCbdz.js","assets/AdminInvites-CSgYqwmG.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Article-BK8FnnCG.js","assets/index-aPAsfKVW.js","assets/wallet-AYPLUlmW.js","assets/circle-check-big-BwJWQX2c.js","assets/copy-ipxWQerX.js","assets/arrow-left-BK6HH55H.js","assets/Admin-_vq3redm.js","assets/index-Be0N5AU9.js","assets/badge-DVI9yD_l.js","assets/index-v-kzpLJD.js","assets/AdminBootstrap-Ck9_H85y.js","assets/AdminNew-Dq1WcIj4.js","assets/ArticleForm-CMCwaZsw.js","assets/input-BF2gWFvE.js","assets/label-CZhYBiAU.js","assets/index-BRHpPh1A.js","assets/upload-C7vKlTL2.js","assets/AdminEdit-eVEDlJzQ.js","assets/AdminSettings-B6JDLvoC.js","assets/select-B8gGLKuh.js","assets/chevron-left-DtBMpjC5.js","assets/Profile-LfFncSVQ.js","assets/AdminInvites-Ch9p7O7r.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -36861,6 +36861,7 @@ function Layout({ children }) {
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-muted-foreground text-xs", children: "· Decentralized publishing on ICP" })
       ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { to: "/article/$id", params: { id: "45" }, className: "flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 hover:border-primary transition-colors duration-200 text-xs font-semibold tracking-wide", children: "How to Register & Pay" }),
       isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsxs(Link, { to: "/admin", className: "type-label text-muted-foreground hover:text-white transition-colors duration-200 flex items-center gap-1.5", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(Shield, { className: "size-3.5" }),
         "Admin"
@@ -45126,27 +45127,37 @@ function HomePage() {
   const rest = searchTerm ? (filteredArticles ?? []).slice(0, 3) : (filteredArticles == null ? void 0 : filteredArticles.slice(1, 4)) ?? [];
   searchTerm ? (filteredArticles ?? []).slice(3) : (filteredArticles == null ? void 0 : filteredArticles.slice(4)) ?? [];
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "min-h-screen bg-background", "data-ocid": "home.page", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("section", { className: "border-b border-subtle py-16 md:py-24 hero-glow", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-6xl mx-auto px-4 sm:px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      motion.div,
-      {
-        className: "flex flex-col gap-3 max-w-2xl",
-        initial: { opacity: 0, y: 16 },
-        animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.5 },
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px w-8 bg-primary" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "type-label text-white", children: "DECENTRALIZED PUBLISHING" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "font-display text-5xl md:text-7xl font-bold tracking-tight leading-tight", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hero-logo-hero", children: "HERO" }),
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hero-logo-blog", children: "BLOG" })
-          ] }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "type-body-lg text-muted-foreground", children: "Decentralized insights on ICP and Web3 — exclusive research, tutorials, and ecosystem news powered by the HERO token." })
-        ]
-      }
-    ) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { className: "border-b border-subtle py-16 md:py-24 hero-glow relative overflow-hidden", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pointer-events-none absolute bottom-0 left-0 w-32 md:w-48 h-3/4", style: {
+        background: "linear-gradient(to right, oklch(0.30 0.15 28 / 0.30) 0%, oklch(0.40 0.18 35 / 0.12) 50%, transparent 100%)",
+        filter: "blur(24px)"
+      } }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "pointer-events-none absolute bottom-0 right-0 w-32 md:w-48 h-3/4", style: {
+        background: "linear-gradient(to left, oklch(0.30 0.15 28 / 0.30) 0%, oklch(0.40 0.18 35 / 0.12) 50%, transparent 100%)",
+        filter: "blur(24px)"
+      } }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-w-6xl mx-auto px-4 sm:px-6", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        motion.div,
+        {
+          className: "flex flex-col gap-3 max-w-2xl",
+          initial: { opacity: 0, y: 16 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.5 },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-px w-8 bg-primary" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "type-label text-white", children: "DECENTRALIZED PUBLISHING" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "font-display text-5xl md:text-7xl font-bold tracking-tight leading-tight", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hero-logo-hero", children: "HERO" }),
+              " ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "hero-logo-blog", children: "BLOG" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "type-body-lg text-muted-foreground", children: "Decentralized insights on ICP and Web3 — exclusive research, tutorials, and ecosystem news powered by the HERO token." })
+          ]
+        }
+      ) })
+    ] }),
     searchTerm && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto px-4 sm:px-6 pt-6", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "type-label text-muted-foreground", children: [
@@ -45218,15 +45229,15 @@ function HomePage() {
     ] })
   ] });
 }
-const ArticlePage = reactExports.lazy(() => __vitePreload(() => import("./Article-BVXuEOVm.js"), true ? __vite__mapDeps([0,1,2,3,4,5]) : void 0));
-const AdminPage = reactExports.lazy(() => __vitePreload(() => import("./Admin-BRmh3pi8.js"), true ? __vite__mapDeps([6,7,8,9,3,4]) : void 0));
-const AdminBootstrapPage = reactExports.lazy(() => __vitePreload(() => import("./AdminBootstrap-GSHNFEZS.js"), true ? __vite__mapDeps([10,9,3,4]) : void 0));
-const AdminNewPage = reactExports.lazy(() => __vitePreload(() => import("./AdminNew-DD_C2NqC.js"), true ? __vite__mapDeps([11,9,12,13,14,1,7,15,5,16]) : void 0));
-const AdminEditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminEdit-B221lTH_.js"), true ? __vite__mapDeps([17,9,12,13,14,1,7,15,5,16]) : void 0));
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettings-JN3xY8ex.js"), true ? __vite__mapDeps([18,8,7,19,15,9,20,16,4]) : void 0));
-const ProfilePage = reactExports.lazy(() => __vitePreload(() => import("./Profile-CS1TCbdz.js"), true ? __vite__mapDeps([21,13,9,20,4,2]) : void 0));
-const AdminInvitesPage = reactExports.lazy(() => __vitePreload(() => import("./AdminInvites-CSgYqwmG.js"), true ? __vite__mapDeps([22,8,7,13,14,1,19,15,9,20,4]) : void 0));
-const ArchivePage = reactExports.lazy(() => __vitePreload(() => import("./Archive-C8gmUyW2.js"), true ? [] : void 0));
+const ArticlePage = reactExports.lazy(() => __vitePreload(() => import("./Article-BK8FnnCG.js"), true ? __vite__mapDeps([0,1,2,3,4,5]) : void 0));
+const AdminPage = reactExports.lazy(() => __vitePreload(() => import("./Admin-_vq3redm.js"), true ? __vite__mapDeps([6,7,8,9,3,4]) : void 0));
+const AdminBootstrapPage = reactExports.lazy(() => __vitePreload(() => import("./AdminBootstrap-Ck9_H85y.js"), true ? __vite__mapDeps([10,9,3,4]) : void 0));
+const AdminNewPage = reactExports.lazy(() => __vitePreload(() => import("./AdminNew-Dq1WcIj4.js"), true ? __vite__mapDeps([11,9,12,13,14,1,7,15,5,16]) : void 0));
+const AdminEditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminEdit-eVEDlJzQ.js"), true ? __vite__mapDeps([17,9,12,13,14,1,7,15,5,16]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettings-B6JDLvoC.js"), true ? __vite__mapDeps([18,8,7,19,15,9,20,16,4]) : void 0));
+const ProfilePage = reactExports.lazy(() => __vitePreload(() => import("./Profile-LfFncSVQ.js"), true ? __vite__mapDeps([21,13,9,20,4,2]) : void 0));
+const AdminInvitesPage = reactExports.lazy(() => __vitePreload(() => import("./AdminInvites-Ch9p7O7r.js"), true ? __vite__mapDeps([22,8,7,13,14,1,19,15,9,20,4]) : void 0));
+const ArchivePage = reactExports.lazy(() => __vitePreload(() => import("./Archive-biWjiBTm.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Layout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(PageLoading, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) }) })
 });

@@ -353,7 +353,17 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background" data-ocid="home.page">
       {/* Page header band */}
-      <section className="border-b border-subtle py-16 md:py-24 hero-glow">
+      <section className="border-b border-subtle py-16 md:py-24 hero-glow relative overflow-hidden">
+        {/* Left flame */}
+        <div className="pointer-events-none absolute bottom-0 left-0 w-32 md:w-48 h-3/4" style={{
+          background: "linear-gradient(to right, oklch(0.30 0.15 28 / 0.30) 0%, oklch(0.40 0.18 35 / 0.12) 50%, transparent 100%)",
+          filter: "blur(24px)",
+        }} />
+        {/* Right flame */}
+        <div className="pointer-events-none absolute bottom-0 right-0 w-32 md:w-48 h-3/4" style={{
+          background: "linear-gradient(to left, oklch(0.30 0.15 28 / 0.30) 0%, oklch(0.40 0.18 35 / 0.12) 50%, transparent 100%)",
+          filter: "blur(24px)",
+        }} />
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <motion.div
             className="flex flex-col gap-3 max-w-2xl"

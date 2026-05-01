@@ -146,6 +146,9 @@ export function Layout({ children }: LayoutProps) {
             </span>
             <span className="text-muted-foreground text-xs">· Decentralized publishing on ICP</span>
           </div>
+          <Link to="/article/$id" params={{ id: "45" }} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 hover:border-primary transition-colors duration-200 text-xs font-semibold tracking-wide">
+            How to Register & Pay
+          </Link>
           {isAuthenticated && (
             <Link to="/admin" className="type-label text-muted-foreground hover:text-white transition-colors duration-200 flex items-center gap-1.5">
               <Shield className="size-3.5" />
