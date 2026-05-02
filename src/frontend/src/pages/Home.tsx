@@ -352,6 +352,14 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background" data-ocid="home.page">
+      {/* Dashboard banner */}
+      <div className="w-full" style={{ height: '60px' }}>
+        <iframe
+          src="https://coinhero.trading/"
+          style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+          title="CoinHero Dashboard"
+        />
+      </div>
       {/* Page header band */}
       <section className="border-b border-subtle py-16 md:py-24 hero-glow relative overflow-hidden">
         {/* Left flame */}
