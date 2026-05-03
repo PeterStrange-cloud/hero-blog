@@ -435,7 +435,7 @@ export default function HomePage() {
       )}
 
       {/* Main content area */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col gap-12">
+      <div className="w-full px-4 sm:px-6 py-10 flex flex-col gap-12">
         {/* Loading state */}
         {showSkeleton && (
           <div className="flex flex-col gap-8">
