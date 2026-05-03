@@ -452,14 +452,29 @@ export default function HomePage() {
           />
         )}
 
-        {/* Featured article */}
+        {/* Featured article + Latest Video */}
         {!showSkeleton && !isError && featured && (
           <section data-ocid="home.featured.section">
             <div className="flex items-center gap-3 mb-5">
               <span className="type-label text-muted-foreground">FEATURED</span>
               <div className="flex-1 h-px bg-border" />
             </div>
-            <FeaturedCard article={featured} unlocked={isUnlocked(featured)} />
+            <div className="flex gap-5 items-stretch">
+              <div className="flex-1 min-w-0" style={{ flexBasis: '65%' }}>
+                <FeaturedCard article={featured} unlocked={isUnlocked(featured)} />
+              </div>
+              <div style={{ flexBasis: '35%', minWidth: '280px' }}>
+                <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'oklch(0.62 0.20 145)' }}>Latest Video</p>
+                <div style={{ border: '1px solid oklch(0.62 0.20 145 / 0.4)', borderRadius: '8px', overflow: 'hidden', height: 'calc(100% - 28px)' }}>
+                  <iframe
+                    src="https://www.youtube.com/embed?listType=user_uploads&list=UCvOZO32EpT8xP15QthoG7wA"
+                    style={{ width: '100%', height: '100%', minHeight: '280px', border: 'none', display: 'block' }}
+                    title="Latest Video"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            </div>
           </section>
         )}
 
