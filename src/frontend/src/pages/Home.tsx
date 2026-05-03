@@ -8,6 +8,7 @@ import type { ArticleCard } from "@/types";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, BookOpen, Lock, Zap } from "lucide-react";
 import { motion } from "motion/react";
+import { useState, useEffect } from "react";
 
 // ─── Cover image helper ───────────────────────────────────────────────────────
 
