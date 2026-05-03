@@ -393,7 +393,7 @@ export default function HomePage() {
           background: "linear-gradient(to left, oklch(0.30 0.15 28 / 0.30) 0%, oklch(0.40 0.18 35 / 0.12) 50%, transparent 100%)",
           filter: "blur(24px)",
         }} />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.div
             className="flex flex-col gap-3 max-w-2xl"
             initial={{ opacity: 0, y: 16 }}
@@ -420,7 +420,7 @@ export default function HomePage() {
 
       {/* Search results banner */}
       {searchTerm && (
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
           <div className="flex items-center gap-3">
             <span className="type-label text-muted-foreground">
               SEARCH RESULTS FOR "{rawSearch}"
@@ -435,7 +435,7 @@ export default function HomePage() {
       )}
 
       {/* Main content area */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex flex-col gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex flex-col gap-12">
         {/* Loading state */}
         {showSkeleton && (
           <div className="flex flex-col gap-8">
