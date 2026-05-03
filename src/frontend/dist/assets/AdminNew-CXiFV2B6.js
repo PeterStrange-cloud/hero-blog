@@ -1,13 +1,13 @@
-import { u as useNavigate, a as useIdentity, f as useListAdmins, g as useCreateArticle, h as usePublishArticle, j as jsxRuntimeExports, P as PageLoading } from "./index-DmduXJ-H.js";
-import { u as ue } from "./index-D4To4rLc.js";
-import { A as ArticleForm } from "./ArticleForm-BSIj0eSJ.js";
-import "./input-Q5GwaLOT.js";
-import "./label-D2UaN3ap.js";
-import "./index-UhF6seQZ.js";
-import "./index-CL5Kmcgg.js";
-import "./index-1El3_3GA.js";
-import "./arrow-left-DzX-OHOD.js";
-import "./upload-CCOu5O-W.js";
+import { u as useNavigate, a as useIdentity, f as useListAdmins, g as useCreateArticle, h as usePublishArticle, j as jsxRuntimeExports, P as PageLoading } from "./index-DIsT6YNP.js";
+import { u as ue } from "./index-DzqgALVr.js";
+import { A as ArticleForm } from "./ArticleForm-DrhJU7qi.js";
+import "./input-Pfe5d7Kx.js";
+import "./label-Qqd_SHXS.js";
+import "./index-BRWITBxI.js";
+import "./index-C2Fce7oE.js";
+import "./index-OSnU7pDC.js";
+import "./arrow-left-onil1M3U.js";
+import "./upload-BTBOQ5--.js";
 function AdminNew() {
   const navigate = useNavigate();
   const { isAuthenticated, isInitializing, principal } = useIdentity();

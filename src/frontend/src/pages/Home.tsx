@@ -477,7 +477,7 @@ export default function HomePage() {
               <span className="type-label text-muted-foreground">FEATURED</span>
               <div className="flex-1 h-px bg-border" />
             </div>
-            <div className="flex gap-5 items-stretch">
+            <div className="flex flex-col-reverse md:flex-row gap-5 items-stretch">
               <div className="flex-1 min-w-0" style={{ flexBasis: '65%' }}>
                 <FeaturedCard article={featured} unlocked={isUnlocked(featured)} />
               </div>
