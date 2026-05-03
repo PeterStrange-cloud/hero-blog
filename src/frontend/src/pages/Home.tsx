@@ -27,9 +27,9 @@ function getGradient(id: bigint) {
 
 // ─── Latest YouTube Video Panel ──────────────────────────────────────────────
 function LatestVideoPanel() {
-  const [videoId, setVideoId] = React.useState<string | null>(null);
+  const [videoId, setVideoId] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCvOZO32EpT8xP15QthoG7wA'))
       .then(r => r.json())
       .then(data => {
