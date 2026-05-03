@@ -1,7 +1,7 @@
-import { u as useNavigate, a as useIdentity, b as useHasSuperadmin, c as useGetMyRole, d as useInitSuperadmin, r as reactExports, j as jsxRuntimeExports, P as PageLoading, S as Shield, B as Button, L as LoaderCircle, A as AdminResult } from "./index-CcB9dZzK.js";
-import { u as ue } from "./index-Bpl7GF6P.js";
-import { C as CircleCheckBig } from "./circle-check-big-CvOCIWL3.js";
-import { C as Copy } from "./copy-8dRSPhoH.js";
+import { u as useNavigate, a as useIdentity, b as useHasSuperadmin, c as useGetMyRole, d as useInitSuperadmin, r as reactExports, j as jsxRuntimeExports, P as PageLoading, S as Shield, B as Button, L as LoaderCircle, A as AdminResult } from "./index-B1ZnW1Ou.js";
+import { u as ue } from "./index-Cg78LCqX.js";
+import { C as CircleCheckBig } from "./circle-check-big-DMP9lvHT.js";
+import { C as Copy } from "./copy-CqIV14Hy.js";
 function AdminBootstrap() {
   const navigate = useNavigate();
   const { isAuthenticated, isInitializing, principal, login } = useIdentity();

@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Article-DVMN2dWS.js","assets/index-CtHRGGy9.js","assets/wallet-CCyxzuEE.js","assets/circle-check-big-CvOCIWL3.js","assets/copy-8dRSPhoH.js","assets/arrow-left-CMnUJn-W.js","assets/Admin-B9qmTVxN.js","assets/index-CUuTamgn.js","assets/badge-B7Cdapur.js","assets/index-Bpl7GF6P.js","assets/AdminBootstrap-Cxf8kZJi.js","assets/AdminNew-CMv6pk8N.js","assets/ArticleForm--MZ0_Ys2.js","assets/input-CuUPDt-B.js","assets/label-BrY1wn6_.js","assets/index-CH5eCTGZ.js","assets/upload-C3IJ00tb.js","assets/AdminEdit-B9Fwy1dC.js","assets/AdminSettings-B8ptxiQi.js","assets/select-BWBLUghc.js","assets/chevron-left-BOo-hLyz.js","assets/Profile-CPtAHfzl.js","assets/AdminInvites-ICbnMsIN.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Article-DZVqmyWG.js","assets/index-Di2T31t8.js","assets/wallet-CDVPjVgA.js","assets/circle-check-big-DMP9lvHT.js","assets/copy-CqIV14Hy.js","assets/arrow-left-BQ9X6kvY.js","assets/Admin-Bk0JWi0t.js","assets/index-DQ2-erTd.js","assets/badge-CBAqeIkh.js","assets/index-Cg78LCqX.js","assets/AdminBootstrap-M3O6hmgb.js","assets/AdminNew-DQUmO8kh.js","assets/ArticleForm-XTgxT56D.js","assets/input-BcSjo3xq.js","assets/label-DEBkHbPw.js","assets/index-CEtPzUH8.js","assets/upload-602PN0be.js","assets/AdminEdit-BzAX6nBr.js","assets/AdminSettings-CVcG_c1g.js","assets/select-B14-491r.js","assets/chevron-left-Cm5iupka.js","assets/Profile-Dan97VOj.js","assets/AdminInvites-D_T8rZMY.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -45213,7 +45213,21 @@ function HomePage() {
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "type-label text-muted-foreground", children: "FEATURED" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 h-px bg-border" })
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(FeaturedCard, { article: featured, unlocked: isUnlocked(featured) })
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex gap-5 items-stretch", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex-1 min-w-0", style: { flexBasis: "65%" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FeaturedCard, { article: featured, unlocked: isUnlocked(featured) }) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flexBasis: "35%", minWidth: "280px" }, children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-semibold uppercase tracking-widest mb-2", style: { color: "oklch(0.62 0.20 145)" }, children: "Latest Video" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { border: "1px solid oklch(0.62 0.20 145 / 0.4)", borderRadius: "8px", overflow: "hidden", height: "calc(100% - 28px)" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "iframe",
+              {
+                src: "https://www.youtube.com/embed?listType=user_uploads&list=UCvOZO32EpT8xP15QthoG7wA",
+                style: { width: "100%", height: "100%", minHeight: "280px", border: "none", display: "block" },
+                title: "Latest Video",
+                allowFullScreen: true
+              }
+            ) })
+          ] })
+        ] })
       ] }),
       !showSkeleton && !isError && rest.length > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { "data-ocid": "home.articles.section", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 mb-5", children: [
@@ -45240,15 +45254,15 @@ function HomePage() {
     ] })
   ] });
 }
-const ArticlePage = reactExports.lazy(() => __vitePreload(() => import("./Article-DVMN2dWS.js"), true ? __vite__mapDeps([0,1,2,3,4,5]) : void 0));
-const AdminPage = reactExports.lazy(() => __vitePreload(() => import("./Admin-B9qmTVxN.js"), true ? __vite__mapDeps([6,7,8,9,3,4]) : void 0));
-const AdminBootstrapPage = reactExports.lazy(() => __vitePreload(() => import("./AdminBootstrap-Cxf8kZJi.js"), true ? __vite__mapDeps([10,9,3,4]) : void 0));
-const AdminNewPage = reactExports.lazy(() => __vitePreload(() => import("./AdminNew-CMv6pk8N.js"), true ? __vite__mapDeps([11,9,12,13,14,1,7,15,5,16]) : void 0));
-const AdminEditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminEdit-B9Fwy1dC.js"), true ? __vite__mapDeps([17,9,12,13,14,1,7,15,5,16]) : void 0));
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettings-B8ptxiQi.js"), true ? __vite__mapDeps([18,8,7,19,15,9,20,16,4]) : void 0));
-const ProfilePage = reactExports.lazy(() => __vitePreload(() => import("./Profile-CPtAHfzl.js"), true ? __vite__mapDeps([21,13,9,20,4,2]) : void 0));
-const AdminInvitesPage = reactExports.lazy(() => __vitePreload(() => import("./AdminInvites-ICbnMsIN.js"), true ? __vite__mapDeps([22,8,7,13,14,1,19,15,9,20,4]) : void 0));
-const ArchivePage = reactExports.lazy(() => __vitePreload(() => import("./Archive-hKjyF6kT.js"), true ? [] : void 0));
+const ArticlePage = reactExports.lazy(() => __vitePreload(() => import("./Article-DZVqmyWG.js"), true ? __vite__mapDeps([0,1,2,3,4,5]) : void 0));
+const AdminPage = reactExports.lazy(() => __vitePreload(() => import("./Admin-Bk0JWi0t.js"), true ? __vite__mapDeps([6,7,8,9,3,4]) : void 0));
+const AdminBootstrapPage = reactExports.lazy(() => __vitePreload(() => import("./AdminBootstrap-M3O6hmgb.js"), true ? __vite__mapDeps([10,9,3,4]) : void 0));
+const AdminNewPage = reactExports.lazy(() => __vitePreload(() => import("./AdminNew-DQUmO8kh.js"), true ? __vite__mapDeps([11,9,12,13,14,1,7,15,5,16]) : void 0));
+const AdminEditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminEdit-BzAX6nBr.js"), true ? __vite__mapDeps([17,9,12,13,14,1,7,15,5,16]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettings-CVcG_c1g.js"), true ? __vite__mapDeps([18,8,7,19,15,9,20,16,4]) : void 0));
+const ProfilePage = reactExports.lazy(() => __vitePreload(() => import("./Profile-Dan97VOj.js"), true ? __vite__mapDeps([21,13,9,20,4,2]) : void 0));
+const AdminInvitesPage = reactExports.lazy(() => __vitePreload(() => import("./AdminInvites-D_T8rZMY.js"), true ? __vite__mapDeps([22,8,7,13,14,1,19,15,9,20,4]) : void 0));
+const ArchivePage = reactExports.lazy(() => __vitePreload(() => import("./Archive-mpaXVAl1.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Layout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(PageLoading, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) }) })
 });

@@ -1,9 +1,9 @@
-import { e as createLucideIcon, u as useNavigate, a as useIdentity, s as useUserAccess, N as useGetLinkedWallet, O as useLinkWallet, r as reactExports, Q as useGetDisplayName, T as useSetDisplayName, j as jsxRuntimeExports, P as PageLoading, E as ErrorMessage, B as Button, K as Link } from "./index-CcB9dZzK.js";
-import { I as Input } from "./input-CuUPDt-B.js";
-import { u as ue } from "./index-Bpl7GF6P.js";
-import { C as ChevronLeft } from "./chevron-left-BOo-hLyz.js";
-import { C as Copy } from "./copy-8dRSPhoH.js";
-import { W as Wallet } from "./wallet-CCyxzuEE.js";
+import { e as createLucideIcon, u as useNavigate, a as useIdentity, s as useUserAccess, N as useGetLinkedWallet, O as useLinkWallet, r as reactExports, Q as useGetDisplayName, T as useSetDisplayName, j as jsxRuntimeExports, P as PageLoading, E as ErrorMessage, B as Button, K as Link } from "./index-B1ZnW1Ou.js";
+import { I as Input } from "./input-BcSjo3xq.js";
+import { u as ue } from "./index-Cg78LCqX.js";
+import { C as ChevronLeft } from "./chevron-left-Cm5iupka.js";
+import { C as Copy } from "./copy-CqIV14Hy.js";
+import { W as Wallet } from "./wallet-CDVPjVgA.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
