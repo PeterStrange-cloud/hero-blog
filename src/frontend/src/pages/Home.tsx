@@ -31,10 +31,10 @@ function LatestVideoPanel() {
   return (
     <div style={{ flexBasis: '35%', minWidth: '280px' }}>
       <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'oklch(0.62 0.20 145)' }}>Latest Video</p>
-      <div style={{ border: '1px solid oklch(0.62 0.20 145 / 0.4)', borderRadius: '8px', overflow: 'hidden', height: 'calc(100% - 28px)', minHeight: '280px' }}>
+      <div style={{ border: '1px solid oklch(0.62 0.20 145 / 0.4)', borderRadius: '8px', overflow: 'hidden', position: 'relative', paddingBottom: '56.25%' }}>
         <iframe
           src={`https://www.youtube.com/embed/${LATEST_VIDEO_ID}`}
-          style={{ width: '100%', height: '100%', minHeight: '280px', border: 'none', display: 'block' }}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
           title="Latest Video"
           allowFullScreen
         />
