@@ -8,7 +8,6 @@ import type { ArticleCard } from "@/types";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, BookOpen, Lock, Zap } from "lucide-react";
 import { motion } from "motion/react";
-import { useState, useEffect } from "react";
 
 // ─── Cover image helper ───────────────────────────────────────────────────────
 
@@ -24,42 +23,25 @@ const GRADIENT_PALETTE = [
 function getGradient(id: bigint) {
   return GRADIENT_PALETTE[Number(id) % GRADIENT_PALETTE.length];
 }
-
 // ─── Latest YouTube Video Panel ──────────────────────────────────────────────
+// Update LATEST_VIDEO_ID when Fabio posts a new video
+const LATEST_VIDEO_ID = "VdI99jtbGwo";
+
 function LatestVideoPanel() {
-  const [videoId, setVideoId] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=UCvOZO32EpT8xP15QthoG7wA'))
-      .then(r => r.json())
-      .then(data => {
-        const match = data.contents.match(/<yt:videoId>([^<]+)<\/yt:videoId>/);
-        if (match) setVideoId(match[1]);
-      })
-      .catch(() => {});
-  }, []);
-
   return (
-    <div style={{ flexBasis: '35%', minWidth: '280px', paddingRight: '1rem' }}>
+    <div style={{ flexBasis: '35%', minWidth: '280px' }}>
       <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'oklch(0.62 0.20 145)' }}>Latest Video</p>
       <div style={{ border: '1px solid oklch(0.62 0.20 145 / 0.4)', borderRadius: '8px', overflow: 'hidden', height: 'calc(100% - 28px)', minHeight: '280px' }}>
-        {videoId ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${videoId}`}
-            style={{ width: '100%', height: '100%', minHeight: '280px', border: 'none', display: 'block' }}
-            title="Latest Video"
-            allowFullScreen
-          />
-        ) : (
-          <div style={{ width: '100%', height: '100%', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'oklch(0.62 0.20 145)' }}>
-            Loading...
-          </div>
-        )}
+        <iframe
+          src={`https://www.youtube.com/embed/${LATEST_VIDEO_ID}`}
+          style={{ width: '100%', height: '100%', minHeight: '280px', border: 'none', display: 'block' }}
+          title="Latest Video"
+          allowFullScreen
+        />
       </div>
     </div>
   );
 }
-
 // ─── Featured hero card ───────────────────────────────────────────────────────
 
 function FeaturedCard({ article, unlocked }: { article: ArticleCard; unlocked: boolean }) {

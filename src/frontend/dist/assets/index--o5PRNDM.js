@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Article-CJAdIs1r.js","assets/index-D2WxH09M.js","assets/wallet-l561MdXh.js","assets/circle-check-big-CHmqdXVe.js","assets/copy-CbtJOYIP.js","assets/arrow-left-U-jh6q0F.js","assets/Admin-Ve6OOJMR.js","assets/index-4cXQ9ims.js","assets/badge-uf5r1E5k.js","assets/index-Mi86EuQS.js","assets/AdminBootstrap-C-m4IkcG.js","assets/AdminNew-Dp6AkUF6.js","assets/ArticleForm-nExVUe8_.js","assets/input-BEMN3f-2.js","assets/label-Dd0me8XM.js","assets/index-CclVVr3t.js","assets/upload-BYNkbmCR.js","assets/AdminEdit-Cm_oAzkc.js","assets/AdminSettings-C-KzFQTL.js","assets/select-BK4k5MRb.js","assets/chevron-left-CWDiRGHc.js","assets/Profile-DxscJx84.js","assets/AdminInvites-BPN51Oz9.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Article-DRertB-1.js","assets/index-DxoQvL16.js","assets/wallet-COAAWNCJ.js","assets/circle-check-big-BUPeNRGz.js","assets/copy-SpvwrIae.js","assets/arrow-left-D3gaP88T.js","assets/Admin-DTBS5iYM.js","assets/index-CPmGwEsC.js","assets/badge-BHqa62ZC.js","assets/index-BCEtBcgP.js","assets/AdminBootstrap-BrcghRP0.js","assets/AdminNew-DUzN7Z_t.js","assets/ArticleForm-DMz4D7wu.js","assets/input--_9USmhJ.js","assets/label-BfTtTFRO.js","assets/index-FqFIk8RC.js","assets/upload-DKs4XtFU.js","assets/AdminEdit-B8OntT4K.js","assets/AdminSettings-CZk-o2PH.js","assets/select-DYxx1Xuu.js","assets/chevron-left-CfsPUucY.js","assets/Profile-BDPttn5Z.js","assets/AdminInvites-B-grvn5v.js"])))=>i.map(i=>d[i]);
 var __defProp = Object.defineProperty;
 var __typeError = (msg) => {
   throw TypeError(msg);
@@ -13790,7 +13790,7 @@ react_production.version = "19.1.5";
 }
 var reactExports = react.exports;
 const React2 = /* @__PURE__ */ getDefaultExportFromCjs(reactExports);
-const React$5 = /* @__PURE__ */ _mergeNamespaces({
+const React$4 = /* @__PURE__ */ _mergeNamespaces({
   __proto__: null,
   default: React2
 }, [reactExports]);
@@ -15708,7 +15708,7 @@ var reactDom_production = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var React$4 = reactExports;
+var React$3 = reactExports;
 function formatProdErrorMessage$1(code) {
   var url = "https://react.dev/errors/" + code;
   if (1 < arguments.length) {
@@ -15747,7 +15747,7 @@ function createPortal$1(children, containerInfo, implementation) {
     implementation
   };
 }
-var ReactSharedInternals$1 = React$4.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+var ReactSharedInternals$1 = React$3.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
 function getCrossOriginStringAs(as, input) {
   if ("font" === as) return "";
   if ("string" === typeof input)
@@ -15874,7 +15874,7 @@ const ReactDOM$2 = /* @__PURE__ */ getDefaultExportFromCjs(reactDomExports);
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var Scheduler = schedulerExports, React$3 = reactExports, ReactDOM$1 = reactDomExports;
+var Scheduler = schedulerExports, React$2 = reactExports, ReactDOM$1 = reactDomExports;
 function formatProdErrorMessage(code) {
   var url = "https://react.dev/errors/" + code;
   if (1 < arguments.length) {
@@ -16042,7 +16042,7 @@ function getComponentNameFromType(type) {
     }
   return null;
 }
-var isArrayImpl = Array.isArray, ReactSharedInternals = React$3.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM$1.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, sharedNotPendingObject = {
+var isArrayImpl = Array.isArray, ReactSharedInternals = React$2.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM$1.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, sharedNotPendingObject = {
   pending: false,
   data: null,
   method: null,
@@ -26828,7 +26828,7 @@ ReactDOMHydrationRoot.prototype.unstable_scheduleHydration = function(target) {
     0 === i && attemptExplicitHydrationTarget(target);
   }
 };
-var isomorphicReactPackageVersion$jscomp$inline_1785 = React$3.version;
+var isomorphicReactPackageVersion$jscomp$inline_1785 = React$2.version;
 if ("19.1.5" !== isomorphicReactPackageVersion$jscomp$inline_1785)
   throw Error(
     formatProdErrorMessage(
@@ -30946,11 +30946,11 @@ var useSyncExternalStoreShim_production = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var React$2 = reactExports;
+var React$1 = reactExports;
 function is$1(x2, y2) {
   return x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
 }
-var objectIs$1 = "function" === typeof Object.is ? Object.is : is$1, useState = React$2.useState, useEffect$1 = React$2.useEffect, useLayoutEffect$1 = React$2.useLayoutEffect, useDebugValue$1 = React$2.useDebugValue;
+var objectIs$1 = "function" === typeof Object.is ? Object.is : is$1, useState = React$1.useState, useEffect$1 = React$1.useEffect, useLayoutEffect$1 = React$1.useLayoutEffect, useDebugValue$1 = React$1.useDebugValue;
 function useSyncExternalStore$2(subscribe2, getSnapshot) {
   var value = getSnapshot(), _useState = useState({ inst: { value, getSnapshot } }), inst = _useState[0].inst, forceUpdate = _useState[1];
   useLayoutEffect$1(
@@ -30987,7 +30987,7 @@ function useSyncExternalStore$1(subscribe2, getSnapshot) {
   return getSnapshot();
 }
 var shim$1 = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
-useSyncExternalStoreShim_production.useSyncExternalStore = void 0 !== React$2.useSyncExternalStore ? React$2.useSyncExternalStore : shim$1;
+useSyncExternalStoreShim_production.useSyncExternalStore = void 0 !== React$1.useSyncExternalStore ? React$1.useSyncExternalStore : shim$1;
 {
   shim$2.exports = useSyncExternalStoreShim_production;
 }
@@ -31001,11 +31001,11 @@ var shimExports = shim$2.exports;
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var React$1 = reactExports, shim = shimExports;
+var React = reactExports, shim = shimExports;
 function is(x2, y2) {
   return x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
 }
-var objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef = React$1.useRef, useEffect = React$1.useEffect, useMemo = React$1.useMemo, useDebugValue = React$1.useDebugValue;
+var objectIs = "function" === typeof Object.is ? Object.is : is, useSyncExternalStore = shim.useSyncExternalStore, useRef = React.useRef, useEffect = React.useEffect, useMemo = React.useMemo, useDebugValue = React.useDebugValue;
 withSelector_production.useSyncExternalStoreWithSelector = function(subscribe2, getSnapshot, getServerSnapshot, selector, isEqual) {
   var instRef = useRef(null);
   if (null === instRef.current) {
@@ -34114,7 +34114,7 @@ function useComposedRefs(...refs) {
   return reactExports.useCallback(composeRefs(...refs), refs);
 }
 var REACT_LAZY_TYPE = Symbol.for("react.lazy");
-var use = React$5[" use ".trim().toString()];
+var use = React$4[" use ".trim().toString()];
 function isPromiseLike(value) {
   return typeof value === "object" && value !== null && "then" in value;
 }
@@ -44889,26 +44889,19 @@ const GRADIENT_PALETTE = [
 function getGradient(id2) {
   return GRADIENT_PALETTE[Number(id2) % GRADIENT_PALETTE.length];
 }
+const LATEST_VIDEO_ID = "VdI99jtbGwo";
 function LatestVideoPanel() {
-  const [videoId, setVideoId] = React.useState(null);
-  React.useEffect(() => {
-    fetch("https://api.allorigins.win/get?url=" + encodeURIComponent("https://www.youtube.com/feeds/videos.xml?channel_id=UCvOZO32EpT8xP15QthoG7wA")).then((r2) => r2.json()).then((data) => {
-      const match = data.contents.match(/<yt:videoId>([^<]+)<\/yt:videoId>/);
-      if (match) setVideoId(match[1]);
-    }).catch(() => {
-    });
-  }, []);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flexBasis: "35%", minWidth: "280px", paddingRight: "1rem" }, children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { flexBasis: "35%", minWidth: "280px" }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-xs font-semibold uppercase tracking-widest mb-2", style: { color: "oklch(0.62 0.20 145)" }, children: "Latest Video" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { border: "1px solid oklch(0.62 0.20 145 / 0.4)", borderRadius: "8px", overflow: "hidden", height: "calc(100% - 28px)", minHeight: "280px" }, children: videoId ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { border: "1px solid oklch(0.62 0.20 145 / 0.4)", borderRadius: "8px", overflow: "hidden", height: "calc(100% - 28px)", minHeight: "280px" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       "iframe",
       {
-        src: `https://www.youtube.com/embed/${videoId}`,
+        src: `https://www.youtube.com/embed/${LATEST_VIDEO_ID}`,
         style: { width: "100%", height: "100%", minHeight: "280px", border: "none", display: "block" },
         title: "Latest Video",
         allowFullScreen: true
       }
-    ) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: "100%", height: "100%", minHeight: "280px", display: "flex", alignItems: "center", justifyContent: "center", color: "oklch(0.62 0.20 145)" }, children: "Loading..." }) })
+    ) })
   ] });
 }
 function FeaturedCard({ article, unlocked }) {
@@ -45265,15 +45258,15 @@ function HomePage() {
     ] })
   ] });
 }
-const ArticlePage = reactExports.lazy(() => __vitePreload(() => import("./Article-CJAdIs1r.js"), true ? __vite__mapDeps([0,1,2,3,4,5]) : void 0));
-const AdminPage = reactExports.lazy(() => __vitePreload(() => import("./Admin-Ve6OOJMR.js"), true ? __vite__mapDeps([6,7,8,9,3,4]) : void 0));
-const AdminBootstrapPage = reactExports.lazy(() => __vitePreload(() => import("./AdminBootstrap-C-m4IkcG.js"), true ? __vite__mapDeps([10,9,3,4]) : void 0));
-const AdminNewPage = reactExports.lazy(() => __vitePreload(() => import("./AdminNew-Dp6AkUF6.js"), true ? __vite__mapDeps([11,9,12,13,14,1,7,15,5,16]) : void 0));
-const AdminEditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminEdit-Cm_oAzkc.js"), true ? __vite__mapDeps([17,9,12,13,14,1,7,15,5,16]) : void 0));
-const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettings-C-KzFQTL.js"), true ? __vite__mapDeps([18,8,7,19,15,9,20,16,4]) : void 0));
-const ProfilePage = reactExports.lazy(() => __vitePreload(() => import("./Profile-DxscJx84.js"), true ? __vite__mapDeps([21,13,9,20,4,2]) : void 0));
-const AdminInvitesPage = reactExports.lazy(() => __vitePreload(() => import("./AdminInvites-BPN51Oz9.js"), true ? __vite__mapDeps([22,8,7,13,14,1,19,15,9,20,4]) : void 0));
-const ArchivePage = reactExports.lazy(() => __vitePreload(() => import("./Archive-DTPlmYC6.js"), true ? [] : void 0));
+const ArticlePage = reactExports.lazy(() => __vitePreload(() => import("./Article-DRertB-1.js"), true ? __vite__mapDeps([0,1,2,3,4,5]) : void 0));
+const AdminPage = reactExports.lazy(() => __vitePreload(() => import("./Admin-DTBS5iYM.js"), true ? __vite__mapDeps([6,7,8,9,3,4]) : void 0));
+const AdminBootstrapPage = reactExports.lazy(() => __vitePreload(() => import("./AdminBootstrap-BrcghRP0.js"), true ? __vite__mapDeps([10,9,3,4]) : void 0));
+const AdminNewPage = reactExports.lazy(() => __vitePreload(() => import("./AdminNew-DUzN7Z_t.js"), true ? __vite__mapDeps([11,9,12,13,14,1,7,15,5,16]) : void 0));
+const AdminEditPage = reactExports.lazy(() => __vitePreload(() => import("./AdminEdit-B8OntT4K.js"), true ? __vite__mapDeps([17,9,12,13,14,1,7,15,5,16]) : void 0));
+const AdminSettingsPage = reactExports.lazy(() => __vitePreload(() => import("./AdminSettings-CZk-o2PH.js"), true ? __vite__mapDeps([18,8,7,19,15,9,20,16,4]) : void 0));
+const ProfilePage = reactExports.lazy(() => __vitePreload(() => import("./Profile-BDPttn5Z.js"), true ? __vite__mapDeps([21,13,9,20,4,2]) : void 0));
+const AdminInvitesPage = reactExports.lazy(() => __vitePreload(() => import("./AdminInvites-B-grvn5v.js"), true ? __vite__mapDeps([22,8,7,13,14,1,19,15,9,20,4]) : void 0));
+const ArchivePage = reactExports.lazy(() => __vitePreload(() => import("./Archive-BVoUNPb5.js"), true ? [] : void 0));
 const rootRoute = createRootRoute({
   component: () => /* @__PURE__ */ jsxRuntimeExports.jsx(Layout, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(PageLoading, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}) }) })
 });
@@ -45378,7 +45371,7 @@ export {
   useBindInvitePrincipal as X,
   formatTimestamp as Y,
   Zap as Z,
-  React$5 as _,
+  React$4 as _,
   useIdentity as a,
   reactDomExports as a0,
   useComposedRefs as a1,
