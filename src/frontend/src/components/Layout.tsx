@@ -70,6 +70,9 @@ export function Layout({ children }: LayoutProps) {
               <Link to="/archive" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.archive_link">
                 Archive
               </Link>
+              <a href="https://coinhero.trading/" target="_blank" rel="noopener noreferrer" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.dashboard_link">
+                Dashboard
+              </a>
             </nav>
           )}
 
@@ -126,6 +129,9 @@ export function Layout({ children }: LayoutProps) {
           <Link to="/archive" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.mobile_archive_link">
             Archive
           </Link>
+          <a href="https://coinhero.trading/" target="_blank" rel="noopener noreferrer" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200" data-ocid="nav.mobile_dashboard_link">
+            Dashboard
+          </a>
           {isAuthenticated && (
             <Link to="/profile" className="type-label text-[oklch(0.72_0.20_145)] hover:text-white transition-colors duration-200 flex items-center gap-1" data-ocid="nav.mobile_profile_link">
               <User className="size-3" />

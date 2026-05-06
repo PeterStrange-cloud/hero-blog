@@ -266,7 +266,7 @@
   }
 
   .nav-dark {
-    background: oklch(0.20 0.025 50 / 0.92);
+    background: oklch(0.18 0.06 145 / 0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
   }

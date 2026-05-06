@@ -1,3 +1,4 @@
+import React from "react";
 import { CategoryBadge, FreeBadge, PremiumBadge } from "@/components/Badge";
 import { EmptyState } from "@/components/ErrorMessage";
 import { Button } from "@/components/ui/button";
@@ -25,15 +26,26 @@ function getGradient(id: bigint) {
 }
 // ─── Latest YouTube Video Panel ──────────────────────────────────────────────
 // Update LATEST_VIDEO_ID when Fabio posts a new video
-const LATEST_VIDEO_ID = "VdI99jtbGwo";
-
+const CHANNEL_ID = "UCvOZO32EpT8xP15QthoG7wA";
+const FALLBACK_VIDEO_ID = "FW1319Yyk0A";
+const YT_API_KEY = "AIzaSyA4NenzOAFAP9Vh3hWmE5B0_B9jzbk47jU";
 function LatestVideoPanel() {
+  const [videoId, setVideoId] = React.useState(FALLBACK_VIDEO_ID);
+  React.useEffect(() => {
+    fetch(`https://www.googleapis.com/youtube/v3/search?key=${YT_API_KEY}&channelId=${CHANNEL_ID}&part=snippet&order=date&maxResults=1&type=video`)
+      .then(r => r.json())
+      .then(data => {
+        const id = data?.items?.[0]?.id?.videoId;
+        if (id) setVideoId(id);
+      })
+      .catch(() => {});
+  }, []);
   return (
     <div style={{ flexBasis: '35%', minWidth: '280px' }}>
       <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'oklch(0.62 0.20 145)' }}>Latest Video</p>
       <div style={{ border: '1px solid oklch(0.62 0.20 145 / 0.4)', borderRadius: '8px', overflow: 'hidden', position: 'relative', paddingBottom: '56.25%' }}>
         <iframe
-          src={`https://www.youtube.com/embed/${LATEST_VIDEO_ID}`}
+          src={`https://www.youtube.com/embed/${videoId}`}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
           title="Latest Video"
           allowFullScreen
@@ -365,22 +377,12 @@ export default function HomePage() {
     : articles;
 
   const featured = searchTerm ? null : (filteredArticles?.[0] ?? null);
-  const rest = searchTerm ? (filteredArticles ?? []).slice(0, 3) : (filteredArticles?.slice(1, 4) ?? []);
+  const rest = searchTerm ? (filteredArticles ?? []) : (filteredArticles?.slice(0, 4) ?? []);
   const archive = searchTerm ? (filteredArticles ?? []).slice(3) : (filteredArticles?.slice(4) ?? []);
 
   return (
     <div className="min-h-screen bg-background" data-ocid="home.page">
-      {/* Dashboard banner */}
-      <div className="mx-auto px-4 py-4" style={{ maxWidth: '1200px' }}>
-        <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: 'oklch(0.62 0.20 145)' }}>Token Dashboard</p>
-        <div style={{ height: '250px', border: '1px solid oklch(0.62 0.20 145 / 0.4)', borderRadius: '8px', overflow: 'hidden' }}>
-          <iframe
-            src="https://coinhero.trading/"
-            style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
-            title="CoinHero Dashboard"
-          />
-        </div>
-      </div>
+
       {/* Page header band */}
       <section className="border-b border-subtle py-16 md:py-24 hero-glow relative overflow-hidden">
         {/* Left flame */}
@@ -393,9 +395,9 @@ export default function HomePage() {
           background: "linear-gradient(to left, oklch(0.30 0.15 28 / 0.30) 0%, oklch(0.40 0.18 35 / 0.12) 50%, transparent 100%)",
           filter: "blur(24px)",
         }} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center gap-8">
           <motion.div
-            className="flex flex-col gap-3 max-w-2xl"
+            className="flex flex-col gap-3 flex-1"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -415,6 +417,7 @@ export default function HomePage() {
               tutorials, and ecosystem news powered by the HERO token.
             </p>
           </motion.div>
+          <LatestVideoPanel />
         </div>
       </section>
 
@@ -470,21 +473,7 @@ export default function HomePage() {
           />
         )}
 
-        {/* Featured article + Latest Video */}
-        {!showSkeleton && !isError && featured && (
-          <section data-ocid="home.featured.section">
-            <div className="flex items-center gap-3 mb-5">
-              <span className="type-label text-muted-foreground">FEATURED</span>
-              <div className="flex-1 h-px bg-border" />
-            </div>
-            <div className="flex flex-col-reverse md:flex-row gap-5 items-stretch">
-              <div className="flex-1 min-w-0" style={{ flexBasis: '65%' }}>
-                <FeaturedCard article={featured} unlocked={isUnlocked(featured)} />
-              </div>
-              <LatestVideoPanel />
-            </div>
-          </section>
-        )}
+
 
         {/* Articles grid */}
         {!showSkeleton && !isError && rest.length > 0 && (

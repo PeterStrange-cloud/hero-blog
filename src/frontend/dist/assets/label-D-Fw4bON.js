@@ -1,5 +1,5 @@
-import { r as reactExports, j as jsxRuntimeExports, o as cn } from "./index-DIsT6YNP.js";
-import { P as Primitive } from "./index-BRWITBxI.js";
+import { r as reactExports, j as jsxRuntimeExports, o as cn } from "./index-TiwocVgQ.js";
+import { P as Primitive } from "./index-C0tEKiQf.js";
 var NAME = "Label";
 var Label$1 = reactExports.forwardRef((props, forwardedRef) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(

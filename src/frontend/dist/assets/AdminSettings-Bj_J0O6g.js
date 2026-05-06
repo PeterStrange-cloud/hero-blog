@@ -1,12 +1,12 @@
-import { e as createLucideIcon, u as useNavigate, a as useIdentity, c as useGetMyRole, y as useGetSettings, z as useListUserRoles, D as useListTrackedPrincipals, G as useUpdateSettings, H as useSetUserRole, I as useRemoveUserRole, r as reactExports, J as Role, j as jsxRuntimeExports, P as PageLoading, S as Shield, B as Button, K as Link, M as RefreshCw, E as ErrorMessage, m as ExternalBlob, A as AdminResult } from "./index-DIsT6YNP.js";
-import { T as Trash2, U as Users, B as Badge } from "./badge-BKnlrlCX.js";
-import { S as Select, a as SelectTrigger, b as SelectValue, c as SelectContent, d as SelectItem } from "./select-xDVYq8vB.js";
-import { u as ue } from "./index-DzqgALVr.js";
-import { C as ChevronLeft } from "./chevron-left-CHSXFpD8.js";
-import { I as Image, U as Upload } from "./upload-BTBOQ5--.js";
-import { C as Copy } from "./copy-DGdSgiFJ.js";
-import "./index-C2Fce7oE.js";
-import "./index-OSnU7pDC.js";
+import { e as createLucideIcon, u as useNavigate, a as useIdentity, c as useGetMyRole, y as useGetSettings, z as useListUserRoles, D as useListTrackedPrincipals, G as useUpdateSettings, H as useSetUserRole, I as useRemoveUserRole, r as reactExports, J as Role, j as jsxRuntimeExports, P as PageLoading, S as Shield, B as Button, K as Link, M as RefreshCw, E as ErrorMessage, m as ExternalBlob, A as AdminResult } from "./index-TiwocVgQ.js";
+import { T as Trash2, U as Users, B as Badge } from "./badge-BOUPNfZc.js";
+import { S as Select, a as SelectTrigger, b as SelectValue, c as SelectContent, d as SelectItem } from "./select-Cu27SJYc.js";
+import { u as ue } from "./index-DqSXkTFh.js";
+import { C as ChevronLeft } from "./chevron-left-BVu0P7Dl.js";
+import { I as Image, U as Upload } from "./upload-CXhhMKy-.js";
+import { C as Copy } from "./copy-D5_el9NY.js";
+import "./index-xMe0hZ_0.js";
+import "./index-C22nE3xn.js";
 /**
  * @license lucide-react v0.511.0 - ISC
  *
