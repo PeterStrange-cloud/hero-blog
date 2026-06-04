@@ -18,6 +18,7 @@ const AdminSettingsPage = lazy(() => import("./pages/AdminSettings"));
 const ProfilePage = lazy(() => import("./pages/Profile"));
 const AdminInvitesPage = lazy(() => import("./pages/AdminInvites"));
 const ArchivePage = lazy(() => import("./pages/Archive"));
+const UnderConstructionPage = lazy(() => import("./pages/UnderConstruction"));
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -81,6 +82,11 @@ const archiveRoute = createRoute({
   path: "/archive",
   component: ArchivePage,
 });
+const underConstructionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/booking",
+  component: UnderConstructionPage,
+});
 
 const profileRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -99,6 +105,7 @@ const routeTree = rootRoute.addChildren([
   adminInvitesRoute,
   profileRoute,
   archiveRoute,
+  underConstructionRoute,
 ]);
 
 const router = createRouter({ routeTree });

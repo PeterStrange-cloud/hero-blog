@@ -19,6 +19,7 @@ export const idlFactory = ({ IDL }) => {
     'notFound' : IDL.Null,
     'alreadyBound' : IDL.Null,
   });
+  const BookingId = IDL.Nat;
   const ExternalBlob = IDL.Vec(IDL.Nat8);
   const ArticleInput = IDL.Record({
     'title' : IDL.Text,
@@ -44,6 +45,29 @@ export const idlFactory = ({ IDL }) => {
     'category' : IDL.Text,
     'authorPrincipal' : UserId,
   });
+  const SlotId = IDL.Nat;
+  const BookingDuration = IDL.Variant({
+    'Sixty' : IDL.Null,
+    'Thirty' : IDL.Null,
+  });
+  const BookingStatus = IDL.Variant({
+    'Confirmed' : IDL.Null,
+    'Cancelled' : IDL.Null,
+    'Completed' : IDL.Null,
+    'Pending' : IDL.Null,
+  });
+  const Booking = IDL.Record({
+    'id' : BookingId,
+    'status' : BookingStatus,
+    'userId' : IDL.Principal,
+    'createdAt' : IDL.Int,
+    'email' : IDL.Opt(IDL.Text),
+    'slotId' : SlotId,
+    'notes' : IDL.Opt(IDL.Text),
+    'amountE8s' : IDL.Nat,
+    'lastName' : IDL.Opt(IDL.Text),
+    'firstName' : IDL.Opt(IDL.Text),
+  });
   const PaymentType = IDL.Variant({
     'ArticleUnlock' : ArticleId,
     'Subscription' : IDL.Null,
@@ -65,6 +89,17 @@ export const idlFactory = ({ IDL }) => {
     'subaccount' : IDL.Vec(IDL.Nat8),
     'paymentType' : PaymentType,
     'amountE8s' : IDL.Nat,
+  });
+  const SlotStatus = IDL.Variant({
+    'Available' : IDL.Null,
+    'Booked' : IDL.Null,
+    'Completed' : IDL.Null,
+  });
+  const BookingSlot = IDL.Record({
+    'id' : SlotId,
+    'startTime' : IDL.Int,
+    'status' : SlotStatus,
+    'duration' : BookingDuration,
   });
   const ArticleFull = IDL.Record({
     'id' : ArticleId,
@@ -108,13 +143,46 @@ export const idlFactory = ({ IDL }) => {
     'addAdmin' : IDL.Func([UserId], [AdminResult], []),
     'addInvite' : IDL.Func([IDL.Text, Role], [InviteResult], []),
     'bindInvitePrincipal' : IDL.Func([IDL.Text], [InviteResult], []),
+    'cancelBooking' : IDL.Func(
+        [BookingId],
+        [IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text })],
+        [],
+      ),
+    'completeBooking' : IDL.Func(
+        [BookingId],
+        [IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text })],
+        [],
+      ),
     'createArticle' : IDL.Func([ArticleInput], [ArticleCard], []),
+    'createBooking' : IDL.Func(
+        [
+          SlotId,
+          BookingDuration,
+          IDL.Opt(IDL.Text),
+          IDL.Opt(IDL.Text),
+          IDL.Opt(IDL.Text),
+          IDL.Opt(IDL.Text),
+        ],
+        [IDL.Variant({ 'ok' : Booking, 'err' : IDL.Text })],
+        [],
+      ),
     'createPaymentRequest' : IDL.Func([PaymentType], [PaymentRequest], []),
+    'createSlot' : IDL.Func(
+        [IDL.Int, BookingDuration],
+        [IDL.Variant({ 'ok' : BookingSlot, 'err' : IDL.Text })],
+        [],
+      ),
     'debugVerify' : IDL.Func([PaymentRequestId], [IDL.Text], []),
     'deleteArticle' : IDL.Func([ArticleId], [AdminResult], []),
+    'deleteSlot' : IDL.Func(
+        [SlotId],
+        [IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text })],
+        [],
+      ),
     'getAllArticlesAdmin' : IDL.Func([], [IDL.Vec(ArticleCard)], []),
     'getArticle' : IDL.Func([ArticleId], [IDL.Opt(ArticleFull)], []),
     'getArticleCard' : IDL.Func([ArticleId], [IDL.Opt(ArticleCard)], ['query']),
+    'getAvailableSlots' : IDL.Func([], [IDL.Vec(BookingSlot)], ['query']),
     'getDisplayName' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(IDL.Text)],
@@ -123,6 +191,7 @@ export const idlFactory = ({ IDL }) => {
     'getInviteByEmail' : IDL.Func([IDL.Text], [IDL.Opt(InvitedUser)], []),
     'getLinkedWallet' : IDL.Func([], [IDL.Opt(IDL.Principal)], ['query']),
     'getLogoUrl' : IDL.Func([], [IDL.Opt(IDL.Text)], ['query']),
+    'getMyBookings' : IDL.Func([], [IDL.Vec(Booking)], ['query']),
     'getMyPaymentRequests' : IDL.Func([], [IDL.Vec(PaymentRequest)], ['query']),
     'getMyRole' : IDL.Func([], [IDL.Opt(Role)], []),
     'getPublishedArticles' : IDL.Func([], [IDL.Vec(ArticleCard)], ['query']),

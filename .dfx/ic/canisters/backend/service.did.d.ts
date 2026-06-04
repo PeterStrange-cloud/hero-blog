@@ -44,6 +44,31 @@ export interface ArticleInput {
   'excerpt' : string,
   'category' : string,
 }
+export interface Booking {
+  'id' : BookingId,
+  'status' : BookingStatus,
+  'userId' : Principal,
+  'createdAt' : bigint,
+  'email' : [] | [string],
+  'slotId' : SlotId,
+  'notes' : [] | [string],
+  'amountE8s' : bigint,
+  'lastName' : [] | [string],
+  'firstName' : [] | [string],
+}
+export type BookingDuration = { 'Sixty' : null } |
+  { 'Thirty' : null };
+export type BookingId = bigint;
+export interface BookingSlot {
+  'id' : SlotId,
+  'startTime' : bigint,
+  'status' : SlotStatus,
+  'duration' : BookingDuration,
+}
+export type BookingStatus = { 'Confirmed' : null } |
+  { 'Cancelled' : null } |
+  { 'Completed' : null } |
+  { 'Pending' : null };
 export type ExternalBlob = Uint8Array | number[];
 export type InviteResult = { 'ok' : null } |
   { 'notAuthorized' : null } |
@@ -81,6 +106,10 @@ export type Role = { 'admin' : null } |
 export type SettingsResult = { 'ok' : null } |
   { 'notAuthorized' : null };
 export interface SiteSettings { 'logoUrl' : [] | [string] }
+export type SlotId = bigint;
+export type SlotStatus = { 'Available' : null } |
+  { 'Booked' : null } |
+  { 'Completed' : null };
 export interface Subscription {
   'startTime' : Timestamp,
   'userId' : UserId,
@@ -99,17 +128,47 @@ export interface _SERVICE {
   'addAdmin' : ActorMethod<[UserId], AdminResult>,
   'addInvite' : ActorMethod<[string, Role], InviteResult>,
   'bindInvitePrincipal' : ActorMethod<[string], InviteResult>,
+  'cancelBooking' : ActorMethod<
+    [BookingId],
+    { 'ok' : null } |
+      { 'err' : string }
+  >,
+  'completeBooking' : ActorMethod<
+    [BookingId],
+    { 'ok' : null } |
+      { 'err' : string }
+  >,
   'createArticle' : ActorMethod<[ArticleInput], ArticleCard>,
+  'createBooking' : ActorMethod<
+    [
+      SlotId,
+      BookingDuration,
+      [] | [string],
+      [] | [string],
+      [] | [string],
+      [] | [string],
+    ],
+    { 'ok' : Booking } |
+      { 'err' : string }
+  >,
   'createPaymentRequest' : ActorMethod<[PaymentType], PaymentRequest>,
+  'createSlot' : ActorMethod<
+    [bigint, BookingDuration],
+    { 'ok' : BookingSlot } |
+      { 'err' : string }
+  >,
   'debugVerify' : ActorMethod<[PaymentRequestId], string>,
   'deleteArticle' : ActorMethod<[ArticleId], AdminResult>,
+  'deleteSlot' : ActorMethod<[SlotId], { 'ok' : null } | { 'err' : string }>,
   'getAllArticlesAdmin' : ActorMethod<[], Array<ArticleCard>>,
   'getArticle' : ActorMethod<[ArticleId], [] | [ArticleFull]>,
   'getArticleCard' : ActorMethod<[ArticleId], [] | [ArticleCard]>,
+  'getAvailableSlots' : ActorMethod<[], Array<BookingSlot>>,
   'getDisplayName' : ActorMethod<[Principal], [] | [string]>,
   'getInviteByEmail' : ActorMethod<[string], [] | [InvitedUser]>,
   'getLinkedWallet' : ActorMethod<[], [] | [Principal]>,
   'getLogoUrl' : ActorMethod<[], [] | [string]>,
+  'getMyBookings' : ActorMethod<[], Array<Booking>>,
   'getMyPaymentRequests' : ActorMethod<[], Array<PaymentRequest>>,
   'getMyRole' : ActorMethod<[], [] | [Role]>,
   'getPublishedArticles' : ActorMethod<[], Array<ArticleCard>>,

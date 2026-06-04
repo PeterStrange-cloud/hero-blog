@@ -17,6 +17,30 @@ type Article__663306592 =
     var title : Text;
     var updatedAt : Timestamp__699635964
   };
+type BookingDuration__382829814 = {#Sixty; #Thirty};
+type BookingId__926350215 = Nat;
+type BookingSlot__898173811 =
+  {
+    duration : BookingDuration__382829814;
+    id : SlotId__929068379;
+    startTime : Int;
+    status : SlotStatus__884969802
+  };
+type BookingStatus__788340740 =
+  {#Cancelled; #Completed; #Confirmed; #Pending};
+type Booking__694399253 =
+  {
+    amountE8s : Nat;
+    createdAt : Int;
+    email : ?Text;
+    firstName : ?Text;
+    id : BookingId__926350215;
+    lastName : ?Text;
+    notes : ?Text;
+    slotId : SlotId__929068379;
+    status : BookingStatus__788340740;
+    userId : Principal
+  };
 type Data__159895909<T> = {var count : Nat__490723111; elements : [var ?T]};
 type Data__791452850<K, V> =
   {var count : Nat__490723111; kvs : [var ?(K, V)]};
@@ -68,6 +92,8 @@ type Set__532252804<T> = Set__710576254<T>;
 type Set__710576254<T> =
   {var root : Node__92254746<T>; var size : Nat__490723111};
 type SiteSettings__573819688 = {logoUrl : ?Text};
+type SlotId__929068379 = Nat;
+type SlotStatus__884969802 = {#Available; #Booked; #Completed};
 type Subscription__171075365 =
   {
     expiryTime : Timestamp__219252874;
@@ -100,6 +126,37 @@ actor {
     {
       articles : Map__605269027<ArticleId__623262048, Article__663306592>;
       var nextId : Nat
+    };
+  stable bookingStore :
+    {
+      bookings :
+        Map__605269027<Nat,
+                        {
+                          amountE8s : Nat;
+                          createdAt : Int;
+                          id : Nat;
+                          slotId : Nat;
+                          status :
+                            {#Cancelled; #Completed; #Confirmed; #Pending};
+                          userId : Principal
+                        }>;
+      var nextBookingId : Nat;
+      var nextSlotId : Nat;
+      slots :
+        Map__605269027<Nat,
+                        {
+                          duration : {#Sixty; #Thirty};
+                          id : Nat;
+                          startTime : Int;
+                          status : {#Available; #Booked; #Completed}
+                        }>
+    };
+  stable bookingStoreV2 :
+    {
+      bookings : Map__605269027<BookingId__926350215, Booking__694399253>;
+      var nextBookingId : Nat;
+      var nextSlotId : Nat;
+      slots : Map__605269027<SlotId__929068379, BookingSlot__898173811>
     };
   stable consumedPayments :
     {var root : Node__92254746<Nat>; var size : Nat__490723111};

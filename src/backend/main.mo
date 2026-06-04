@@ -13,6 +13,8 @@ import SettingsLib "lib/settings";
 import PaymentLib "lib/payment";
 import Principal "mo:core/Principal";
 import Map "mo:core/Map";
+import BookingApi "mixins/booking-api";
+import BookingLib "lib/booking";
 
 
 persistent actor self {
@@ -111,6 +113,9 @@ persistent actor self {
     // Article 3 remains unpublished (draft)
   };
 
+  stable let bookingStore : { var nextSlotId : Nat; var nextBookingId : Nat; slots : Map.Map<Nat, { id : Nat; startTime : Int; duration : { #Thirty; #Sixty }; status : { #Available; #Booked; #Completed } }>; bookings : Map.Map<Nat, { id : Nat; slotId : Nat; userId : Principal; amountE8s : Nat; status : { #Pending; #Confirmed; #Cancelled; #Completed }; createdAt : Int }> } = { var nextSlotId = 0; var nextBookingId = 0; slots = Map.empty(); bookings = Map.empty() };
+  stable let bookingStoreV2 = BookingLib.newStore();
+
   stable let displayNameStore = Map.empty<Principal, Text>();
 
   public shared(msg) func setDisplayName(name : Text) : async () {
@@ -128,4 +133,5 @@ persistent actor self {
   include InviteApi(inviteStore, adminStore);
   include SettingsApi(settingsStore, adminStore);
   include PaymentApi(accessStoreV2, paymentRequestStoreV2, consumedPayments, adminStore);
+  include BookingApi(bookingStoreV2, adminStore);
 };

@@ -84,6 +84,7 @@ module {
     let amountE8s : Nat = switch (paymentType) {
       case (#ArticleUnlock(_)) ARTICLE_UNLOCK_PRICE;
       case (#Subscription)     SUBSCRIPTION_PRICE;
+      case (#BookingPayment(_)) 10_000_000_000_000; // default, overridden by caller
     };
     let now = Time.now();
     let thirtyMinutesNs : Int = 1_800_000_000_000;

@@ -18,6 +18,13 @@ type Subscription =
    startTime: Timestamp;
    userId: UserId;
  };
+type SlotStatus = 
+ variant {
+   Available;
+   Booked;
+   Completed;
+ };
+type SlotId = nat;
 type SiteSettings = record {logoUrl: opt text;};
 type SettingsResult = 
  variant {
@@ -72,6 +79,39 @@ type InviteResult =
    ok;
  };
 type ExternalBlob = blob;
+type BookingStatus = 
+ variant {
+   Cancelled;
+   Completed;
+   Confirmed;
+   Pending;
+ };
+type BookingSlot = 
+ record {
+   duration: BookingDuration;
+   id: SlotId;
+   startTime: int;
+   status: SlotStatus;
+ };
+type BookingId = nat;
+type BookingDuration = 
+ variant {
+   Sixty;
+   Thirty;
+ };
+type Booking = 
+ record {
+   amountE8s: nat;
+   createdAt: int;
+   email: opt text;
+   firstName: opt text;
+   id: BookingId;
+   lastName: opt text;
+   notes: opt text;
+   slotId: SlotId;
+   status: BookingStatus;
+   userId: principal;
+ };
 type ArticleInput = 
  record {
    category: text;
@@ -124,17 +164,42 @@ service : {
   addAdmin: (newAdmin: UserId) -> (AdminResult);
   addInvite: (email: text, role: Role) -> (InviteResult);
   bindInvitePrincipal: (email: text) -> (InviteResult);
+  cancelBooking: (bookingId: BookingId) -> (variant {
+                                              err: text;
+                                              ok;
+                                            });
+  completeBooking: (bookingId: BookingId) -> (variant {
+                                                err: text;
+                                                ok;
+                                              });
   createArticle: (input: ArticleInput) -> (ArticleCard);
+  createBooking: (slotId: SlotId, duration: BookingDuration, email: opt text,
+   firstName: opt text, lastName: opt text, notes: opt text) ->
+   (variant {
+      err: text;
+      ok: Booking;
+    });
   createPaymentRequest: (paymentType: PaymentType) -> (PaymentRequest);
+  createSlot: (startTime: int, duration: BookingDuration) ->
+   (variant {
+      err: text;
+      ok: BookingSlot;
+    });
   debugVerify: (reqId: PaymentRequestId) -> (text);
   deleteArticle: (id: ArticleId) -> (AdminResult);
+  deleteSlot: (slotId: SlotId) -> (variant {
+                                     err: text;
+                                     ok;
+                                   });
   getAllArticlesAdmin: () -> (vec ArticleCard);
   getArticle: (id: ArticleId) -> (opt ArticleFull);
   getArticleCard: (id: ArticleId) -> (opt ArticleCard) query;
+  getAvailableSlots: () -> (vec BookingSlot) query;
   getDisplayName: (p: principal) -> (opt text) query;
   getInviteByEmail: (email: text) -> (opt InvitedUser);
   getLinkedWallet: () -> (opt principal) query;
   getLogoUrl: () -> (opt text) query;
+  getMyBookings: () -> (vec Booking) query;
   getMyPaymentRequests: () -> (vec PaymentRequest) query;
   getMyRole: () -> (opt Role);
   getPublishedArticles: () -> (vec ArticleCard) query;
