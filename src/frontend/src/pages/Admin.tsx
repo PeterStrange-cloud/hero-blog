@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
+  CalendarDays,
   CheckCircle,
   Copy,
   Edit,
@@ -384,6 +385,17 @@ export default function Admin() {
                 <Link to="/admin/settings" className="flex items-center gap-2">
                   <Settings className="size-4" />
                   Settings
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                data-ocid="admin.booking_link"
+              >
+                <Link to="/admin/booking" className="flex items-center gap-2">
+                  <CalendarDays className="size-4" />
+                  Booking
                 </Link>
               </Button>
             </>

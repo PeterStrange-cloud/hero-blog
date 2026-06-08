@@ -95,6 +95,11 @@ export interface UserAccess {
 }
 export type UserId = Principal;
 export interface UserRole { 'principal' : UserId, 'role' : Role }
+export type BookingDuration = { 'Thirty' : null } | { 'Sixty' : null };
+export type SlotStatus = { 'Available' : null } | { 'Booked' : null } | { 'Completed' : null };
+export type BookingStatus = { 'Pending' : null } | { 'Confirmed' : null } | { 'Cancelled' : null } | { 'Completed' : null };
+export interface BookingSlot { 'id' : bigint; 'startTime' : bigint; 'duration' : BookingDuration; 'status' : SlotStatus; }
+export interface Booking { 'id' : bigint; 'slotId' : bigint; 'userId' : Principal; 'amountE8s' : bigint; 'status' : BookingStatus; 'createdAt' : bigint; 'email' : [] | [string]; 'firstName' : [] | [string]; 'lastName' : [] | [string]; 'notes' : [] | [string]; }
 export interface _SERVICE {
   'addAdmin' : ActorMethod<[UserId], AdminResult>,
   'addInvite' : ActorMethod<[string, Role], InviteResult>,
@@ -131,11 +136,21 @@ export interface _SERVICE {
   'unpublishArticle' : ActorMethod<[ArticleId], AdminResult>,
   'updateArticle' : ActorMethod<[ArticleId, ArticleInput], AdminResult>,
   'updateSettings' : ActorMethod<[SiteSettings], SettingsResult>,
-  'verifyPaymentRequest' : ActorMethod<
+  'verifyPaymentRequest' : ActorMethod
     [PaymentRequestId],
     { 'ok' : null } |
       { 'err' : string }
   >,
+  'createSlot' : ActorMethod<[bigint, BookingDuration], { 'ok' : BookingSlot } | { 'err' : string }>,
+  'deleteSlot' : ActorMethod<[bigint], { 'ok' : null } | { 'err' : string }>,
+  'getAvailableSlots' : ActorMethod<[], Array<BookingSlot>>,
+  'getAllSlots' : ActorMethod<[], Array<BookingSlot>>,
+  'getAllBookings' : ActorMethod<[], Array<Booking>>,
+  'createBooking' : ActorMethod<[bigint, BookingDuration, [] | [string], [] | [string], [] | [string], [] | [string]], { 'ok' : Booking } | { 'err' : string }>,
+  'cancelBooking' : ActorMethod<[bigint], { 'ok' : null } | { 'err' : string }>,
+  'confirmBooking' : ActorMethod<[bigint], { 'ok' : null } | { 'err' : string }>,
+  'completeBooking' : ActorMethod<[bigint], { 'ok' : null } | { 'err' : string }>,
+  'getMyBookings' : ActorMethod<[], Array<Booking>>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];

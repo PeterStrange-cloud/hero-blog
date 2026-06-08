@@ -1,4 +1,9 @@
 export const idlFactory = ({ IDL }) => {
+  const BookingDuration = IDL.Variant({ 'Thirty' : IDL.Null, 'Sixty' : IDL.Null });
+  const SlotStatus = IDL.Variant({ 'Available' : IDL.Null, 'Booked' : IDL.Null, 'Completed' : IDL.Null });
+  const BookingStatus = IDL.Variant({ 'Pending' : IDL.Null, 'Confirmed' : IDL.Null, 'Cancelled' : IDL.Null, 'Completed' : IDL.Null });
+  const BookingSlot = IDL.Record({ 'id' : IDL.Nat, 'startTime' : IDL.Int, 'duration' : BookingDuration, 'status' : SlotStatus });
+  const Booking = IDL.Record({ 'id' : IDL.Nat, 'slotId' : IDL.Nat, 'userId' : IDL.Principal, 'amountE8s' : IDL.Nat, 'status' : BookingStatus, 'createdAt' : IDL.Int, 'email' : IDL.Opt(IDL.Text), 'firstName' : IDL.Opt(IDL.Text), 'lastName' : IDL.Opt(IDL.Text), 'notes' : IDL.Opt(IDL.Text) });
   const UserId = IDL.Principal;
   const AdminResult = IDL.Variant({
     'ok' : IDL.Null,
@@ -149,6 +154,16 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text })],
         [],
       ),
+    'createSlot' : IDL.Func([IDL.Int, BookingDuration], [IDL.Variant({ 'ok' : BookingSlot, 'err' : IDL.Text })], []),
+    'deleteSlot' : IDL.Func([IDL.Nat], [IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text })], []),
+    'getAvailableSlots' : IDL.Func([], [IDL.Vec(BookingSlot)], ['query']),
+    'getAllSlots' : IDL.Func([], [IDL.Vec(BookingSlot)], ['query']),
+    'getAllBookings' : IDL.Func([], [IDL.Vec(Booking)], ['query']),
+    'createBooking' : IDL.Func([IDL.Nat, BookingDuration, IDL.Opt(IDL.Text), IDL.Opt(IDL.Text), IDL.Opt(IDL.Text), IDL.Opt(IDL.Text)], [IDL.Variant({ 'ok' : Booking, 'err' : IDL.Text })], []),
+    'cancelBooking' : IDL.Func([IDL.Nat], [IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text })], []),
+    'confirmBooking' : IDL.Func([IDL.Nat], [IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text })], []),
+    'completeBooking' : IDL.Func([IDL.Nat], [IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text })], []),
+    'getMyBookings' : IDL.Func([], [IDL.Vec(Booking)], ['query']),
   });
 };
 export const init = ({ IDL }) => { return []; };
