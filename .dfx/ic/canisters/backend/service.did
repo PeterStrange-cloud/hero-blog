@@ -172,6 +172,10 @@ service : {
                                                 err: text;
                                                 ok;
                                               });
+  confirmBooking: (bookingId: BookingId) -> (variant {
+                                               err: text;
+                                               ok;
+                                             });
   createArticle: (input: ArticleInput) -> (ArticleCard);
   createBooking: (slotId: SlotId, duration: BookingDuration, email: opt text,
    firstName: opt text, lastName: opt text, notes: opt text) ->
@@ -192,6 +196,8 @@ service : {
                                      ok;
                                    });
   getAllArticlesAdmin: () -> (vec ArticleCard);
+  getAllBookings: () -> (vec Booking) query;
+  getAllSlots: () -> (vec BookingSlot) query;
   getArticle: (id: ArticleId) -> (opt ArticleFull);
   getArticleCard: (id: ArticleId) -> (opt ArticleCard) query;
   getAvailableSlots: () -> (vec BookingSlot) query;

@@ -153,6 +153,11 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text })],
         [],
       ),
+    'confirmBooking' : IDL.Func(
+        [BookingId],
+        [IDL.Variant({ 'ok' : IDL.Null, 'err' : IDL.Text })],
+        [],
+      ),
     'createArticle' : IDL.Func([ArticleInput], [ArticleCard], []),
     'createBooking' : IDL.Func(
         [
@@ -180,6 +185,8 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'getAllArticlesAdmin' : IDL.Func([], [IDL.Vec(ArticleCard)], []),
+    'getAllBookings' : IDL.Func([], [IDL.Vec(Booking)], ['query']),
+    'getAllSlots' : IDL.Func([], [IDL.Vec(BookingSlot)], ['query']),
     'getArticle' : IDL.Func([ArticleId], [IDL.Opt(ArticleFull)], []),
     'getArticleCard' : IDL.Func([ArticleId], [IDL.Opt(ArticleCard)], ['query']),
     'getAvailableSlots' : IDL.Func([], [IDL.Vec(BookingSlot)], ['query']),

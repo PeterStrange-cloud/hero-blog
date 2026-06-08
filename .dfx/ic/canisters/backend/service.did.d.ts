@@ -138,6 +138,11 @@ export interface _SERVICE {
     { 'ok' : null } |
       { 'err' : string }
   >,
+  'confirmBooking' : ActorMethod<
+    [BookingId],
+    { 'ok' : null } |
+      { 'err' : string }
+  >,
   'createArticle' : ActorMethod<[ArticleInput], ArticleCard>,
   'createBooking' : ActorMethod<
     [
@@ -161,6 +166,8 @@ export interface _SERVICE {
   'deleteArticle' : ActorMethod<[ArticleId], AdminResult>,
   'deleteSlot' : ActorMethod<[SlotId], { 'ok' : null } | { 'err' : string }>,
   'getAllArticlesAdmin' : ActorMethod<[], Array<ArticleCard>>,
+  'getAllBookings' : ActorMethod<[], Array<Booking>>,
+  'getAllSlots' : ActorMethod<[], Array<BookingSlot>>,
   'getArticle' : ActorMethod<[ArticleId], [] | [ArticleFull]>,
   'getArticleCard' : ActorMethod<[ArticleId], [] | [ArticleCard]>,
   'getAvailableSlots' : ActorMethod<[], Array<BookingSlot>>,

@@ -46,6 +46,23 @@ mixin (
     BookingLib.completeBooking(bookingStoreV2, bookingId)
   };
 
+  public shared query ({ caller }) func getAllSlots() : async [BookingTypes.BookingSlot] {
+    if (not AdminLib.isAdmin(adminStore, caller)) return [];
+    BookingLib.getAllSlots(bookingStoreV2)
+  };
+
+  public shared query ({ caller }) func getAllBookings() : async [BookingTypes.Booking] {
+    if (not AdminLib.isAdmin(adminStore, caller)) return [];
+    BookingLib.getAllBookings(bookingStoreV2)
+  };
+
+  public shared ({ caller }) func confirmBooking(
+    bookingId : BookingTypes.BookingId,
+  ) : async { #ok; #err : Text } {
+    if (not AdminLib.isAdmin(adminStore, caller)) return #err("Not authorized");
+    BookingLib.confirmBooking(bookingStoreV2, bookingId)
+  };
+
   public shared ({ caller }) func deleteSlot(
     slotId : BookingTypes.SlotId,
   ) : async { #ok; #err : Text } {

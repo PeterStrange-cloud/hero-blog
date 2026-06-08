@@ -150,6 +150,30 @@ module {
     }
   };
 
+  public func getAllSlots(store : BookingStore) : [BookingTypes.BookingSlot] {
+    Iter.toArray(Map.values(store.slots))
+  };
+
+  public func getAllBookings(store : BookingStore) : [BookingTypes.Booking] {
+    Iter.toArray(Map.values(store.bookings))
+  };
+
+  public func confirmBooking(
+    store     : BookingStore,
+    bookingId : BookingTypes.BookingId,
+  ) : { #ok; #err : Text } {
+    let bookingOpt = Map.get(store.bookings, Nat.compare, bookingId);
+    switch (bookingOpt) {
+      case null { #err("Booking not found") };
+      case (?booking) {
+        if (booking.status != #Pending) return #err("Booking is not pending");
+        let updated : BookingTypes.Booking = { booking with status = #Confirmed };
+        Map.add(store.bookings, Nat.compare, bookingId, updated);
+        #ok
+      };
+    }
+  };
+
   public func deleteSlot(
     store  : BookingStore,
     slotId : BookingTypes.SlotId,

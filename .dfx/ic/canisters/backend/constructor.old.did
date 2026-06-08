@@ -187,6 +187,10 @@ service : {
     });
   debugVerify: (reqId: PaymentRequestId) -> (text);
   deleteArticle: (id: ArticleId) -> (AdminResult);
+  deleteSlot: (slotId: SlotId) -> (variant {
+                                     err: text;
+                                     ok;
+                                   });
   getAllArticlesAdmin: () -> (vec ArticleCard);
   getArticle: (id: ArticleId) -> (opt ArticleFull);
   getArticleCard: (id: ArticleId) -> (opt ArticleCard) query;
