@@ -819,6 +819,36 @@ export class Backend implements backendInterface {
         if (Array.isArray(result) && result.length === 1) return result[0];
         return result;
     }
+    async createSlot(startTime: bigint, duration: { Thirty: null } | { Sixty: null }): Promise<any> {
+        return await (this.actor as any).createSlot(startTime, duration);
+    }
+    async deleteSlot(slotId: bigint): Promise<any> {
+        return await (this.actor as any).deleteSlot(slotId);
+    }
+    async getAvailableSlots(): Promise<any[]> {
+        return await (this.actor as any).getAvailableSlots();
+    }
+    async getAllSlots(): Promise<any[]> {
+        return await (this.actor as any).getAllSlots();
+    }
+    async getAllBookings(): Promise<any[]> {
+        return await (this.actor as any).getAllBookings();
+    }
+    async createBooking(slotId: bigint, duration: { Thirty: null } | { Sixty: null }, email: [string] | [], firstName: [string] | [], lastName: [string] | [], notes: [string] | []): Promise<any> {
+        return await (this.actor as any).createBooking(slotId, duration, email, firstName, lastName, notes);
+    }
+    async cancelBooking(bookingId: bigint): Promise<any> {
+        return await (this.actor as any).cancelBooking(bookingId);
+    }
+    async confirmBooking(bookingId: bigint): Promise<any> {
+        return await (this.actor as any).confirmBooking(bookingId);
+    }
+    async completeBooking(bookingId: bigint): Promise<any> {
+        return await (this.actor as any).completeBooking(bookingId);
+    }
+    async getMyBookings(): Promise<any[]> {
+        return await (this.actor as any).getMyBookings();
+    }
 }
 function from_candid_AdminResult_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _AdminResult): AdminResult {
     return from_candid_variant_n9(_uploadFile, _downloadFile, value);
